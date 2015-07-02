@@ -11,8 +11,10 @@ class CGUIGlyphControlWidget : public CGUIContextWidget
 
 	Gwen::Controls::WindowControl * Window;
 	Gwen::Controls::Button * EnableButton;
+	Gwen::Controls::Label * DateLabel;
 
 	void SetButtonTitle();
+	void SetDateTime();
 
 public:
 
@@ -22,6 +24,8 @@ public:
 	void OnSelectPoint(Gwen::Controls::Base * Control);
 	void OnSelectGrid(Gwen::Controls::Base * Control);
 	void OnSizeSlider(Gwen::Controls::Base * Control);
+	void OnTimeDecrease(Gwen::Controls::Base * Control);
+	void OnTimeIncrease(Gwen::Controls::Base * Control);
 
 	void toggle();
 

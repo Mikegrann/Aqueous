@@ -15,6 +15,7 @@ public:
 
 	vec3f GetPosition() const;
 	color3f GetColor() const;
+	std::time_t GetTime() const;
 
 private:
 
@@ -22,6 +23,7 @@ private:
 
 	vec3f Position;
 	color3f Color;
+	std::time_t Time;
 
 };
 
@@ -37,16 +39,29 @@ public:
 	CSceneNode * GetNode();
 	CSceneNode const * GetNode() const;
 
+	std::string GetTimeFormatted() const;
+
+	void DecreaseTime();
+	void IncreaseTime();
+
 protected:
 
 	void LoadSceneElements();
+	void LoadSceneElementsAtTime(std::time_t curTime);
 
 	vector<CGlyph *> Glyphs;
 	CSceneNode * Node;
 	
 	vector<f32> Positions;
 	vector<f32> Colors;
+	vector<std::time_t> Times;
 	ion::GL::VertexBuffer * PositionBuffer = nullptr;
 	ion::GL::VertexBuffer * ColorBuffer = nullptr;
+	ion::GL::VertexBuffer * TimeBuffer = nullptr;
+
+	int curTimeDex;
+	CUniformValue<int> timeUniformMin;
+	CUniformValue<int> timeUniformMax;
+	void UpdateTime();
 
 };

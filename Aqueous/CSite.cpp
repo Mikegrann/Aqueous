@@ -48,6 +48,9 @@ void CSite::ReadConfiguration()
 				if (dDataSet.HasMember("ColorField") && dDataSet["ColorField"].IsString())
 					DataSet->ColorField = dDataSet["ColorField"].GetString();
 
+				if (dDataSet.HasMember("TField") && dDataSet["TField"].IsString())
+					DataSet->Traits.TField = dDataSet["TField"].GetString();
+
 				if (dDataSet.HasMember("DataLonLatCenter") && dDataSet["DataLonLatCenter"].IsObject())
 				{
 					SLongitudeLatituded DataLonLatCenter;

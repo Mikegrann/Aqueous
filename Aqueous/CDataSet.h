@@ -18,11 +18,11 @@ public:
 
 	struct STraits
 	{
-		std::string PositionXField, PositionYField, PositionZField;
+		std::string PositionXField, PositionYField, PositionZField, TField;
 		bool InvertY;
 
 		STraits()
-			: PositionXField("x"), PositionYField("y"), PositionZField("z"), InvertY(true)
+			: PositionXField("x"), PositionYField("y"), PositionZField("z"), TField("t"), InvertY(true)
 		{}
 	};
 

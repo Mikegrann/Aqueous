@@ -2,7 +2,7 @@
 
 #include "GifWriter.h"
 
-#include <gif_lib.h>
+#include "gif_lib.h"
 
 
 GifWriter::GifWriter(vec2i const & Dimensions)
@@ -161,7 +161,8 @@ bool GifWriter::Save(std::string const & fileName)
 		}
 	}
 
-	if (EGifCloseFile(GifFile) == GIF_ERROR)
+	int errorcode;
+	if (EGifCloseFile(GifFile, &errorcode) == GIF_ERROR)
 	{
 		std::cerr << "Failed to close GIF file" << std::endl;
 		return false;

@@ -283,7 +283,7 @@ void CMainState::CalculateDataAlignment()
 	vec2d const ActualOffset = MapRangeCenter - DataRangeCenter;
 	vec2d const MapOffset = ActualOffset * 3.f / Maximum(DataRangeSize.X, DataRangeSize.Y);
 	vec3d const DataScale = 3.0 * vec3d(DataRangeSize.X, DataDepth, DataRangeSize.Y) / Maximum(DataRangeSize.X, DataRangeSize.Y);
-	vec3d const MapScale = DataScale * vec3d(MapRangeSize.X, MapDepth, MapRangeSize.Y) / vec3d(DataRangeSize.X, DataDepth, DataRangeSize.Y);
+	vec3d const MapScale = DataScale * vec3d(MapRangeSize.X, MapDepth, MapRangeSize.Y) / vec3d(DataRangeSize.X, 1, DataRangeSize.Y);
 
 	static f64 const YExaggeration = DataSet->YExaggeration;
 	static vec3d const Multiplier = vec3d(1, YExaggeration, 1);

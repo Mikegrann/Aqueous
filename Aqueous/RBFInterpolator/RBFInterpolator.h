@@ -15,7 +15,8 @@
 #define WANT_STREAM                  
 #define WANT_MATH                    
 
-#include "newmat.h"                  // use matrix operations from the newmat library by R B Davies
+#include "../Util/newmat.h"
+#include "../Util/newmatap.h"
 									 // http://www.robertnz.net/nm_intro.htm
 
 #include <vector>

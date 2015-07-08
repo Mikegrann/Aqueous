@@ -20,9 +20,6 @@
     <ClCompile Include="CMainState.MouseTracking.cpp">
       <Filter>MainState</Filter>
     </ClCompile>
-    <ClCompile Include="RBFInterpolator\newmat.cpp">
-      <Filter>MainState\RBFInterpolator</Filter>
-    </ClCompile>
     <ClCompile Include="RBFInterpolator\RBFInterpolator.cpp">
       <Filter>MainState\RBFInterpolator</Filter>
     </ClCompile>
@@ -107,6 +104,84 @@
     <ClCompile Include="CGlyphNodeManager.cpp">
       <Filter>MainState\Glyphs</Filter>
     </ClCompile>
+    <ClCompile Include="PolyRegress.cpp">
+      <Filter>MainState\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="Util\bandmat.cpp">
+      <Filter>MainState\Util\NewMat</Filter>
+    </ClCompile>
+    <ClCompile Include="Util\cholesky.cpp">
+      <Filter>MainState\Util\NewMat</Filter>
+    </ClCompile>
+    <ClCompile Include="Util\evalue.cpp">
+      <Filter>MainState\Util\NewMat</Filter>
+    </ClCompile>
+    <ClCompile Include="Util\fft.cpp">
+      <Filter>MainState\Util\NewMat</Filter>
+    </ClCompile>
+    <ClCompile Include="Util\hholder.cpp">
+      <Filter>MainState\Util\NewMat</Filter>
+    </ClCompile>
+    <ClCompile Include="Util\jacobi.cpp">
+      <Filter>MainState\Util\NewMat</Filter>
+    </ClCompile>
+    <ClCompile Include="Util\myexcept.cpp">
+      <Filter>MainState\Util\NewMat</Filter>
+    </ClCompile>
+    <ClCompile Include="Util\newfft.cpp">
+      <Filter>MainState\Util\NewMat</Filter>
+    </ClCompile>
+    <ClCompile Include="Util\newmat1.cpp">
+      <Filter>MainState\Util\NewMat</Filter>
+    </ClCompile>
+    <ClCompile Include="Util\newmat2.cpp">
+      <Filter>MainState\Util\NewMat</Filter>
+    </ClCompile>
+    <ClCompile Include="Util\newmat3.cpp">
+      <Filter>MainState\Util\NewMat</Filter>
+    </ClCompile>
+    <ClCompile Include="Util\newmat4.cpp">
+      <Filter>MainState\Util\NewMat</Filter>
+    </ClCompile>
+    <ClCompile Include="Util\newmat5.cpp">
+      <Filter>MainState\Util\NewMat</Filter>
+    </ClCompile>
+    <ClCompile Include="Util\newmat6.cpp">
+      <Filter>MainState\Util\NewMat</Filter>
+    </ClCompile>
+    <ClCompile Include="Util\newmat7.cpp">
+      <Filter>MainState\Util\NewMat</Filter>
+    </ClCompile>
+    <ClCompile Include="Util\newmat8.cpp">
+      <Filter>MainState\Util\NewMat</Filter>
+    </ClCompile>
+    <ClCompile Include="Util\newmat9.cpp">
+      <Filter>MainState\Util\NewMat</Filter>
+    </ClCompile>
+    <ClCompile Include="Util\newmatex.cpp">
+      <Filter>MainState\Util\NewMat</Filter>
+    </ClCompile>
+    <ClCompile Include="Util\newmatnl.cpp">
+      <Filter>MainState\Util\NewMat</Filter>
+    </ClCompile>
+    <ClCompile Include="Util\newmatrm.cpp">
+      <Filter>MainState\Util\NewMat</Filter>
+    </ClCompile>
+    <ClCompile Include="Util\solution.cpp">
+      <Filter>MainState\Util\NewMat</Filter>
+    </ClCompile>
+    <ClCompile Include="Util\sort.cpp">
+      <Filter>MainState\Util\NewMat</Filter>
+    </ClCompile>
+    <ClCompile Include="Util\submat.cpp">
+      <Filter>MainState\Util\NewMat</Filter>
+    </ClCompile>
+    <ClCompile Include="Util\svd.cpp">
+      <Filter>MainState\Util\NewMat</Filter>
+    </ClCompile>
+    <ClCompile Include="InvDistWeight.cpp">
+      <Filter>MainState\Util</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CMainState.h">
@@ -123,9 +198,6 @@
     </ClInclude>
     <ClInclude Include="CSpectrumColorMapper.h">
       <Filter>MainState\Data Management\Color Mapping</Filter>
-    </ClInclude>
-    <ClInclude Include="RBFInterpolator\newmat.h">
-      <Filter>MainState\RBFInterpolator</Filter>
     </ClInclude>
     <ClInclude Include="RBFInterpolator\RBFInterpolator.h">
       <Filter>MainState\RBFInterpolator</Filter>
@@ -211,6 +283,48 @@
     <ClInclude Include="CGlyphNodeManager.h">
       <Filter>MainState\Glyphs</Filter>
     </ClInclude>
+    <ClInclude Include="PolyRegress.h">
+      <Filter>MainState\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="Util\boolean.h">
+      <Filter>MainState\Util\NewMat</Filter>
+    </ClInclude>
+    <ClInclude Include="Util\controlw.h">
+      <Filter>MainState\Util\NewMat</Filter>
+    </ClInclude>
+    <ClInclude Include="Util\include.h">
+      <Filter>MainState\Util\NewMat</Filter>
+    </ClInclude>
+    <ClInclude Include="Util\myexcept.h">
+      <Filter>MainState\Util\NewMat</Filter>
+    </ClInclude>
+    <ClInclude Include="Util\newmat.h">
+      <Filter>MainState\Util\NewMat</Filter>
+    </ClInclude>
+    <ClInclude Include="Util\newmatap.h">
+      <Filter>MainState\Util\NewMat</Filter>
+    </ClInclude>
+    <ClInclude Include="Util\newmatio.h">
+      <Filter>MainState\Util\NewMat</Filter>
+    </ClInclude>
+    <ClInclude Include="Util\newmatnl.h">
+      <Filter>MainState\Util\NewMat</Filter>
+    </ClInclude>
+    <ClInclude Include="Util\newmatrc.h">
+      <Filter>MainState\Util\NewMat</Filter>
+    </ClInclude>
+    <ClInclude Include="Util\newmatrm.h">
+      <Filter>MainState\Util\NewMat</Filter>
+    </ClInclude>
+    <ClInclude Include="Util\precisio.h">
+      <Filter>MainState\Util\NewMat</Filter>
+    </ClInclude>
+    <ClInclude Include="Util\solution.h">
+      <Filter>MainState\Util\NewMat</Filter>
+    </ClInclude>
+    <ClInclude Include="InvDistWeight.h">
+      <Filter>MainState\Util</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="MainState">
@@ -260,6 +374,12 @@
     </Filter>
     <Filter Include="MainMenuState\GUI">
       <UniqueIdentifier>{9ca08e71-6ecd-42e6-bac3-564d365dbc93}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainState\Util">
+      <UniqueIdentifier>{21fc6297-c2ee-42c4-ae60-cd05655a256e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainState\Util\NewMat">
+      <UniqueIdentifier>{f1035df9-db38-4f7c-9f1b-a8a6b55aacf9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

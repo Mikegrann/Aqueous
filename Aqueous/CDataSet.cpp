@@ -6,6 +6,8 @@
 #include "SciDataParser.h"
 #include "CSite.h"
 #include "RBFInterpolator/RBFInterpolator.h"
+#include "PolyRegress.h"
+#include "InvDistWeight.h"
 
 
 CDataSet::CDataSet(CSite * Site)
@@ -59,6 +61,8 @@ void CDataSet::ConcurrentLoad()
 		Mapper = new CSpectrumColorMapper(ColorField);
 	else if (VolumeColorMapper == "Oxygen")
 		Mapper = new COxygenColorMapper();
+
+	GenerateVolumeFromPointData();
 
 	Volume.MakeOpenGLVolume(VolumeHandle, Mapper);
 
@@ -150,7 +154,9 @@ void CDataSet::GenerateVolumeFromPointData()
 	CPrintProgressBar print;
 	cout << "Loading interpolator values..." << endl;
 
+	// TODO: Fix N^2 Solution (Pre-sort and skip sequential values that are equal?)
 	vector<real> Xs, Ys, Zs, Fs;
+	map<vec3f, float> positions;
 	int Count = 0;
 	print.BeginProgress();
 	for (auto Point : Points)
@@ -162,6 +168,7 @@ void CDataSet::GenerateVolumeFromPointData()
 
 		bool Skip = false;
 
+		/*
 		for (auto & x : Xs)
 			if (X == x)
 				Skip = true;
@@ -174,21 +181,29 @@ void CDataSet::GenerateVolumeFromPointData()
 		for (auto & f : Fs)
 			if (F == f)
 				Skip = true;
-		
+		*/
+
+		for (auto & pos : positions)
+			if (pos.first == vec3f(X, Y, Z))
+				Skip = true;
+
 		if (! Skip)
 		{
 			Xs.push_back(X);
 			Ys.push_back(Y);
 			Zs.push_back(Z);
 			Fs.push_back(F);
-		}
 
+			positions[vec3f(X, Y, Z)] = F;
+		}
+		
 		print.SetProgress(++Count / (f32) Points.Size());
 	}
 	print.EndProgress();
 	
 	cout << "Creating interpolator..." << endl;
-	RBFInterpolator rbfi(Xs, Ys, Zs, Fs);
+	//RBFInterpolator rbfi(Xs, Ys, Zs, Fs);
+	PolyRegress pr(Ys, Fs, 2, false);
 	cout << "Interpolating..." << endl;
 	
 	int const Resolution = 28;
@@ -203,7 +218,10 @@ void CDataSet::GenerateVolumeFromPointData()
 			for (int i = 0; i < Volume.Dimensions.X; ++ i)
 			{
 				SVolumeDataRecord<f64> & Row = Volume[i][k][j];
-				Row.GetField(ColorField) = rbfi.interpolate(j / Scale, 1.0 - k / Scale, i / Scale);
+				//Row.GetField(ColorField) = 1.0 - rbfi.interpolate(j / Scale, 1.0 - k / Scale, i / Scale);
+				//Row.GetField(ColorField) = pr.interpolate(k / Scale);
+				//Row.GetField(ColorField) = 1.0 - InvDistWeight::interpolate(positions, vec3f(j / Scale, 1.0 - k / Scale, i / Scale), 2);
+				Row.GetField(ColorField) = (pr.interpolate(k / Scale) + 1.0 - InvDistWeight::interpolate(positions, vec3f(j / Scale, 1.0 - k / Scale, i / Scale), 2)) / 2.0;
 			}
 		}
 

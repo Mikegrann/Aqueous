@@ -3,7 +3,7 @@
 
 #include "CLocation.h"
 
-#include <rapidjson/document.h>
+#include "rapidjson/document.h"
 
 
 CSite::CSite(string const & Name)

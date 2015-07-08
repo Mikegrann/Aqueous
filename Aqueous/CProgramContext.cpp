@@ -6,7 +6,7 @@
 #include "CMainMenuState.h"
 #include "CLoadState.h"
 
-#include <rapidjson/document.h>
+#include "rapidjson/document.h"
 
 
 void CProgramContext::Run()

@@ -4,9 +4,9 @@
 #define WANT_STREAM                  
 #define WANT_MATH                    
 
-#include "Util/newmat.h"
-#include "Util/newmatio.h"
-#include "Util/newmatap.h"
+#include "newmat/newmat.h"
+#include "newmat/newmatio.h"
+#include "newmat/newmatap.h"
 #include <vector>
 
 class PolyRegress

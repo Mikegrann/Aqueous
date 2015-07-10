@@ -39,6 +39,7 @@ public:
 	CSceneNode * GetNode();
 	CSceneNode const * GetNode() const;
 
+	std::time_t GetTime() const;
 	std::string GetTimeFormatted() const;
 
 	void DecreaseTime();

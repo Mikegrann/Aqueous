@@ -12,9 +12,11 @@ public:
 	CDataSet(CSite * Site);
 
 	void Load(IProgressBar::CTask * Task);
-	void GenerateVolumeFromPointData();
+	void GenerateVolumeFromPointData(std::time_t targetTime);
+	void GenerateVolume(std::time_t targetTime);
 	void ConcurrentLoad();
 	void InitSceneElements(CProgramContext::SScene & Scene);
+	void InitTextures();
 
 	struct STraits
 	{

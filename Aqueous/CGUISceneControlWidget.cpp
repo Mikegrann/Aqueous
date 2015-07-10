@@ -1,8 +1,11 @@
 #include "CGUISceneControlWidget.h"
 
 #include "CProgramContext.h"
+#include "CSite.h"
+#include "CDataSet.h"
 #include "CMainState.h"
 #include "CTerrainNodeManager.h"
+#include "CGlyphNodeManager.h"
 
 #include <Gwen/Controls.h>
 #include <Gwen/Controls/ComboBox.h>
@@ -20,6 +23,29 @@ CGUISceneControlWidget::CGUISceneControlWidget()
 	EnableButton->SetBounds(15, 10, 290, 25);
 	EnableButton->SetText("Enable Backdrop");
 	EnableButton->onPress.Add(this, & CGUISceneControlWidget::OnToggleBackdrop);
+
+	DateLabel = new Gwen::Controls::Label(Window);
+	DateLabel->SetFont(GUIManager->GetRegularFont());
+	DateLabel->SetText(L"Date/Time:");
+	DateLabel->SetBounds(10, 50, 300, 30);
+	DateLabel->SetTextColor(Gwen::Color(50, 20, 20, 215));
+
+	Gwen::Controls::Button * BackButton = new Gwen::Controls::Button(Window);
+	BackButton->SetBounds(15, 85, 25, 25);
+	BackButton->SetText("<");
+	BackButton->onPress.Add(this, &CGUISceneControlWidget::OnTimeDecrease);
+
+	Gwen::Controls::Button * ForwardButton = new Gwen::Controls::Button(Window);
+	ForwardButton->SetBounds(330 - 25 - 15, 85, 25, 25);
+	ForwardButton->SetText(">");
+	ForwardButton->onPress.Add(this, &CGUISceneControlWidget::OnTimeIncrease);
+
+	DateLabel = new Gwen::Controls::Label(Window);
+	DateLabel->SetFont(GUIManager->GetRegularFont());
+	DateLabel->SetText(L"Time Here");
+	DateLabel->SetBounds(15 + 25 + 5, 90, 300 - 25 - 25 - 10, 25);
+	DateLabel->SetTextColor(Gwen::Color(50, 20, 20, 215));
+	SetDateTime();
 }
 
 void CGUISceneControlWidget::OnToggleBackdrop(Gwen::Controls::Base * Control)
@@ -44,4 +70,30 @@ void CGUISceneControlWidget::OnToggleBackdrop(Gwen::Controls::Base * Control)
 void CGUISceneControlWidget::toggle()
 {
 	Window->SetHidden(Window->Visible());
+}
+
+void CGUISceneControlWidget::SetDateTime()
+{
+	CProgramContext * Context = &CProgramContext::Get();
+
+	DateLabel->SetText(Context->Scene.Glyphs->GetTimeFormatted());
+	Context->CurrentSite->GetCurrentDataSet()->GenerateVolume(Context->Scene.Glyphs->GetTime());
+}
+
+void CGUISceneControlWidget::OnTimeDecrease(Gwen::Controls::Base * Control)
+{
+	GUIContext->GetConsole()->AddMessage("Time Decreased");
+
+	CProgramContext * Context = &CProgramContext::Get();
+	Context->Scene.Glyphs->DecreaseTime();
+	SetDateTime();
+}
+
+void CGUISceneControlWidget::OnTimeIncrease(Gwen::Controls::Base * Control)
+{
+	GUIContext->GetConsole()->AddMessage("Time Increased");
+
+	CProgramContext * Context = &CProgramContext::Get();
+	Context->Scene.Glyphs->IncreaseTime();
+	SetDateTime();
 }

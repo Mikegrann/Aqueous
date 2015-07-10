@@ -16,7 +16,7 @@ CGUIGlyphControlWidget::CGUIGlyphControlWidget()
 
 	Window = new Gwen::Controls::WindowControl(GUIManager->GetCanvas());
 	Window->SetDeleteOnClose(false);
-	Window->SetBounds(1200, 670, 330, 300);
+	Window->SetBounds(1200, 670, 330, 215);
 	Window->SetTitle("Glyph Controls");
 	Window->SetHidden(true);
 
@@ -56,29 +56,6 @@ CGUIGlyphControlWidget::CGUIGlyphControlWidget()
 
 		// Wire Up Events
 		GlyphSizeSlider->onValueChanged.Add(this, & CGUIGlyphControlWidget::OnSizeSlider);
-
-		SliderLabel = new Gwen::Controls::Label(Window);
-		SliderLabel->SetFont(GUIManager->GetRegularFont());
-		SliderLabel->SetText(L"Date/Time:");
-		SliderLabel->SetBounds(10, 10 + 45 + 25 + 15 + 45 + 45, 300, 40);
-		SliderLabel->SetTextColor(Gwen::Color(50, 20, 20, 215));
-
-		Gwen::Controls::Button * BackButton = new Gwen::Controls::Button(Window);
-		BackButton->SetBounds(15, 10 + 45 + 25 + 15 + 45 + 45 + 45, 25, 25);
-		BackButton->SetText("<");
-		BackButton->onPress.Add(this, &CGUIGlyphControlWidget::OnTimeDecrease);
-
-		Gwen::Controls::Button * ForwardButton = new Gwen::Controls::Button(Window);
-		ForwardButton->SetBounds(330 - 25 - 15, 10 + 45 + 25 + 15 + 45 + 45 + 45, 25, 25);
-		ForwardButton->SetText(">");
-		ForwardButton->onPress.Add(this, &CGUIGlyphControlWidget::OnTimeIncrease);
-
-		DateLabel = new Gwen::Controls::Label(Window);
-		DateLabel->SetFont(GUIManager->GetRegularFont());
-		DateLabel->SetText(L"Time Here");
-		DateLabel->SetBounds(15 + 25 + 5, 10 + 45 + 25 + 15 + 45 + 45 + 45 + 5, 300 - 25 - 25 - 10, 25);
-		DateLabel->SetTextColor(Gwen::Color(50, 20, 20, 215));
-		SetDateTime();
 	}
 }
 
@@ -90,13 +67,6 @@ void CGUIGlyphControlWidget::SetButtonTitle()
 		EnableButton->SetText("Disable Glyph Visual");
 	else
 		EnableButton->SetText("Enable Glyph Visual");
-}
-
-void CGUIGlyphControlWidget::SetDateTime()
-{
-	CProgramContext * Context = &CProgramContext::Get();
-
-	DateLabel->SetText(Context->Scene.Glyphs->GetTimeFormatted());
 }
 
 void CGUIGlyphControlWidget::OnToggleGlyphs(Gwen::Controls::Base * Control)
@@ -136,24 +106,6 @@ void CGUIGlyphControlWidget::OnSizeSlider(Gwen::Controls::Base * Control)
 	CProgramContext & Context = CProgramContext::Get();
 	Gwen::Controls::Slider * Bar = (Gwen::Controls::Slider *) Control;
 	//Context.Scene.Glyphs->GlyphSize = Bar->GetFloatValue();
-}
-
-void CGUIGlyphControlWidget::OnTimeDecrease(Gwen::Controls::Base * Control)
-{
-	GUIContext->GetConsole()->AddMessage("Time Decreased");
-
-	CProgramContext * Context = &CProgramContext::Get();
-	Context->Scene.Glyphs->DecreaseTime();
-	SetDateTime();
-}
-
-void CGUIGlyphControlWidget::OnTimeIncrease(Gwen::Controls::Base * Control)
-{
-	GUIContext->GetConsole()->AddMessage("Time Increased");
-
-	CProgramContext * Context = &CProgramContext::Get();
-	Context->Scene.Glyphs->IncreaseTime();
-	SetDateTime();
 }
 
 void CGUIGlyphControlWidget::toggle()

@@ -52,9 +52,19 @@ void CDataSet::Load(IProgressBar::CTask * Task)
 	}
 }
 
+void CDataSet::InitTextures() {
+	glGenTextures(1, &VolumeHandle);
+	glGenTextures(1, &ProximityTextureHandle);
+}
+
 void CDataSet::ConcurrentLoad()
 {
-	glGenTextures(1, & VolumeHandle);
+	InitTextures();
+	auto firstPoint = Points.begin();
+	GenerateVolume((std::time_t)firstPoint->GetField(Traits.TField));
+}
+
+void CDataSet::GenerateVolume(std::time_t targetTime) {
 	IColorMapper * Mapper = nullptr;
 
 	if (VolumeColorMapper == "Spectrum")
@@ -62,11 +72,11 @@ void CDataSet::ConcurrentLoad()
 	else if (VolumeColorMapper == "Oxygen")
 		Mapper = new COxygenColorMapper();
 
-	GenerateVolumeFromPointData();
+	GenerateVolumeFromPointData(targetTime);
 
 	Volume.MakeOpenGLVolume(VolumeHandle, Mapper);
 
-
+	
 	vec3u Dimensions = Volume.Dimensions; // (10);
 	u8 * const VolumeData = new u8[Dimensions.X * Dimensions.Y * Dimensions.Z]();
 
@@ -115,8 +125,7 @@ void CDataSet::ConcurrentLoad()
 				//VolumeData[Index] = Clamp<u32>(Value * 255.0, 0, 255);
 				VolumeData[Index] = 255;
 			}
-
-	glGenTextures(1, & ProximityTextureHandle);
+			
 	glBindTexture(GL_TEXTURE_3D, ProximityTextureHandle);
 	glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -144,7 +153,7 @@ void CDataSet::InitSceneElements(CProgramContext::SScene & Scene)
 	Scene.Glyphs->LoadGlyphs(this, Mapper);
 }
 
-void CDataSet::GenerateVolumeFromPointData()
+void CDataSet::GenerateVolumeFromPointData(std::time_t targetTime)
 {
 	SRange<f64> XRange = Points.GetFieldRange(Traits.PositionXField, 15.0);
 	SRange<f64> YRange = Points.GetFieldRange(Traits.PositionYField, 15.0);
@@ -164,9 +173,10 @@ void CDataSet::GenerateVolumeFromPointData()
 		f64 const X = XRange.Normalize(Point.GetField(Traits.PositionXField));
 		f64 const Y = YRange.Normalize(Point.GetField(Traits.PositionYField));
 		f64 const Z = ZRange.Normalize(Point.GetField(Traits.PositionZField));
+		f64 const T = Point.GetField(Traits.TField);
 		f64 const F = FRange.Normalize(Point.GetField(ColorField));
 
-		bool Skip = false;
+		bool Skip = ((std::time_t)T != targetTime);
 
 		/*
 		for (auto & x : Xs)
@@ -183,8 +193,8 @@ void CDataSet::GenerateVolumeFromPointData()
 				Skip = true;
 		*/
 
-		for (auto & pos : positions)
-			if (pos.first == vec3f(X, Y, Z))
+		for (auto pos = positions.begin(); !Skip && pos != positions.end(); pos++)
+			if (pos->first == vec3f(X, Y, Z))
 				Skip = true;
 
 		if (! Skip)

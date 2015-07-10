@@ -11,6 +11,9 @@ class CGUISceneControlWidget : public CGUIContextWidget
 
 	Gwen::Controls::WindowControl * Window;
 	Gwen::Controls::Button * EnableButton;
+	Gwen::Controls::Label * DateLabel;
+
+	void SetDateTime();
 
 public:
 
@@ -19,6 +22,8 @@ public:
 	void OnToggleBackdrop(Gwen::Controls::Base * Control);
 	void OnSelectPoint(Gwen::Controls::Base * Control);
 	void OnSelectGrid(Gwen::Controls::Base * Control);
+	void OnTimeDecrease(Gwen::Controls::Base * Control);
+	void OnTimeIncrease(Gwen::Controls::Base * Control);
 
 	void toggle();
 

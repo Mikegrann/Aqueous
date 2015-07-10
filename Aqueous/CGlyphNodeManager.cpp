@@ -32,8 +32,13 @@ void CGlyphNodeManager::Init()
 }
 
 void CGlyphNodeManager::UpdateTime() {
-	timeUniformMax = timeUniformMin = Glyphs[curTimeDex]->Time;
-	LoadSceneElementsAtTime(Glyphs[curTimeDex]->Time);
+	if (curTimeDex < 0 || curTimeDex >= Glyphs.size()) {
+		curTimeDex = 0; // Reset to start
+	}
+	if (Glyphs.size()) {
+		timeUniformMax = timeUniformMin = Glyphs[curTimeDex]->Time;
+		LoadSceneElementsAtTime(Glyphs[curTimeDex]->Time);
+	}
 }
 
 void CGlyphNodeManager::LoadSceneElementsAtTime(std::time_t curTime)
@@ -212,6 +217,11 @@ CSceneNode const * CGlyphNodeManager::GetNode() const
 	return Node;
 }
 
+std::time_t CGlyphNodeManager::GetTime() const
+{
+	return Glyphs[curTimeDex]->Time;
+}
+
 std::string CGlyphNodeManager::GetTimeFormatted() const
 {
 	std::string retVal;
@@ -227,16 +237,16 @@ void CGlyphNodeManager::DecreaseTime() {
 	if (curTimeDex > 0) {
 		do {
 			--curTimeDex;
-		} while (curTimeDex > 0 && Glyphs[curTimeDex]->Time == Glyphs[curTimeDex - 1]->Time);
+		} while (curTimeDex > 0 && Glyphs[curTimeDex]->Time == Glyphs[curTimeDex + 1]->Time);
 	}
 	UpdateTime();
 }
 
 void CGlyphNodeManager::IncreaseTime() {
-	if (curTimeDex < Glyphs.size()) {
+	if (curTimeDex < Glyphs.size() - 1) {
 		do {
 			++curTimeDex;
-		} while (curTimeDex < Glyphs.size() && Glyphs[curTimeDex]->Time == Glyphs[curTimeDex + 1]->Time);
+		} while (curTimeDex < Glyphs.size() - 1 && Glyphs[curTimeDex]->Time == Glyphs[curTimeDex - 1]->Time);
 	}
 	UpdateTime();
 }

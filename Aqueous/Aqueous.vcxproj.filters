@@ -182,6 +182,12 @@
     <ClCompile Include="newmat\svd.cpp">
       <Filter>External\NewMat</Filter>
     </ClCompile>
+    <ClCompile Include="CGUISharkControlWidget.cpp">
+      <Filter>MainState\Shark</Filter>
+    </ClCompile>
+    <ClCompile Include="CSharkNodeManager.cpp">
+      <Filter>MainState\Shark</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CMainState.h">
@@ -409,6 +415,12 @@
     <ClInclude Include="rapidjson\msinttypes\stdint.h">
       <Filter>External\RapidJSON\msinttypes</Filter>
     </ClInclude>
+    <ClInclude Include="CGUISharkControlWidget.h">
+      <Filter>MainState\Shark</Filter>
+    </ClInclude>
+    <ClInclude Include="CSharkNodeManager.h">
+      <Filter>MainState\Shark</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="MainState">
@@ -479,6 +491,9 @@
     </Filter>
     <Filter Include="External\RapidJSON\msinttypes">
       <UniqueIdentifier>{dc4c26dd-0a35-4715-b70d-a0bc80ba34d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainState\Shark">
+      <UniqueIdentifier>{2991fa8b-4bc2-478d-82f1-a4fce45f457d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

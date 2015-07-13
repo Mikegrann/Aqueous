@@ -8,6 +8,7 @@
 #include "CGUIVolumeControlWidget.h"
 #include "CGUITerrainControlWidget.h"
 #include "CGUIGlyphControlWidget.h"
+#include "CGUISharkControlWidget.h"
 #include "CGUISceneControlWidget.h"
 #include "CGUIControlPanelWidget.h"
 
@@ -33,6 +34,7 @@ public:
 	CGUIVolumeControlWidget * GetVolumeControl();
 	CGUITerrainControlWidget * GetTerrainControl();
 	CGUIGlyphControlWidget * GetGlyphControl();
+	CGUISharkControlWidget * GetSharkControl();
 	CGUISceneControlWidget * GetSceneControl();
 	CGUIControlPanelWidget * GetControlPanel();
 
@@ -49,6 +51,7 @@ protected:
 	CGUIVolumeControlWidget * VolumeControl = 0;
 	CGUITerrainControlWidget * TerrainControl = 0;
 	CGUIGlyphControlWidget * GlyphControl = 0;
+	CGUISharkControlWidget * SharkControl = 0;
 	CGUISceneControlWidget * SceneControl = 0;
 	CGUIControlPanelWidget * ControlPanel = 0;
 

@@ -8,6 +8,7 @@
 #include "CTerrainNodeManager.h"
 #include "CVolumeNodeManager.h"
 #include "CGlyphNodeManager.h"
+#include "CSharkNodeManager.h"
 #include "CPlaneGridSceneObject.h"
 
 #include <ionGUI/CGUIEventManager.h>
@@ -92,7 +93,9 @@ void CLoadState::LoadShaders()
 {
 	Indent = 60;
 	bool Failed = false;
-	
+
+	if (! (Context->Shaders.Shark = SceneManager->GetShaderLibrary()->Load("Shark")))
+		AddLabel(L"Failed to load Shark Shader - Shark will not draw.", Gwen::Color(255, 32, 32, 192)), Failed = true;
 	if (! (Context->Shaders.Glyph = SceneManager->GetShaderLibrary()->Load("Glyph")))
 		AddLabel(L"Failed to load Glyph Shader - Glyphs will not draw.", Gwen::Color(255, 32, 32, 192)), Failed = true;
 	if (! (Context->Shaders.DiffuseTexture = SceneManager->GetShaderLibrary()->Load("DiffuseTexture")))
@@ -179,6 +182,7 @@ void CLoadState::LoadScene()
 
 	Scene.Glyphs->Init();
 	Scene.Terrain->Load();
+	Scene.Shark->Init();
 	Scene.Volume->Load();
 
 	CSceneNode * MergePass = SceneManager->GetFactory()->AddPostProcessingSceneNode("Merge", "Merge");

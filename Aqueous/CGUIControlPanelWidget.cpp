@@ -12,7 +12,7 @@ CGUIControlPanelWidget::CGUIControlPanelWidget()
 {
 	Window = new Gwen::Controls::WindowControl(GUIManager->GetCanvas());
 	Window->SetDeleteOnClose(false);
-	Window->SetBounds(30, 600, 660 + 30, 85);
+	Window->SetBounds(30, 600, 660 + 30 + 165, 85);
 	Window->SetTitle("Control Panel");
 	Window->SetClosable(false);
 
@@ -35,6 +35,11 @@ CGUIControlPanelWidget::CGUIControlPanelWidget()
 	EnableButton->SetBounds(510, 10, 150, 35);
 	EnableButton->SetText("Scene Controls");
 	EnableButton->onPress.Add(this, & CGUIControlPanelWidget::OnToggleScene);
+
+	EnableButton = new Gwen::Controls::Button(Window);
+	EnableButton->SetBounds(675, 10, 150, 35);
+	EnableButton->SetText("Shark Controls");
+	EnableButton->onPress.Add(this, &CGUIControlPanelWidget::OnToggleShark);
 }
 
 void CGUIControlPanelWidget::OnToggleTerrain(Gwen::Controls::Base * Control)
@@ -59,4 +64,10 @@ void CGUIControlPanelWidget::OnToggleScene(Gwen::Controls::Base * Control)
 {
 	CProgramContext * Context = & CProgramContext::Get();
 	Context->GUIContext->GetSceneControl()->toggle();
+}
+
+void CGUIControlPanelWidget::OnToggleShark(Gwen::Controls::Base * Control)
+{
+	CProgramContext * Context = &CProgramContext::Get();
+	Context->GUIContext->GetSharkControl()->toggle();
 }

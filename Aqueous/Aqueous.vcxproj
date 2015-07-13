@@ -57,6 +57,7 @@
     <ClCompile Include="CGUIGlyphControlWidget.cpp" />
     <ClCompile Include="CGUIMainMenuWidget.cpp" />
     <ClCompile Include="CGUISceneControlWidget.cpp" />
+    <ClCompile Include="CGUISharkControlWidget.cpp" />
     <ClCompile Include="CGUISiteWidget.cpp" />
     <ClCompile Include="CGUITerrainControlWidget.cpp" />
     <ClCompile Include="CGUIVolumeControlWidget.cpp" />
@@ -67,6 +68,7 @@
     <ClCompile Include="CMainState.MouseTracking.cpp" />
     <ClCompile Include="CPlaneGridSceneObject.cpp" />
     <ClCompile Include="CProgramContext.cpp" />
+    <ClCompile Include="CSharkNodeManager.cpp" />
     <ClCompile Include="CSite.cpp" />
     <ClCompile Include="CLocation.cpp" />
     <ClCompile Include="CTerrainNodeManager.cpp" />
@@ -122,10 +124,12 @@
     <ClInclude Include="CGUIGlyphControlWidget.h" />
     <ClInclude Include="CGUIMainMenuWidget.h" />
     <ClInclude Include="CGUISceneControlWidget.h" />
+    <ClInclude Include="CGUISharkControlWidget.h" />
     <ClInclude Include="CGUITerrainControlWidget.h" />
     <ClInclude Include="CGUIVolumeControlWidget.h" />
     <ClInclude Include="CLoadState.h" />
     <ClInclude Include="CGUISiteWidget.h" />
+    <ClInclude Include="CSharkNodeManager.h" />
     <ClInclude Include="GifWriter.h" />
     <ClInclude Include="CLocation.h" />
     <ClInclude Include="CMainMenuState.h" />

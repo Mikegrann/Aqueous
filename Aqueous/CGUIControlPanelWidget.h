@@ -19,5 +19,6 @@ public:
 	void OnToggleVolume(Gwen::Controls::Base * Control);
 	void OnToggleGlyph(Gwen::Controls::Base * Control);
 	void OnToggleScene(Gwen::Controls::Base * Control);
+	void OnToggleShark(Gwen::Controls::Base * Control);
 
 };

@@ -20,6 +20,7 @@ void CGUIContext::SetupMainState()
 	VolumeControl = new CGUIVolumeControlWidget();
 	TerrainControl = new CGUITerrainControlWidget();
 	GlyphControl = new CGUIGlyphControlWidget();
+	SharkControl = new CGUISharkControlWidget();
 	SceneControl = new CGUISceneControlWidget();
 	ControlPanel = new CGUIControlPanelWidget();
 	
@@ -34,6 +35,7 @@ void CGUIContext::Clear()
 	VolumeControl = 0;
 	TerrainControl = 0;
 	GlyphControl = 0;
+	SharkControl = 0;
 	SceneControl = 0;
 	ControlPanel = 0;
 
@@ -69,6 +71,11 @@ CGUITerrainControlWidget * CGUIContext::GetTerrainControl()
 CGUIGlyphControlWidget * CGUIContext::GetGlyphControl()
 {
 	return GlyphControl;
+}
+
+CGUISharkControlWidget * CGUIContext::GetSharkControl()
+{
+	return SharkControl;
 }
 
 CGUISceneControlWidget * CGUIContext::GetSceneControl()

@@ -3,6 +3,7 @@
 
 #include "CTerrainNodeManager.h"
 #include "CGlyphNodeManager.h"
+#include "CSharkNodeManager.h"
 #include "CSite.h"
 #include "CSpectrumColorMapper.h"
 #include "CGUIContext.h"
@@ -116,6 +117,7 @@ void CMainState::Update(f32 const Elapsed)
 	glEnable(GL_DEPTH_TEST);
 
 	Scene.Volume->Update();
+	Scene.Shark->Update(Elapsed);
 
 	SceneManager->DrawAll();
 

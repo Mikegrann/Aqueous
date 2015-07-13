@@ -11,6 +11,7 @@ class CGUIContext;
 class CTerrainNodeManager;
 class CVolumeNodeManager;
 class CGlyphNodeManager;
+class CSharkNodeManager;
 
 class CSite;
 
@@ -37,6 +38,7 @@ public:
 		CSceneNode * SkyBox = nullptr;
 		SingletonPointer<CTerrainNodeManager> Terrain;
 		SingletonPointer<CGlyphNodeManager> Glyphs;
+		SingletonPointer<CSharkNodeManager> Shark;
 		SingletonPointer<CVolumeNodeManager> Volume;
 		CSceneNode * Water = nullptr;
 
@@ -52,6 +54,7 @@ public:
 		CShader * Terrain = nullptr;
 		CShader * Volume = nullptr;
 		CShader * Glyph = nullptr;
+		CShader * Shark = nullptr;
 		CShader * Water = nullptr;
 		CShader * Merge = nullptr;
 		CShader * Refract = nullptr;

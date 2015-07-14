@@ -77,7 +77,7 @@ void CGUISceneControlWidget::SetDateTime()
 	CProgramContext * Context = &CProgramContext::Get();
 
 	DateLabel->SetText(Context->Scene.Glyphs->GetTimeFormatted());
-	Context->CurrentSite->GetCurrentDataSet()->GenerateVolume(Context->Scene.Glyphs->GetTime());
+	Context->CurrentSite->GetCurrentDataSet()->GenerateVolume(Context->Scene.Glyphs->GetTime(), Context->Scene.Volume->GetInterpMode());
 }
 
 void CGUISceneControlWidget::OnTimeDecrease(Gwen::Controls::Base * Control)

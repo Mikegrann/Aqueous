@@ -61,10 +61,10 @@ void CDataSet::ConcurrentLoad()
 {
 	InitTextures();
 	auto firstPoint = Points.begin();
-	GenerateVolume((std::time_t)firstPoint->GetField(Traits.TField));
+	GenerateVolume((std::time_t)firstPoint->GetField(Traits.TField), (CVolumeNodeManager::InterpMode)0);
 }
 
-void CDataSet::GenerateVolume(std::time_t targetTime) {
+void CDataSet::GenerateVolume(std::time_t targetTime, CVolumeNodeManager::InterpMode mode) {
 	IColorMapper * Mapper = nullptr;
 
 	if (VolumeColorMapper == "Spectrum")
@@ -72,10 +72,9 @@ void CDataSet::GenerateVolume(std::time_t targetTime) {
 	else if (VolumeColorMapper == "Oxygen")
 		Mapper = new COxygenColorMapper();
 
-	GenerateVolumeFromPointData(targetTime);
+	GenerateVolumeFromPointData(targetTime, mode);
 
 	Volume.MakeOpenGLVolume(VolumeHandle, Mapper);
-
 	
 	vec3u Dimensions = Volume.Dimensions; // (10);
 	u8 * const VolumeData = new u8[Dimensions.X * Dimensions.Y * Dimensions.Z]();
@@ -153,7 +152,7 @@ void CDataSet::InitSceneElements(CProgramContext::SScene & Scene)
 	Scene.Glyphs->LoadGlyphs(this, Mapper);
 }
 
-void CDataSet::GenerateVolumeFromPointData(std::time_t targetTime)
+void CDataSet::GenerateVolumeFromPointData(std::time_t targetTime, CVolumeNodeManager::InterpMode mode)
 {
 	SRange<f64> XRange = Points.GetFieldRange(Traits.PositionXField, 15.0);
 	SRange<f64> YRange = Points.GetFieldRange(Traits.PositionYField, 15.0);
@@ -212,8 +211,23 @@ void CDataSet::GenerateVolumeFromPointData(std::time_t targetTime)
 	print.EndProgress();
 	
 	cout << "Creating interpolator..." << endl;
-	//RBFInterpolator rbfi(Xs, Ys, Zs, Fs);
-	PolyRegress pr(Ys, Fs, 2, false);
+	RBFInterpolator *rbfi = 0;
+	PolyRegress *pr = 0;
+
+	switch (mode) {
+		case CVolumeNodeManager::InterpMode::Radial: 
+			rbfi = new RBFInterpolator(Xs, Ys, Zs, Fs);
+		break;
+
+		case CVolumeNodeManager::InterpMode::Connor:
+			pr = new PolyRegress(Ys, Fs, 2, false);
+		break;
+
+		default:
+			cerr << "Incorrect interpolator mode specified." << endl;
+			return;
+		break;
+	}
 	cout << "Interpolating..." << endl;
 	
 	int const Resolution = 28;
@@ -228,13 +242,24 @@ void CDataSet::GenerateVolumeFromPointData(std::time_t targetTime)
 			for (int i = 0; i < Volume.Dimensions.X; ++ i)
 			{
 				SVolumeDataRecord<f64> & Row = Volume[i][k][j];
-				//Row.GetField(ColorField) = 1.0 - rbfi.interpolate(j / Scale, 1.0 - k / Scale, i / Scale);
-				//Row.GetField(ColorField) = pr.interpolate(k / Scale);
-				//Row.GetField(ColorField) = 1.0 - InvDistWeight::interpolate(positions, vec3f(j / Scale, 1.0 - k / Scale, i / Scale), 2);
-				Row.GetField(ColorField) = (pr.interpolate(k / Scale) + 1.0 - InvDistWeight::interpolate(positions, vec3f(j / Scale, 1.0 - k / Scale, i / Scale), 2)) / 2.0;
+				if (rbfi) {
+					Row.GetField(ColorField) = rbfi->interpolate(j / Scale, k / Scale, i / Scale);
+				}
+				else if (pr) {
+					//Row.GetField(ColorField) = pr->interpolate(k / Scale);
+					//Row.GetField(ColorField) = 1.0 - InvDistWeight::interpolate(positions, vec3f(j / Scale, 1.0 - k / Scale, i / Scale), 2);
+					Row.GetField(ColorField) = (pr->interpolate(k / Scale) + 1.0 - InvDistWeight::interpolate(positions, vec3f(j / Scale, 1.0 - k / Scale, i / Scale), 2)) / 2.0;
+				}
 			}
 		}
 
 		print.SetProgress(k / (f32) Volume.Dimensions.Z);
+	}
+
+	if (rbfi) {
+		delete rbfi;
+	}
+	if (pr) {
+		delete pr;
 	}
 }

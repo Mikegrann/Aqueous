@@ -1,6 +1,8 @@
 #include "CGUIVolumeControlWidget.h"
 
 #include "CProgramContext.h"
+#include "CSite.h"
+#include "CGlyphNodeManager.h"
 #include "CGUIContext.h"
 #include "CMainState.h"
 
@@ -78,10 +80,16 @@ CGUIVolumeControlWidget::CGUIVolumeControlWidget()
 	
 	// Other Controls Panel
 	{
+		Gwen::Controls::Label * InterpLabel = new Gwen::Controls::Label(Window);
+		InterpLabel->SetFont(GUIManager->GetRegularFont());
+		InterpLabel->SetText(L"Interp:");
+		InterpLabel->SetBounds(27, 320 + 10 + 6, 90, 40);
+		InterpLabel->SetTextColor(Gwen::Color(50, 50, 20, 215));
+
 		Gwen::Controls::Label * ControlLabel = new Gwen::Controls::Label(Window);
 		ControlLabel->SetFont(GUIManager->GetRegularFont());
-		ControlLabel->SetText(L"Mode:");
-		ControlLabel->SetBounds(30, 320 + 45 + 6, 90, 40);
+		ControlLabel->SetText(L"Draw:");
+		ControlLabel->SetBounds(33, 320 + 45 + 6, 90, 40);
 		ControlLabel->SetTextColor(Gwen::Color(50, 50, 20, 215));
 		
 		Gwen::Controls::Label * DebugLabel = new Gwen::Controls::Label(Window);
@@ -97,9 +105,17 @@ CGUIVolumeControlWidget::CGUIVolumeControlWidget()
 		ShadingLabel->SetTextColor(Gwen::Color(50, 50, 20, 215));
 
 		Gwen::Controls::Button * pButton2 = new Gwen::Controls::Button(Window);
-		pButton2->SetBounds(80, 120 + 120 + 10 + 35 + 45, 200, 25);
+		pButton2->SetBounds(80, 120 + 120 + 15 + 35, 200, 25);
 		pButton2->SetText("Reset Volume Opacity");
 		
+		Gwen::Controls::ComboBox * InterpMode = new Gwen::Controls::ComboBox(Window);
+		InterpMode->SetBounds(80, 120 + 120 + 45 + 45, 200, 25);
+		for (int i = 0; i < CVolumeNodeManager::InterpMode::NumModes; i++) {
+			std::string name = CVolumeNodeManager::GetInterpName((CVolumeNodeManager::InterpMode)i);
+			Gwen::Controls::MenuItem *newItem = InterpMode->AddItem(Gwen::UnicodeString(name.begin(), name.end()));
+		}
+		OnInterpMode(InterpMode);
+
 		Gwen::Controls::ComboBox * VolumeMode = new Gwen::Controls::ComboBox(Window);
 		VolumeMode->SetBounds(80, 120 + 120 + 45 + 35 + 45, 200, 25);
 		VolumeMode->AddItem(L"Constant");
@@ -167,6 +183,7 @@ CGUIVolumeControlWidget::CGUIVolumeControlWidget()
 		pButtonY->onPress.Add(this,					& CGUIVolumeControlWidget::OnSetYAxis);
 		pButtonZ->onPress.Add(this,					& CGUIVolumeControlWidget::OnSetZAxis);
 		VolumeMode->onSelection.Add(this,			& CGUIVolumeControlWidget::OnVolumeMode);
+		InterpMode->onSelection.Add(this,			& CGUIVolumeControlWidget::OnInterpMode);
 		DebugMode->onSelection.Add(this,			& CGUIVolumeControlWidget::OnDebugMode);
 		ShadingMode->onSelection.Add(this,			& CGUIVolumeControlWidget::OnShadingMode);
 		StepSizeSlider->onValueChanged.Add(this,	& CGUIVolumeControlWidget::OnStepSizeSlider);
@@ -236,6 +253,21 @@ void CGUIVolumeControlWidget::OnSetYAxis(Gwen::Controls::Base * Control)
 void CGUIVolumeControlWidget::OnSetZAxis(Gwen::Controls::Base * Control)
 {
 	VolumeControl.SliceAxis = SVector3f(0.f, 0.f, 1.f);
+}
+
+void CGUIVolumeControlWidget::OnInterpMode(Gwen::Controls::Base * Control)
+{
+	CProgramContext * Context = &CProgramContext::Get();
+	Gwen::Controls::ComboBox * Box = (Gwen::Controls::ComboBox *) Control;
+
+	for (int i = 0; i < CVolumeNodeManager::InterpMode::NumModes; i++) {
+		std::string name = CVolumeNodeManager::GetInterpName((CVolumeNodeManager::InterpMode)i);
+		if (Box->GetSelectedItem()->GetText() == Gwen::UnicodeString(name.begin(), name.end())) {
+			Context->Scene.Volume->SetInterpMode((CVolumeNodeManager::InterpMode)i);
+			Context->CurrentSite->GetCurrentDataSet()->GenerateVolume(Context->Scene.Glyphs->GetTime(), Context->Scene.Volume->GetInterpMode());
+			return;
+		}
+	}
 }
 
 void CGUIVolumeControlWidget::OnVolumeMode(Gwen::Controls::Base * Control)

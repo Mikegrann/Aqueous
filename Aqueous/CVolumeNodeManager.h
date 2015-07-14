@@ -9,6 +9,33 @@ class CVolumeNodeManager : public Singleton<CVolumeNodeManager>
 {
 
 public:
+	enum InterpMode {
+		Radial,
+		Connor,
+		NumModes
+	};
+	static std::string GetInterpName(InterpMode mode) {
+		switch (mode) {
+			case Radial: 
+				return "Radial Basis";
+			break;
+
+			case Connor:
+				return "Depth & Inverse Dist";
+			break;
+
+			default: 
+				return "";
+			break;
+		}
+	}
+
+	void SetInterpMode(InterpMode mode) {
+		Interp = mode;
+	}
+	InterpMode GetInterpMode() const {
+		return Interp;
+	}
 
 	struct SControl
 	{
@@ -53,4 +80,5 @@ private:
 	friend class Singleton<CVolumeNodeManager>;
 	CVolumeNodeManager();
 
+	InterpMode Interp;
 };

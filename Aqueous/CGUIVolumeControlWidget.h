@@ -37,8 +37,9 @@ public:
 	void OnSetXAxis(Gwen::Controls::Base * Control);
 	void OnSetYAxis(Gwen::Controls::Base * Control);
 	void OnSetZAxis(Gwen::Controls::Base * Control);
-	
+
 	void OnVolumeMode(Gwen::Controls::Base * Control);
+	void OnInterpMode(Gwen::Controls::Base * Control);
 	void OnDebugMode(Gwen::Controls::Base * Control);
 	void OnShadingMode(Gwen::Controls::Base * Control);
 	void OnDepthMode(Gwen::Controls::Base * Control);

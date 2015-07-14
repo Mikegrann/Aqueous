@@ -12,7 +12,7 @@ CVolumeNodeManager::SControl::SControl()
 	StepSize(100.f), DebugLevel(0), UseShading(0)
 {}
 
-CVolumeNodeManager::CVolumeNodeManager()
+CVolumeNodeManager::CVolumeNodeManager() : Interp((InterpMode)0)
 {}
 
 bool CVolumeNodeManager::Load()

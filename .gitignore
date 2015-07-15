@@ -1,0 +1,22 @@
+syntax: glob
+*.log
+*.tlog
+*.obj
+*.lastbuildstate
+*.pdb
+*.ilk
+*.idb
+*.opensdf
+*.sdf
+*.v11.suo
+*.v12.suo
+*.exe
+*.dll
+*/ShaderCompileLog.txt
+*.unsuccessfulbuild
+Thumbs.db
+*.psd
+*/Screenshots/*
+Aqueous/Aqueous.vcxproj.user
+
+!Aqueous/Meshes/*

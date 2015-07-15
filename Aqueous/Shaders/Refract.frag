@@ -1,6 +1,6 @@
 #version 150
 
-#define LIGHT_MAX 4
+//const int LIGHT_MAX = 4;
 
 struct SMaterial
 {
@@ -12,9 +12,10 @@ struct SLight
 {
 	vec3 Color;
 	float Radius;
+   vec3 Position;
 };
 
-in vec3 vLight[LIGHT_MAX];
+in vec3 vLight[4];//[LIGHT_MAX];
 in vec3 vNormal;
 in vec2 vTexCoord;
 in vec4 vScreenPosition;
@@ -23,7 +24,7 @@ uniform sampler2D Texture0;
 uniform sampler2D Texture1;
 uniform sampler2D Texture2;
 uniform int uLightCount;
-uniform SLight uLights[LIGHT_MAX];
+uniform SLight uLights[4];//[LIGHT_MAX];
 uniform SMaterial uMaterial;
 uniform float uElapsedTime;
 
@@ -48,7 +49,7 @@ void main()
 	if (MaskValue == 0.0)
 		discard;
 
-	for (int i = 0; i < LIGHT_MAX && i < uLightCount; ++ i)
+	for (int i = 0; i < 4 && i < uLightCount; i = i + 1)
 	{
 		vec3 nLight = normalize(vLight[i]);
 		vec3 nNormal = normalize(vNormal);

@@ -188,6 +188,12 @@
     <ClCompile Include="CSharkNodeManager.cpp">
       <Filter>MainState\Shark</Filter>
     </ClCompile>
+    <ClCompile Include="CSplineNodeManager.cpp">
+      <Filter>MainState\Spline</Filter>
+    </ClCompile>
+    <ClCompile Include="EXEreader.cpp">
+      <Filter>MainState\Data Management\Parsers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CMainState.h">
@@ -421,6 +427,12 @@
     <ClInclude Include="CSharkNodeManager.h">
       <Filter>MainState\Shark</Filter>
     </ClInclude>
+    <ClInclude Include="CSplineNodeManager.h">
+      <Filter>MainState\Spline</Filter>
+    </ClInclude>
+    <ClInclude Include="EXEreader.h">
+      <Filter>MainState\Data Management\Parsers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="MainState">
@@ -494,6 +506,9 @@
     </Filter>
     <Filter Include="MainState\Shark">
       <UniqueIdentifier>{2991fa8b-4bc2-478d-82f1-a4fce45f457d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainState\Spline">
+      <UniqueIdentifier>{0cb1b1d7-c638-4590-9d2f-52a07f3f6b90}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

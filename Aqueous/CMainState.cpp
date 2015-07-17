@@ -4,6 +4,7 @@
 #include "CTerrainNodeManager.h"
 #include "CGlyphNodeManager.h"
 #include "CSharkNodeManager.h"
+#include "CSplineNodeManager.h"
 #include "CSite.h"
 #include "CSpectrumColorMapper.h"
 #include "CGUIContext.h"

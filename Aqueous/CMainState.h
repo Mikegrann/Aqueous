@@ -3,7 +3,6 @@
 #include "CProgramContext.h"
 #include "GifWriter.h"
 
-
 class CMainState : public CContextState<CMainState, CProgramContext>
 {
 

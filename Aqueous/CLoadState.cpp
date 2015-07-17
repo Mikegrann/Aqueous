@@ -9,6 +9,7 @@
 #include "CVolumeNodeManager.h"
 #include "CGlyphNodeManager.h"
 #include "CSharkNodeManager.h"
+#include "CSplineNodeManager.h"
 #include "CPlaneGridSceneObject.h"
 
 #include <ionGUI/CGUIEventManager.h>
@@ -183,6 +184,7 @@ void CLoadState::LoadScene()
 	Scene.Glyphs->Init();
 	Scene.Terrain->Load();
 	Scene.Shark->Init();
+	Scene.Spline->Init();
 	Scene.Volume->Load();
 
 	CSceneNode * MergePass = SceneManager->GetFactory()->AddPostProcessingSceneNode("Merge", "Merge");

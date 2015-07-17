@@ -12,6 +12,7 @@ class CTerrainNodeManager;
 class CVolumeNodeManager;
 class CGlyphNodeManager;
 class CSharkNodeManager;
+class CSplineNodeManager;
 
 class CSite;
 
@@ -39,6 +40,7 @@ public:
 		SingletonPointer<CTerrainNodeManager> Terrain;
 		SingletonPointer<CGlyphNodeManager> Glyphs;
 		SingletonPointer<CSharkNodeManager> Shark;
+		SingletonPointer<CSplineNodeManager> Spline;
 		SingletonPointer<CVolumeNodeManager> Volume;
 		CSceneNode * Water = nullptr;
 

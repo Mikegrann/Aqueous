@@ -18,7 +18,7 @@ RBFInterpolator::RBFInterpolator()
 	successfullyInitialized = false;
 }
 
-RBFInterpolator::RBFInterpolator(vector<real> x, vector<real> y, vector<real> z, vector<real> f)
+RBFInterpolator::RBFInterpolator(vector<real> x, vector<real> y, vector<real> z, vector<real> f, RBFunc basis)
 {
 
 
@@ -30,6 +30,7 @@ RBFInterpolator::RBFInterpolator(vector<real> x, vector<real> y, vector<real> z,
 	if ( x.size() != M || y.size() != M || z.size() != M )
 		return;	
 
+	basis_func = basis;
 	ColumnVector F = ColumnVector(M + 4);
 	P = Matrix(M, 3);
 
@@ -63,7 +64,7 @@ RBFInterpolator::RBFInterpolator(vector<real> x, vector<real> y, vector<real> z,
 
 		real distance_squared = dx*dx + dy*dy + dz*dz;
 
-		G(i,j) = g(distance_squared);
+		G(i,j) = basis_func(distance_squared);
 	}
 
 	//Set last 4 columns of G
@@ -127,7 +128,7 @@ real RBFInterpolator::interpolate(real x, real y, real z)
 
 		real distance_squared = dx*dx + dy*dy + dz*dz;
 
-		sum += (real) (A(i) * g(distance_squared));
+		sum += (real)(A(i) * basis_func(distance_squared));
 	}
 	
 	//affine part
@@ -137,9 +138,17 @@ real RBFInterpolator::interpolate(real x, real y, real z)
 }
 
 //note: assuming the input is t squared
-real RBFInterpolator::g(real t_squared)
+//sqrt(log10(r^2 + B^2))
+real RBFInterpolator::log_shift(real t_squared)
 {	
 	return sqrt(log10(t_squared + 1.0f));
+}
+
+//r^2 * ln(r)
+real RBFInterpolator::thin_spline(real t_squared)
+{
+	real t = sqrt(t_squared);
+	return t ? t_squared * log(t) : 0;
 }
 
 void RBFInterpolator::UpdateFunctionValues(vector<real> f)

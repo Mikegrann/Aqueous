@@ -215,9 +215,13 @@ void CDataSet::GenerateVolumeFromPointData(std::time_t targetTime, CVolumeNodeMa
 	PolyRegress *pr = 0;
 
 	switch (mode) {
-		case CVolumeNodeManager::InterpMode::Radial: 
-			rbfi = new RBFInterpolator(Xs, Ys, Zs, Fs);
+		case CVolumeNodeManager::InterpMode::Radial_Log: 
+			rbfi = new RBFInterpolator(Xs, Ys, Zs, Fs, RBFInterpolator::log_shift);
 		break;
+
+		case CVolumeNodeManager::InterpMode::Radial_ThinSpline:
+			rbfi = new RBFInterpolator(Xs, Ys, Zs, Fs, RBFInterpolator::thin_spline);
+			break;
 
 		case CVolumeNodeManager::InterpMode::Connor:
 			pr = new PolyRegress(Ys, Fs, 2, false);
@@ -246,9 +250,9 @@ void CDataSet::GenerateVolumeFromPointData(std::time_t targetTime, CVolumeNodeMa
 					Row.GetField(ColorField) = rbfi->interpolate(j / Scale, k / Scale, i / Scale);
 				}
 				else if (pr) {
-					//Row.GetField(ColorField) = pr->interpolate(k / Scale);
-					//Row.GetField(ColorField) = 1.0 - InvDistWeight::interpolate(positions, vec3f(j / Scale, 1.0 - k / Scale, i / Scale), 2);
-					Row.GetField(ColorField) = (pr->interpolate(k / Scale) + 1.0 - InvDistWeight::interpolate(positions, vec3f(j / Scale, 1.0 - k / Scale, i / Scale), 2)) / 2.0;
+					Row.GetField(ColorField) = pr->interpolate(k / Scale);
+					Row.GetField(ColorField) += 1.0 - InvDistWeight::interpolate(positions, vec3f(j / Scale, 1.0 - k / Scale, i / Scale), 2);
+					Row.GetField(ColorField) /= 2.0;
 				}
 			}
 		}

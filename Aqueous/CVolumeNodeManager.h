@@ -10,15 +10,20 @@ class CVolumeNodeManager : public Singleton<CVolumeNodeManager>
 
 public:
 	enum InterpMode {
-		Radial,
+		Radial_Log,
+		Radial_ThinSpline,
 		Connor,
 		NumModes
 	};
 	static std::string GetInterpName(InterpMode mode) {
 		switch (mode) {
-			case Radial: 
-				return "Radial Basis";
+			case Radial_Log: 
+				return "Radial Basis - Log Shift";
 			break;
+
+			case Radial_ThinSpline:
+				return "Radial Basis - Thin Spline";
+				break;
 
 			case Connor:
 				return "Depth & Inverse Dist";

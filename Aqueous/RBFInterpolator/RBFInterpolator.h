@@ -23,6 +23,8 @@
 
 typedef float real;
 
+typedef real(*RBFunc)(real t_squared);
+
 using namespace std;
 
 class RBFInterpolator
@@ -32,7 +34,7 @@ public:
 	~RBFInterpolator();
 
 	//create an interpolation function f that obeys F_i = f(x_i, y_i, z_i)
-	RBFInterpolator(vector<real> x, vector<real> y, vector<real> z, vector<real> F);
+	RBFInterpolator(vector<real> x, vector<real> y, vector<real> z, vector<real> F, RBFunc basis);
 
 	//specify new function values F_i while keeping the same 
 	void UpdateFunctionValues(vector<real> F);
@@ -40,10 +42,14 @@ public:
 	//evaluate the interpolation function f at the 3D position (x,y,z)
 	real interpolate(real x, real y, real z);
 
+	// valid RBFuncs
+	static real log_shift(real t_squared);
+	static real thin_spline(real t_squared);
+
 private:
+	RBFunc basis_func;
 
 	// read the tutorial on cg.alexandra.dk to make sense of these variable names ;-)
-	real g(real t_squared);
 	bool successfullyInitialized;
 	ColumnVector A;
 	Matrix P;		//contains positions

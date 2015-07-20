@@ -5,6 +5,7 @@
 #include "CProgramContext.h"
 #include "CDataSet.h"
 
+extern f64 GlobalMin, GlobalMax;
 
 vec3f CGlyph::GetPosition() const
 {
@@ -95,6 +96,9 @@ void CGlyphNodeManager::LoadGlyphs(CDataSet * DataSet, IColorMapper * ColorMappe
 	SRange<f64> XRange = DataSet->Points.GetFieldRange(DataSet->Traits.PositionXField, 15.0);
 	SRange<f64> YRange = DataSet->Points.GetFieldRange(DataSet->Traits.PositionYField, 15.0);
 	SRange<f64> ZRange = DataSet->Points.GetFieldRange(DataSet->Traits.PositionZField, 15.0);
+	SRange<f64> CRange = DataSet->Points.GetFieldRange(DataSet->ColorField, 15.0);
+	GlobalMin = CRange.Minimum;
+	GlobalMax = CRange.Maximum;
 
 	if (XRange.IsEmpty())
 		XRange = SRange<f64>(-1, 1);

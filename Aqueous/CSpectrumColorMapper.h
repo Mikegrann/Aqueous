@@ -5,10 +5,6 @@
 #include <ionScene.h>
 #include <ionScience.h>
 
-
-extern f64 GlobalMin, GlobalMax;
-
-
 class CSpectrumColorMapper : public IColorMapper
 {
 
@@ -91,8 +87,6 @@ public:
 	virtual void PreProcessValues(IDatabase<f64> & s)
 	{
 		FieldRange = s.GetFieldRange(Field, ValueCutoff, AcceptedRange);
-		GlobalMin = FieldRange.Minimum;
-		GlobalMax = FieldRange.Maximum;
 	}
 
 };

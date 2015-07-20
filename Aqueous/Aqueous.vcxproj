@@ -46,6 +46,9 @@
         %(Command)
       </Command>
     </PostBuildEvent>
+    <ClCompile>
+      <MultiProcessorCompilation Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</MultiProcessorCompilation>
+    </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CDataLoadingThread.cpp" />

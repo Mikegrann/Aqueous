@@ -8,9 +8,9 @@ GWEN_CONTROL_CONSTRUCTOR(HorizontalSliderTooltip)
 	m_SliderBar->SetHorizontal(true);
 }
 
-float HorizontalSliderTooltip::CalculateValue()
+float HorizontalSliderTooltip::GetFloatValue()
 {
-	float value = (float)m_SliderBar->X() / (float)(Width() - m_SliderBar->Width());
+	float value = Slider::GetFloatValue();
 	SetToolTip(TextObject(std::to_string(value)));
 	return value;
 }
@@ -18,5 +18,5 @@ float HorizontalSliderTooltip::CalculateValue()
 void HorizontalSliderTooltip::SetFloatValue(float val, bool forceUpdate)
 {
 	Slider::SetFloatValue(val, forceUpdate);
-	CalculateValue();
+	GetFloatValue();
 }

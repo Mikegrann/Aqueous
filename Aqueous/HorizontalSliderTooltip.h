@@ -19,7 +19,7 @@ namespace Gwen
 		{
 			GWEN_CONTROL(HorizontalSliderTooltip, HorizontalSlider);
 
-			virtual float CalculateValue();
+			virtual float GetFloatValue();
 			virtual void SetFloatValue(float val, bool forceUpdate = true);
 		};
 	}

@@ -13,6 +13,7 @@ class CVolumeNodeManager;
 class CGlyphNodeManager;
 class CSharkNodeManager;
 class CSplineNodeManager;
+class CWorldTime;
 
 class CSite;
 
@@ -76,6 +77,8 @@ public:
 	CTexture2D * RefractMaskTexture = nullptr;
 	CTexture2D * FinalColor = nullptr;
 	CTexture2D * AAColor = nullptr;
+
+	SingletonPointer<CWorldTime> WorldTime;
 
 	string SitePath = "./Sites/";
 

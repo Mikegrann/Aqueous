@@ -6,6 +6,7 @@
 #include "CSharkNodeManager.h"
 #include "CSplineNodeManager.h"
 #include "CSite.h"
+#include "CWorldTime.h"
 #include "CSpectrumColorMapper.h"
 #include "CGUIContext.h"
 
@@ -116,6 +117,13 @@ void CMainState::Update(f32 const Elapsed)
 	//Context->Scene.SkyBox->load(SceneManager, SceneManager->getDefaultColorRenderPass());
 	//Context->Scene.SkyBox->draw(SceneManager, SceneManager->getDefaultColorRenderPass(), false);
 	glEnable(GL_DEPTH_TEST);
+
+	// Time Management
+	if (Context->WorldTime->HasTimeChanged())  {
+		Scene.Glyphs->UpdateTime(Context->WorldTime->GetTime());
+		Scene.Volume->UpdateTime(Context->WorldTime->GetTime());
+	}
+	Context->WorldTime->Update();
 
 	Scene.Volume->Update();
 	Scene.Shark->Update(Elapsed);

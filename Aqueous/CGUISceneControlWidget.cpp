@@ -4,6 +4,7 @@
 #include "CSite.h"
 #include "CDataSet.h"
 #include "CMainState.h"
+#include "CWorldTime.h"
 #include "CTerrainNodeManager.h"
 #include "CGlyphNodeManager.h"
 
@@ -76,8 +77,7 @@ void CGUISceneControlWidget::SetDateTime()
 {
 	CProgramContext * Context = &CProgramContext::Get();
 
-	DateLabel->SetText(Context->Scene.Glyphs->GetTimeFormatted());
-	Context->CurrentSite->GetCurrentDataSet()->GenerateVolume(Context->Scene.Glyphs->GetTime(), Context->Scene.Volume->GetInterpMode());
+	DateLabel->SetText(Context->WorldTime->GetTimeFormatted());
 }
 
 void CGUISceneControlWidget::OnTimeDecrease(Gwen::Controls::Base * Control)
@@ -85,7 +85,7 @@ void CGUISceneControlWidget::OnTimeDecrease(Gwen::Controls::Base * Control)
 	GUIContext->GetConsole()->AddMessage("Time Decreased");
 
 	CProgramContext * Context = &CProgramContext::Get();
-	Context->Scene.Glyphs->DecreaseTime();
+	Context->WorldTime->DecreaseTime(GetTimeStep());
 	SetDateTime();
 }
 
@@ -94,6 +94,6 @@ void CGUISceneControlWidget::OnTimeIncrease(Gwen::Controls::Base * Control)
 	GUIContext->GetConsole()->AddMessage("Time Increased");
 
 	CProgramContext * Context = &CProgramContext::Get();
-	Context->Scene.Glyphs->IncreaseTime();
+	Context->WorldTime->IncreaseTime(GetTimeStep());
 	SetDateTime();
 }

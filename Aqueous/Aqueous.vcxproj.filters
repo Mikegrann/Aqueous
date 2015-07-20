@@ -194,6 +194,9 @@
     <ClCompile Include="EXEreader.cpp">
       <Filter>MainState\Data Management\Parsers</Filter>
     </ClCompile>
+    <ClCompile Include="CWorldTime.cpp">
+      <Filter>MainState\Misc</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CMainState.h">
@@ -432,6 +435,9 @@
     </ClInclude>
     <ClInclude Include="EXEreader.h">
       <Filter>MainState\Data Management\Parsers</Filter>
+    </ClInclude>
+    <ClInclude Include="CWorldTime.h">
+      <Filter>MainState\Misc</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

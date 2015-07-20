@@ -2,6 +2,7 @@
 
 #include "CProgramContext.h"
 #include "CSite.h"
+#include "CWorldTime.h"
 #include "CGlyphNodeManager.h"
 #include "CGUIContext.h"
 #include "CMainState.h"
@@ -264,7 +265,7 @@ void CGUIVolumeControlWidget::OnInterpMode(Gwen::Controls::Base * Control)
 		std::string name = CVolumeNodeManager::GetInterpName((CVolumeNodeManager::InterpMode)i);
 		if (Box->GetSelectedItem()->GetText() == Gwen::UnicodeString(name.begin(), name.end())) {
 			Context->Scene.Volume->SetInterpMode((CVolumeNodeManager::InterpMode)i);
-			Context->CurrentSite->GetCurrentDataSet()->GenerateVolume(Context->Scene.Glyphs->GetTime(), Context->Scene.Volume->GetInterpMode());
+			Context->CurrentSite->GetCurrentDataSet()->GenerateVolume(Context->WorldTime->GetTime(), Context->Scene.Volume->GetInterpMode());
 			return;
 		}
 	}

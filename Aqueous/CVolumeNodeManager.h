@@ -70,6 +70,8 @@ public:
 	void Update();
 	void LoadTextures();
 
+	void UpdateTime(std::time_t t);
+
 protected:
 
 	SingletonPointer<CSceneManager> SceneManager;

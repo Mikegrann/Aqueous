@@ -1,4 +1,6 @@
 #include "CVolumeNodeManager.h"
+#include "CSite.h"
+#include "CDataSet.h"
 
 #include <ionWindow.h>
 
@@ -147,6 +149,13 @@ void CVolumeNodeManager::Update()
 		InvModelMatrix = glm::inverse(Node->GetTransformationUniform().GetValue());
 		Control.StepSizeUniform = 1.f / Control.StepSize;
 	}
+}
+
+void CVolumeNodeManager::UpdateTime(std::time_t t)
+{
+	CProgramContext * Context = &CProgramContext::Get();
+
+	Context->CurrentSite->GetCurrentDataSet()->GenerateVolume(t, GetInterpMode());
 }
 
 CSceneNode * CVolumeNodeManager::GetNode()

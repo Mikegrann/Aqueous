@@ -78,6 +78,7 @@
     <ClCompile Include="CWorldTime.cpp" />
     <ClCompile Include="EXEreader.cpp" />
     <ClCompile Include="GifWriter.cpp" />
+    <ClCompile Include="HorizontalSliderTooltip.cpp" />
     <ClCompile Include="InvDistWeight.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include=".\SciDataParserSimpleTXT.cpp" />
@@ -152,6 +153,7 @@
     <ClInclude Include="CGUITitleLabelsWidget.h" />
     <ClInclude Include="CVolumeNodeManager.h" />
     <ClInclude Include="CSplineNodeManager.h" />
+    <ClInclude Include="HorizontalSliderTooltip.h" />
     <ClInclude Include="InvDistWeight.h" />
     <ClInclude Include="newmat\boolean.h" />
     <ClInclude Include="newmat\controlw.h" />

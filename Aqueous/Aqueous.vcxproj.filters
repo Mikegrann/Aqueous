@@ -197,6 +197,9 @@
     <ClCompile Include="CWorldTime.cpp">
       <Filter>MainState\Misc</Filter>
     </ClCompile>
+    <ClCompile Include="HorizontalSliderTooltip.cpp">
+      <Filter>MainState\GUI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CMainState.h">
@@ -438,6 +441,9 @@
     </ClInclude>
     <ClInclude Include="CWorldTime.h">
       <Filter>MainState\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="HorizontalSliderTooltip.h">
+      <Filter>MainState\GUI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

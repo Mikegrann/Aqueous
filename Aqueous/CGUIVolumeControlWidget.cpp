@@ -9,6 +9,7 @@
 
 #include <Gwen/Controls.h>
 #include <Gwen/Controls/ComboBox.h>
+#include "HorizontalSliderTooltip.h"
 
 
 CGUIVolumeControlWidget::CGUIVolumeControlWidget()
@@ -33,7 +34,7 @@ CGUIVolumeControlWidget::CGUIVolumeControlWidget()
 		SliderLabel->SetBounds(10, 10 + 45, 300, 40);
 		SliderLabel->SetTextColor(Gwen::Color(50, 20, 20, 215));
 
-		Gwen::Controls::HorizontalSlider * EmphasisSlider = new Gwen::Controls::HorizontalSlider(Window);
+		Gwen::Controls::HorizontalSliderTooltip * EmphasisSlider = new Gwen::Controls::HorizontalSliderTooltip(Window);
 		EmphasisSlider->SetBounds(10, 30 + 45, 300, 40);
 		EmphasisSlider->SetRange(0.f, 1.f);
 		EmphasisSlider->SetFloatValue(0.5f);
@@ -44,7 +45,7 @@ CGUIVolumeControlWidget::CGUIVolumeControlWidget()
 		SliderLabel->SetBounds(10, 70 + 45, 300, 40);
 		SliderLabel->SetTextColor(Gwen::Color(50, 20, 20, 215));
 
-		IntensitySlider = new Gwen::Controls::HorizontalSlider(Window);
+		IntensitySlider = new Gwen::Controls::HorizontalSliderTooltip(Window);
 		IntensitySlider->SetBounds(10, 90 + 45, 300, 40);
 		IntensitySlider->SetRange(0.5f, 10.f);
 		IntensitySlider->SetFloatValue(1.f);
@@ -55,7 +56,7 @@ CGUIVolumeControlWidget::CGUIVolumeControlWidget()
 		SliderLabel->SetBounds(10, 130 + 45, 300, 40);
 		SliderLabel->SetTextColor(Gwen::Color(50, 20, 20, 215));
 
-		Gwen::Controls::HorizontalSlider * LocalRangeSlider = new Gwen::Controls::HorizontalSlider(Window);
+		Gwen::Controls::HorizontalSliderTooltip * LocalRangeSlider = new Gwen::Controls::HorizontalSliderTooltip(Window);
 		LocalRangeSlider->SetBounds(10, 150 + 45, 300, 40);
 		LocalRangeSlider->SetRange(0.05f, 0.5f);
 		LocalRangeSlider->SetFloatValue(0.1f);
@@ -66,7 +67,7 @@ CGUIVolumeControlWidget::CGUIVolumeControlWidget()
 		SliderLabel->SetBounds(10, 190 + 45, 300, 40);
 		SliderLabel->SetTextColor(Gwen::Color(50, 20, 20, 215));
 
-		Gwen::Controls::HorizontalSlider * MinimumAlphaSlider = new Gwen::Controls::HorizontalSlider(Window);
+		Gwen::Controls::HorizontalSliderTooltip * MinimumAlphaSlider = new Gwen::Controls::HorizontalSliderTooltip(Window);
 		MinimumAlphaSlider->SetBounds(10, 210 + 45, 300, 40);
 		MinimumAlphaSlider->SetRange(0.0f, 0.5f);
 		MinimumAlphaSlider->SetFloatValue(0.1f);
@@ -173,10 +174,10 @@ CGUIVolumeControlWidget::CGUIVolumeControlWidget()
 		SliderLabel->SetBounds(10, 530, 300, 40);
 		SliderLabel->SetTextColor(Gwen::Color(50, 20, 20, 215));
 
-		Gwen::Controls::HorizontalSlider * StepSizeSlider = new Gwen::Controls::HorizontalSlider(Window);
+		Gwen::Controls::HorizontalSliderTooltip * StepSizeSlider = new Gwen::Controls::HorizontalSliderTooltip(Window);
 		StepSizeSlider->SetBounds(10, 545, 300, 40);
 		StepSizeSlider->SetRange(10.f, 300.f);
-		//StepSizeSlider->SetFloatValue(VolumeControl.StepSize);
+		StepSizeSlider->SetFloatValue(VolumeControl.StepSize);
 
 		// Wire Up Events
 		pButton2->onPress.Add(this,					& CGUIVolumeControlWidget::OnResetAlpha);

@@ -7,7 +7,7 @@
 
 #include <Gwen/Controls.h>
 #include <Gwen/Controls/ComboBox.h>
-#include <sstream>
+#include "HorizontalSliderTooltip.h"
 
 
 CGUIGlyphControlWidget::CGUIGlyphControlWidget()
@@ -49,7 +49,7 @@ CGUIGlyphControlWidget::CGUIGlyphControlWidget()
 		SliderLabel->SetBounds(10, 10 + 45 + 25 + 45, 300, 40);
 		SliderLabel->SetTextColor(Gwen::Color(50, 20, 20, 215));
 
-		Gwen::Controls::HorizontalSlider * GlyphSizeSlider = new Gwen::Controls::HorizontalSlider(Window);
+		Gwen::Controls::HorizontalSliderTooltip * GlyphSizeSlider = new Gwen::Controls::HorizontalSliderTooltip(Window);
 		GlyphSizeSlider->SetBounds(10, 10 + 45 + 25 + 15 + 45, 300, 40);
 		GlyphSizeSlider->SetRange(1 / 256.f, 1 / 24.f);
 		GlyphSizeSlider->SetFloatValue(1 / 64.f);

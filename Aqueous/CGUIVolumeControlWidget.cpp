@@ -15,6 +15,9 @@
 CGUIVolumeControlWidget::CGUIVolumeControlWidget()
 	: VolumeControl(CProgramContext::Get().Scene.Volume->Control), MainState(CMainState::Get())
 {
+	CProgramContext * Context = &CProgramContext::Get();
+	f64 minVal = Context->CurrentSite->GetCurrentDataSet()->GetMinColorValue(), maxVal = Context->CurrentSite->GetCurrentDataSet()->GetMaxColorValue();
+
 	Window = new Gwen::Controls::WindowControl(GUIManager->GetCanvas());
 	Window->SetDeleteOnClose(false);
 	Window->SetBounds(1200, 10, 330, 620);
@@ -36,8 +39,9 @@ CGUIVolumeControlWidget::CGUIVolumeControlWidget()
 
 		Gwen::Controls::HorizontalSliderTooltip * EmphasisSlider = new Gwen::Controls::HorizontalSliderTooltip(Window);
 		EmphasisSlider->SetBounds(10, 30 + 45, 300, 40);
-		EmphasisSlider->SetRange(0.f, 1.f);
-		EmphasisSlider->SetFloatValue(0.5f);
+		//EmphasisSlider->SetRange(0.f, 1.f);
+		EmphasisSlider->SetRange(minVal, maxVal);
+		EmphasisSlider->SetFloatValue((maxVal + minVal) / 2.0);
 
 		SliderLabel = new Gwen::Controls::Label(Window);
 		SliderLabel->SetFont(GUIManager->GetRegularFont());
@@ -58,8 +62,8 @@ CGUIVolumeControlWidget::CGUIVolumeControlWidget()
 
 		Gwen::Controls::HorizontalSliderTooltip * LocalRangeSlider = new Gwen::Controls::HorizontalSliderTooltip(Window);
 		LocalRangeSlider->SetBounds(10, 150 + 45, 300, 40);
-		LocalRangeSlider->SetRange(0.05f, 0.5f);
-		LocalRangeSlider->SetFloatValue(0.1f);
+		LocalRangeSlider->SetRange((maxVal - minVal) * 0.05f, (maxVal - minVal) * 0.5f);
+		LocalRangeSlider->SetFloatValue((maxVal - minVal) * 0.1f);
 
 		SliderLabel = new Gwen::Controls::Label(Window);
 		SliderLabel->SetFont(GUIManager->GetRegularFont());
@@ -202,8 +206,11 @@ void CGUIVolumeControlWidget::resetVolumeRange()
 void CGUIVolumeControlWidget::OnEmphasisSlider(Gwen::Controls::Base * Control)
 {
 	Gwen::Controls::Slider * Bar = (Gwen::Controls::Slider *) Control;
-	VolumeControl.EmphasisLocation = Bar->GetFloatValue();
+	VolumeControl.EmphasisLocation = Bar->CalculateValue();
 	resetVolumeRange();
+
+	//Update Tooltip
+	Bar->GetFloatValue();
 }
 
 void CGUIVolumeControlWidget::OnIntensitySlider(Gwen::Controls::Base * Control)
@@ -220,8 +227,11 @@ void CGUIVolumeControlWidget::OnMinimumAlphaSlider(Gwen::Controls::Base * Contro
 
 void CGUIVolumeControlWidget::OnLocalRangeSlider(Gwen::Controls::Base * Control)
 {
+	CProgramContext * Context = &CProgramContext::Get();
+	f64 minVal = Context->CurrentSite->GetCurrentDataSet()->GetMinColorValue(), maxVal = Context->CurrentSite->GetCurrentDataSet()->GetMaxColorValue();
+
 	Gwen::Controls::Slider * Bar = (Gwen::Controls::Slider *) Control;
-	VolumeControl.LocalRange = Bar->GetFloatValue();
+	VolumeControl.LocalRange = Bar->GetFloatValue() / (maxVal - minVal);
 	resetVolumeRange();
 }
 

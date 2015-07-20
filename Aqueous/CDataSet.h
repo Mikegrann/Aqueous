@@ -18,6 +18,9 @@ public:
 	void InitSceneElements(CProgramContext::SScene & Scene);
 	void InitTextures();
 
+	f64 GetMinColorValue() const;
+	f64 GetMaxColorValue() const;
+
 	struct STraits
 	{
 		std::string PositionXField, PositionYField, PositionZField, TField;

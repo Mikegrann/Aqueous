@@ -58,8 +58,6 @@ void CMainState::EndGifDraw()
 	gifWriter = 0;
 }
 
-f64 GlobalMin, GlobalMax;
-
 void CMainState::Update(f32 const Elapsed)
 {
 	CProgramContext::SScene & Scene = Context->Scene;
@@ -175,11 +173,15 @@ void CMainState::Update(f32 const Elapsed)
 	
 	if (ShowKey && Font)
 	{
-		auto GetValueAt = [](f32 const v)
+		CSite * CurrentSite = Context->CurrentSite;
+		CDataSet const * const DataSet = CurrentSite->GetCurrentDataSet();
+		f64 minVal = DataSet->GetMinColorValue(), maxVal = DataSet->GetMaxColorValue();
+		auto GetValueAt = [=](f32 const v)
 		{
 			color4f Color = CSpectrumColorMapper::MapColor(v);
 			glColor3f(Color.Red, Color.Green, Color.Blue);
-			return GlobalMin * (1 - v) + GlobalMax * v;
+
+			return minVal * (1 - v) + maxVal * v;
 		};
 		int Counter = 10;
 		auto DrawColor = [this, & Counter, GetValueAt](c8 const * const Label, f32 const v)

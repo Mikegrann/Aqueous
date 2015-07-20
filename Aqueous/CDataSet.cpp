@@ -267,3 +267,13 @@ void CDataSet::GenerateVolumeFromPointData(std::time_t targetTime, CVolumeNodeMa
 		delete pr;
 	}
 }
+
+f64 CDataSet::GetMinColorValue() const {
+	SRange<f64> FRange = Points.GetFieldRange(ColorField, 15.0);
+	return FRange.Minimum;
+}
+
+f64 CDataSet::GetMaxColorValue() const {
+	SRange<f64> FRange = Points.GetFieldRange(ColorField, 15.0);
+	return FRange.Maximum;
+}

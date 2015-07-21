@@ -105,7 +105,7 @@ void CGUIGlyphControlWidget::OnSizeSlider(Gwen::Controls::Base * Control)
 {
 	CProgramContext & Context = CProgramContext::Get();
 	Gwen::Controls::Slider * Bar = (Gwen::Controls::Slider *) Control;
-	//Context.Scene.Glyphs->GlyphSize = Bar->GetFloatValue();
+	Context.Scene.Glyphs->GlyphSize = Bar->GetFloatValue();
 }
 
 void CGUIGlyphControlWidget::toggle()

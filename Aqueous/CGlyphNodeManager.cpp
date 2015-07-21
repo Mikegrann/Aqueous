@@ -26,6 +26,8 @@ void CGlyphNodeManager::Init()
 	SingletonPointer<CSceneManager> SceneManager;
 	
 	Node = SceneManager->GetFactory()->AddSceneNode("Glyph");
+
+	GlyphSize = 0.02f;
 }
 
 void CGlyphNodeManager::UpdateTime(std::time_t t) {
@@ -66,6 +68,7 @@ void CGlyphNodeManager::LoadSceneElementsAtTime(std::time_t curTime)
 		Node->SetUniform("Model", &Node->GetTransformationUniform());
 		//Node->SetUniform("timeMin", &timeUniformMin);
 		//Node->SetUniform("timeMax", &timeUniformMax);
+		Node->SetUniform("size", &GlyphSize);
 		Node->SetPrimitiveType(ion::GL::EPrimitiveType::Points);
 	}
 

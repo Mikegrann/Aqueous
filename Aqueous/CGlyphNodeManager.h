@@ -41,6 +41,8 @@ public:
 
 	void UpdateTime(std::time_t);
 
+	CUniformValue<float> GlyphSize;
+
 protected:
 
 	void LoadSceneElements();

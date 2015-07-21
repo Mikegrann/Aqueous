@@ -445,6 +445,9 @@
     <ClInclude Include="HorizontalSliderTooltip.h">
       <Filter>MainState\GUI</Filter>
     </ClInclude>
+    <ClInclude Include="Interp.h">
+      <Filter>MainState\Util</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="MainState">

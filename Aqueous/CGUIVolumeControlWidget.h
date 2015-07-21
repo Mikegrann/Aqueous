@@ -20,6 +20,14 @@ class CGUIVolumeControlWidget : public CGUIContextWidget
 	Gwen::Controls::Button * EnableButton;
 	Gwen::Controls::HorizontalSlider * IntensitySlider;
 
+	Gwen::Controls::ComboBox * FuncMode;
+	Gwen::Controls::Label * FuncLabel;
+
+	Gwen::Controls::HorizontalSlider * InvExponent;
+	Gwen::Controls::Label * InvLabel;
+	Gwen::Controls::CheckBox * LogCheckBox;
+	Gwen::Controls::Label * LogLabel;
+
 public:
 
 	CGUIVolumeControlWidget();
@@ -40,6 +48,11 @@ public:
 
 	void OnVolumeMode(Gwen::Controls::Base * Control);
 	void OnInterpMode(Gwen::Controls::Base * Control);
+
+	void OnFuncMode(Gwen::Controls::Base * Control);
+	void OnExponentSlider(Gwen::Controls::Base * Control);
+	void OnLogCheck(Gwen::Controls::Base * Control);
+
 	void OnDebugMode(Gwen::Controls::Base * Control);
 	void OnShadingMode(Gwen::Controls::Base * Control);
 	void OnDepthMode(Gwen::Controls::Base * Control);
@@ -47,4 +60,5 @@ public:
 
 	void toggle();
 
+	void ShowParameters(Interp::Mode mode);
 };

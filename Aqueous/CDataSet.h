@@ -12,8 +12,8 @@ public:
 	CDataSet(CSite * Site);
 
 	void Load(IProgressBar::CTask * Task);
-	void GenerateVolumeFromPointData(std::time_t targetTime, CVolumeNodeManager::InterpMode mode);
-	void GenerateVolume(std::time_t targetTime, CVolumeNodeManager::InterpMode mode);
+	void GenerateVolumeFromPointData(std::time_t targetTime, Interp interp);
+	void GenerateVolume(std::time_t targetTime, Interp interp);
 	void ConcurrentLoad();
 	void InitSceneElements(CProgramContext::SScene & Scene);
 	void InitTextures();

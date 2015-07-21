@@ -157,6 +157,7 @@
     <ClInclude Include="CVolumeNodeManager.h" />
     <ClInclude Include="CSplineNodeManager.h" />
     <ClInclude Include="HorizontalSliderTooltip.h" />
+    <ClInclude Include="Interp.h" />
     <ClInclude Include="InvDistWeight.h" />
     <ClInclude Include="newmat\boolean.h" />
     <ClInclude Include="newmat\controlw.h" />

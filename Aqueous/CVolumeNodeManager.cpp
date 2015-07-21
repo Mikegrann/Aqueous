@@ -14,7 +14,7 @@ CVolumeNodeManager::SControl::SControl()
 	StepSize(100.f), DebugLevel(0), UseShading(0)
 {}
 
-CVolumeNodeManager::CVolumeNodeManager() : Interp((InterpMode)0)
+CVolumeNodeManager::CVolumeNodeManager() : interp((Interp::Mode)0, (Interp::RadialFunc)0, 2, true)
 {}
 
 bool CVolumeNodeManager::Load()
@@ -155,7 +155,7 @@ void CVolumeNodeManager::UpdateTime(std::time_t t)
 {
 	CProgramContext * Context = &CProgramContext::Get();
 
-	Context->CurrentSite->GetCurrentDataSet()->GenerateVolume(t, GetInterpMode());
+	Context->CurrentSite->GetCurrentDataSet()->GenerateVolume(t, GetInterp());
 }
 
 CSceneNode * CVolumeNodeManager::GetNode()

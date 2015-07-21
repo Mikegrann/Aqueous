@@ -20,7 +20,7 @@ CGUIVolumeControlWidget::CGUIVolumeControlWidget()
 
 	Window = new Gwen::Controls::WindowControl(GUIManager->GetCanvas());
 	Window->SetDeleteOnClose(false);
-	Window->SetBounds(1200, 10, 330, 620);
+	Window->SetBounds(1200, 10, 330, 655);
 	Window->SetTitle("Volume Controls");
 	Window->SetHidden(true);
 
@@ -92,22 +92,62 @@ CGUIVolumeControlWidget::CGUIVolumeControlWidget()
 		InterpLabel->SetBounds(27, 320 + 10 + 6, 90, 40);
 		InterpLabel->SetTextColor(Gwen::Color(50, 50, 20, 215));
 
+		// Interpolation Parameters
+		{
+			// Radial
+			FuncLabel = new Gwen::Controls::Label(Window);
+			FuncLabel->SetFont(GUIManager->GetRegularFont());
+			FuncLabel->SetText(L"Func:");
+			FuncLabel->SetBounds(33, 320 + 10 + 35 + 6, 90, 40);
+			FuncLabel->SetTextColor(Gwen::Color(50, 50, 20, 215));
+
+			FuncMode = new Gwen::Controls::ComboBox(Window);
+			FuncMode->SetBounds(80, 120 + 120 + 35 + 45 + 45, 200, 25);
+			for (int i = 0; i < Interp::RadialFunc::NumFuncs; i++) {
+				std::string name = Interp::GetFuncName((Interp::RadialFunc)i);
+				Gwen::Controls::MenuItem *newItem = FuncMode->AddItem(Gwen::UnicodeString(name.begin(), name.end()));
+			}
+
+			// Connor
+			InvLabel = new Gwen::Controls::Label(Window);
+			InvLabel->SetFont(GUIManager->GetRegularFont());
+			InvLabel->SetText(L"Falloff:");
+			InvLabel->SetBounds(27, 320 + 10 + 35 + 6, 90, 40);
+			InvLabel->SetTextColor(Gwen::Color(50, 50, 20, 215));
+
+			InvExponent = new Gwen::Controls::HorizontalSliderTooltip(Window);
+			InvExponent->SetBounds(80, 120 + 120 + 35 + 45 + 45, 100, 25);
+			InvExponent->SetRange(1.0f, 4.0f);
+			InvExponent->SetFloatValue(2.0f);
+			InvExponent->SetNotchCount(3);
+			InvExponent->SetClampToNotches(true);
+
+			LogLabel = new Gwen::Controls::Label(Window);
+			LogLabel->SetFont(GUIManager->GetRegularFont());
+			LogLabel->SetText(L"Log:");
+			LogLabel->SetBounds(80 + 100 + 10, 320 + 10 + 35 + 6, 90, 40);
+			LogLabel->SetTextColor(Gwen::Color(50, 50, 20, 215));
+
+			LogCheckBox = new Gwen::Controls::CheckBox(Window);
+			LogCheckBox->SetBounds(80 + 100 + 10 + 60, 320 + 10 + 35 + 6, 15, 15);
+		}
+
 		Gwen::Controls::Label * ControlLabel = new Gwen::Controls::Label(Window);
 		ControlLabel->SetFont(GUIManager->GetRegularFont());
 		ControlLabel->SetText(L"Draw:");
-		ControlLabel->SetBounds(33, 320 + 45 + 6, 90, 40);
+		ControlLabel->SetBounds(33, 320 + 35 + 45 + 6, 90, 40);
 		ControlLabel->SetTextColor(Gwen::Color(50, 50, 20, 215));
 		
 		Gwen::Controls::Label * DebugLabel = new Gwen::Controls::Label(Window);
 		DebugLabel->SetFont(GUIManager->GetRegularFont());
 		DebugLabel->SetText(L"Debug:");
-		DebugLabel->SetBounds(22, 320 + 45 + 70 + 6, 90, 40);
+		DebugLabel->SetBounds(22, 320 + 35 + 45 + 70 + 6, 90, 40);
 		DebugLabel->SetTextColor(Gwen::Color(50, 50, 20, 215));
 
 		Gwen::Controls::Label * ShadingLabel = new Gwen::Controls::Label(Window);
 		ShadingLabel->SetFont(GUIManager->GetRegularFont());
 		ShadingLabel->SetText(L"Shading:");
-		ShadingLabel->SetBounds(10, 320 + 45 + 70 + 35 + 6, 90, 40);
+		ShadingLabel->SetBounds(10, 320 + 35 + 45 + 70 + 35 + 6, 90, 40);
 		ShadingLabel->SetTextColor(Gwen::Color(50, 50, 20, 215));
 
 		Gwen::Controls::Button * pButton2 = new Gwen::Controls::Button(Window);
@@ -116,21 +156,21 @@ CGUIVolumeControlWidget::CGUIVolumeControlWidget()
 		
 		Gwen::Controls::ComboBox * InterpMode = new Gwen::Controls::ComboBox(Window);
 		InterpMode->SetBounds(80, 120 + 120 + 45 + 45, 200, 25);
-		for (int i = 0; i < CVolumeNodeManager::InterpMode::NumModes; i++) {
-			std::string name = CVolumeNodeManager::GetInterpName((CVolumeNodeManager::InterpMode)i);
+		for (int i = 0; i < Interp::Mode::NumModes; i++) {
+			std::string name = Interp::GetInterpName((Interp::Mode)i);
 			Gwen::Controls::MenuItem *newItem = InterpMode->AddItem(Gwen::UnicodeString(name.begin(), name.end()));
 		}
 		OnInterpMode(InterpMode);
 
 		Gwen::Controls::ComboBox * VolumeMode = new Gwen::Controls::ComboBox(Window);
-		VolumeMode->SetBounds(80, 120 + 120 + 45 + 35 + 45, 200, 25);
+		VolumeMode->SetBounds(80, 120 + 120 + 45 + 35 + 35 + 45, 200, 25);
 		VolumeMode->AddItem(L"Constant");
 		VolumeMode->AddItem(L"Sample Alpha");
 		VolumeMode->AddItem(L"Plane Slices");
 		VolumeMode->AddItem(L"Isosurface");
 
 		Gwen::Controls::ComboBox * DebugMode = new Gwen::Controls::ComboBox(Window);
-		DebugMode->SetBounds(80, 120 + 120 + 45 + 35 + 45 + 70, 100, 25);
+		DebugMode->SetBounds(80, 120 + 120 + 45 + 35 + 45 + 35 + 70, 100, 25);
 		DebugMode->AddItem(L"Disabled");
 		DebugMode->AddItem(L"Front");
 		DebugMode->AddItem(L"Cutoff");
@@ -140,7 +180,7 @@ CGUIVolumeControlWidget::CGUIVolumeControlWidget()
 		DebugMode->AddItem(L"Gradient");
 
 		Gwen::Controls::ComboBox * ShadingMode = new Gwen::Controls::ComboBox(Window);
-		ShadingMode->SetBounds(80, 120 + 120 + 45 + 35 + 45 + 70 + 35, 200, 25);
+		ShadingMode->SetBounds(80, 120 + 120 + 45 + 35 + 45 + 70 + 35 + 35, 200, 25);
 		ShadingMode->AddItem(L"No Shading");
 		ShadingMode->AddItem(L"Orbit Camera");
 		ShadingMode->AddItem(L"Fly Camera");
@@ -148,38 +188,38 @@ CGUIVolumeControlWidget::CGUIVolumeControlWidget()
 		Gwen::Controls::Label * DepthLabel = new Gwen::Controls::Label(Window);
 		DepthLabel->SetFont(GUIManager->GetRegularFont());
 		DepthLabel->SetText(L"Depth:");
-		DepthLabel->SetBounds(80 + 100 + 10, 320 + 45 + 70 + 6, 90, 40);
+		DepthLabel->SetBounds(80 + 100 + 10, 320 + 45 + 70 + 35 + 6, 90, 40);
 		DepthLabel->SetTextColor(Gwen::Color(50, 50, 20, 215));
 
 		Gwen::Controls::CheckBox * DepthMode = new Gwen::Controls::CheckBox(Window);
-		DepthMode->SetBounds(80 + 100 + 10 + 60, 120 + 120 + 45 + 35 + 45 + 70 + 6, 15, 15);
+		DepthMode->SetBounds(80 + 100 + 10 + 60, 120 + 120 + 45 + 35 + 45 + 70 + 35 + 6, 15, 15);
 	
 		ControlLabel = new Gwen::Controls::Label(Window);
 		ControlLabel->SetFont(GUIManager->GetRegularFont());
 		ControlLabel->SetText(L"Axis:");
-		ControlLabel->SetBounds(43, 355 + 45 + 6, 90, 40);
+		ControlLabel->SetBounds(43, 355 + 45 + 35 + 6, 90, 40);
 		ControlLabel->SetTextColor(Gwen::Color(50, 50, 20, 215));
 
 		Gwen::Controls::Button * pButtonX = new Gwen::Controls::Button(Window);
-		pButtonX->SetBounds(80, 120 + 120 + 10 + 45 + 25 + 35 + 45, 40, 25);
+		pButtonX->SetBounds(80, 120 + 120 + 10 + 45 + 25 + 35 + 35 + 45, 40, 25);
 		pButtonX->SetText("X");
 
 		Gwen::Controls::Button * pButtonY = new Gwen::Controls::Button(Window);
-		pButtonY->SetBounds(130, 120 + 120 + 10 + 45 + 25 + 35 + 45, 40, 25);
+		pButtonY->SetBounds(130, 120 + 120 + 10 + 45 + 25 + 35 + 35 + 45, 40, 25);
 		pButtonY->SetText("Y");
 
 		Gwen::Controls::Button * pButtonZ = new Gwen::Controls::Button(Window);
-		pButtonZ->SetBounds(180, 120 + 120 + 10 + 45 + 25 + 35 + 45, 40, 25);
+		pButtonZ->SetBounds(180, 120 + 120 + 10 + 45 + 25 + 35 + 35 + 45, 40, 25);
 		pButtonZ->SetText("Z");
 
 		Gwen::Controls::Label * SliderLabel = new Gwen::Controls::Label(Window);
 		SliderLabel->SetFont(GUIManager->GetRegularFont());
 		SliderLabel->SetText(L"Volume Detail:");
-		SliderLabel->SetBounds(10, 530, 300, 40);
+		SliderLabel->SetBounds(10, 35 + 530, 300, 40);
 		SliderLabel->SetTextColor(Gwen::Color(50, 20, 20, 215));
 
 		Gwen::Controls::HorizontalSliderTooltip * StepSizeSlider = new Gwen::Controls::HorizontalSliderTooltip(Window);
-		StepSizeSlider->SetBounds(10, 545, 300, 40);
+		StepSizeSlider->SetBounds(10, 35 + 545, 300, 40);
 		StepSizeSlider->SetRange(10.f, 300.f);
 		StepSizeSlider->SetFloatValue(VolumeControl.StepSize);
 
@@ -190,6 +230,11 @@ CGUIVolumeControlWidget::CGUIVolumeControlWidget()
 		pButtonZ->onPress.Add(this,					& CGUIVolumeControlWidget::OnSetZAxis);
 		VolumeMode->onSelection.Add(this,			& CGUIVolumeControlWidget::OnVolumeMode);
 		InterpMode->onSelection.Add(this,			& CGUIVolumeControlWidget::OnInterpMode);
+
+		FuncMode->onSelection.Add(this,				& CGUIVolumeControlWidget::OnFuncMode);
+		InvExponent->onValueChanged.Add(this,		& CGUIVolumeControlWidget::OnExponentSlider);
+		LogCheckBox->onCheckChanged.Add(this,		& CGUIVolumeControlWidget::OnLogCheck);
+
 		DebugMode->onSelection.Add(this,			& CGUIVolumeControlWidget::OnDebugMode);
 		ShadingMode->onSelection.Add(this,			& CGUIVolumeControlWidget::OnShadingMode);
 		StepSizeSlider->onValueChanged.Add(this,	& CGUIVolumeControlWidget::OnStepSizeSlider);
@@ -241,6 +286,22 @@ void CGUIVolumeControlWidget::OnStepSizeSlider(Gwen::Controls::Base * Control)
 	VolumeControl.StepSize = Bar->GetFloatValue();
 }
 
+void CGUIVolumeControlWidget::OnExponentSlider(Gwen::Controls::Base * Control)
+{
+	CProgramContext * Context = &CProgramContext::Get();
+	Gwen::Controls::Slider * Bar = (Gwen::Controls::Slider *) Control;
+	Context->Scene.Volume->SetInterpExp((int)Bar->GetFloatValue());
+	Context->CurrentSite->GetCurrentDataSet()->GenerateVolume(Context->WorldTime->GetTime(), Context->Scene.Volume->GetInterp());
+}
+
+void CGUIVolumeControlWidget::OnLogCheck(Gwen::Controls::Base * Control)
+{
+	CProgramContext * Context = &CProgramContext::Get();
+	Gwen::Controls::CheckBox * Box = (Gwen::Controls::CheckBox *) Control;
+	Context->Scene.Volume->SetInterpLog(Box->IsChecked());
+	Context->CurrentSite->GetCurrentDataSet()->GenerateVolume(Context->WorldTime->GetTime(), Context->Scene.Volume->GetInterp());
+}
+
 void CGUIVolumeControlWidget::OnResetVolume(Gwen::Controls::Base * Control)
 {
 	VolumeControl.Mode = 0;
@@ -272,11 +333,27 @@ void CGUIVolumeControlWidget::OnInterpMode(Gwen::Controls::Base * Control)
 	CProgramContext * Context = &CProgramContext::Get();
 	Gwen::Controls::ComboBox * Box = (Gwen::Controls::ComboBox *) Control;
 
-	for (int i = 0; i < CVolumeNodeManager::InterpMode::NumModes; i++) {
-		std::string name = CVolumeNodeManager::GetInterpName((CVolumeNodeManager::InterpMode)i);
+	for (int i = 0; i < Interp::Mode::NumModes; i++) {
+		std::string name = Interp::GetInterpName((Interp::Mode)i);
 		if (Box->GetSelectedItem()->GetText() == Gwen::UnicodeString(name.begin(), name.end())) {
-			Context->Scene.Volume->SetInterpMode((CVolumeNodeManager::InterpMode)i);
-			Context->CurrentSite->GetCurrentDataSet()->GenerateVolume(Context->WorldTime->GetTime(), Context->Scene.Volume->GetInterpMode());
+			ShowParameters((Interp::Mode)i);
+			Context->Scene.Volume->SetInterpMode((Interp::Mode)i);
+			Context->CurrentSite->GetCurrentDataSet()->GenerateVolume(Context->WorldTime->GetTime(), Context->Scene.Volume->GetInterp());
+			return;
+		}
+	}
+}
+
+void CGUIVolumeControlWidget::OnFuncMode(Gwen::Controls::Base * Control)
+{
+	CProgramContext * Context = &CProgramContext::Get();
+	Gwen::Controls::ComboBox * Box = (Gwen::Controls::ComboBox *) Control;
+
+	for (int i = 0; i < Interp::RadialFunc::NumFuncs; i++) {
+		std::string name = Interp::GetFuncName((Interp::RadialFunc)i);
+		if (Box->GetSelectedItem()->GetText() == Gwen::UnicodeString(name.begin(), name.end())) {
+			Context->Scene.Volume->SetInterpFunc((Interp::RadialFunc)i);
+			Context->CurrentSite->GetCurrentDataSet()->GenerateVolume(Context->WorldTime->GetTime(), Context->Scene.Volume->GetInterp());
 			return;
 		}
 	}
@@ -368,4 +445,28 @@ void CGUIVolumeControlWidget::OnToggleVolume(Gwen::Controls::Base * Control)
 void CGUIVolumeControlWidget::toggle()
 {
 	Window->SetHidden(Window->Visible());
+}
+
+void CGUIVolumeControlWidget::ShowParameters(Interp::Mode mode) {
+	switch (mode) {
+	case Interp::Mode::Radial:
+		FuncMode->SetHidden(false);
+		FuncLabel->SetHidden(false);
+
+		InvExponent->SetHidden(true);
+		InvLabel->SetHidden(true);
+		LogCheckBox->SetHidden(true);
+		LogLabel->SetHidden(true);
+		break;
+
+	case Interp::Mode::Connor:
+		FuncMode->SetHidden(true);
+		FuncLabel->SetHidden(true);
+
+		InvExponent->SetHidden(false);
+		InvLabel->SetHidden(false);
+		LogCheckBox->SetHidden(false);
+		LogLabel->SetHidden(false);
+		break;
+	}
 }

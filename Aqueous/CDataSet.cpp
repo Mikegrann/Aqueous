@@ -3,11 +3,13 @@
 
 #include "ColorMappers.h"
 #include "CGlyphNodeManager.h"
+#include "CVolumeNodeManager.h"
 #include "SciDataParser.h"
 #include "CSite.h"
 #include "RBFInterpolator/RBFInterpolator.h"
 #include "PolyRegress.h"
 #include "InvDistWeight.h"
+#include "Interp.h"
 
 
 CDataSet::CDataSet(CSite * Site)
@@ -61,10 +63,10 @@ void CDataSet::ConcurrentLoad()
 {
 	InitTextures();
 	auto firstPoint = Points.begin();
-	GenerateVolume((std::time_t)firstPoint->GetField(Traits.TField), (CVolumeNodeManager::InterpMode)0);
+	GenerateVolume((std::time_t)firstPoint->GetField(Traits.TField), Interp((Interp::Mode)0, (Interp::RadialFunc)0, 2, true));
 }
 
-void CDataSet::GenerateVolume(std::time_t targetTime, CVolumeNodeManager::InterpMode mode) {
+void CDataSet::GenerateVolume(std::time_t targetTime, Interp interp) {
 	IColorMapper * Mapper = nullptr;
 
 	if (VolumeColorMapper == "Spectrum")
@@ -72,7 +74,7 @@ void CDataSet::GenerateVolume(std::time_t targetTime, CVolumeNodeManager::Interp
 	else if (VolumeColorMapper == "Oxygen")
 		Mapper = new COxygenColorMapper();
 
-	GenerateVolumeFromPointData(targetTime, mode);
+	GenerateVolumeFromPointData(targetTime, interp);
 
 	Volume.MakeOpenGLVolume(VolumeHandle, Mapper);
 	
@@ -152,7 +154,7 @@ void CDataSet::InitSceneElements(CProgramContext::SScene & Scene)
 	Scene.Glyphs->LoadGlyphs(this, Mapper);
 }
 
-void CDataSet::GenerateVolumeFromPointData(std::time_t targetTime, CVolumeNodeManager::InterpMode mode)
+void CDataSet::GenerateVolumeFromPointData(std::time_t targetTime, Interp interp)
 {
 	SRange<f64> XRange = Points.GetFieldRange(Traits.PositionXField, 15.0);
 	SRange<f64> YRange = Points.GetFieldRange(Traits.PositionYField, 15.0);
@@ -214,22 +216,18 @@ void CDataSet::GenerateVolumeFromPointData(std::time_t targetTime, CVolumeNodeMa
 	RBFInterpolator *rbfi = 0;
 	PolyRegress *pr = 0;
 
-	switch (mode) {
-		case CVolumeNodeManager::InterpMode::Radial_Log: 
-			rbfi = new RBFInterpolator(Xs, Ys, Zs, Fs, RBFInterpolator::log_shift);
+	switch (interp.mode) {
+	case Interp::Mode::Radial:
+		rbfi = new RBFInterpolator(Xs, Ys, Zs, Fs, Interp::GetFuncPtr(interp.func));
 		break;
 
-		case CVolumeNodeManager::InterpMode::Radial_ThinSpline:
-			rbfi = new RBFInterpolator(Xs, Ys, Zs, Fs, RBFInterpolator::thin_spline);
-			break;
-
-		case CVolumeNodeManager::InterpMode::Connor:
-			pr = new PolyRegress(Ys, Fs, 2, false);
+	case Interp::Mode::Connor:
+		pr = new PolyRegress(Ys, Fs, interp.exponent, interp.useLog);
 		break;
 
-		default:
-			cerr << "Incorrect interpolator mode specified." << endl;
-			return;
+	default:
+		cerr << "Incorrect interpolator mode specified." << endl;
+		return;
 		break;
 	}
 	cout << "Interpolating..." << endl;

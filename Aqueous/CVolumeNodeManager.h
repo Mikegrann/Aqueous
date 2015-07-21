@@ -3,45 +3,12 @@
 
 #include <ionCore.h>
 #include <ionScene.h>
-
+#include "Interp.h"
 
 class CVolumeNodeManager : public Singleton<CVolumeNodeManager>
 {
 
 public:
-	enum InterpMode {
-		Radial_Log,
-		Radial_ThinSpline,
-		Connor,
-		NumModes
-	};
-	static std::string GetInterpName(InterpMode mode) {
-		switch (mode) {
-			case Radial_Log: 
-				return "Radial Basis - Log Shift";
-			break;
-
-			case Radial_ThinSpline:
-				return "Radial Basis - Thin Spline";
-				break;
-
-			case Connor:
-				return "Depth & Inverse Dist";
-			break;
-
-			default: 
-				return "";
-			break;
-		}
-	}
-
-	void SetInterpMode(InterpMode mode) {
-		Interp = mode;
-	}
-	InterpMode GetInterpMode() const {
-		return Interp;
-	}
-
 	struct SControl
 	{
 		// To Do : Provide actual ranges and use for volume control widget
@@ -72,6 +39,39 @@ public:
 
 	void UpdateTime(std::time_t t);
 
+	// Interpolations
+	void SetInterpMode(Interp::Mode mode) {
+		interp.mode = mode;
+	}
+	Interp::Mode GetInterpMode() const {
+		return interp.mode;
+	}
+
+	void SetInterpFunc(Interp::RadialFunc func) {
+		interp.func = func;
+	}
+	Interp::RadialFunc GetInterpFunc() const {
+		return interp.func;
+	}
+
+	void SetInterpExp(int exponent) {
+		interp.exponent = exponent;
+	}
+	int GetInterpExp() {
+		return interp.exponent;
+	}
+
+	void SetInterpLog(bool useLog) {
+		interp.useLog = useLog;
+	}
+	int GetInterpLog() {
+		return interp.useLog;
+	}
+
+	Interp GetInterp() {
+		return interp;
+	}
+
 protected:
 
 	SingletonPointer<CSceneManager> SceneManager;
@@ -87,5 +87,5 @@ private:
 	friend class Singleton<CVolumeNodeManager>;
 	CVolumeNodeManager();
 
-	InterpMode Interp;
+	Interp interp;
 };

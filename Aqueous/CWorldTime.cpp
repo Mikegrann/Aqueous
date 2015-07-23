@@ -1,5 +1,7 @@
 #include "CWorldTime.h"
 
+#define TIME_STEP 300
+
 void CWorldTime::Update() {
 	DirtyTime = false;
 }
@@ -35,4 +37,8 @@ void CWorldTime::DecreaseTime(uint seconds) {
 
 void CWorldTime::IncreaseTime(uint seconds) {
 	SetTime(WorldTime + seconds);
+}
+
+uint CWorldTime::GetTimeStep() {
+	return TIME_STEP;
 }

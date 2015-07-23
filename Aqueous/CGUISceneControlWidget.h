@@ -5,7 +5,6 @@
 #include <Gwen/Controls/WindowControl.h>
 #include <Gwen/Controls/HorizontalSlider.h>
 
-
 class CGUISceneControlWidget : public CGUIContextWidget
 {
 
@@ -26,7 +25,5 @@ public:
 	void OnTimeIncrease(Gwen::Controls::Base * Control);
 
 	void toggle();
-
-	uint GetTimeStep() const { return 300; }
 
 };

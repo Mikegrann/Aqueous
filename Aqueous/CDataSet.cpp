@@ -10,6 +10,7 @@
 #include "PolyRegress.h"
 #include "InvDistWeight.h"
 #include "Interp.h"
+#include "CWorldTime.h"
 
 
 CDataSet::CDataSet(CSite * Site)
@@ -177,7 +178,9 @@ void CDataSet::GenerateVolumeFromPointData(std::time_t targetTime, Interp interp
 		f64 const T = Point.GetField(Traits.TField);
 		f64 const F = FRange.Normalize(Point.GetField(ColorField));
 
-		bool Skip = ((std::time_t)T != targetTime);
+		bool Skip = ((std::time_t)T < targetTime - CWorldTime::GetTimeStep() ||
+			targetTime + CWorldTime::GetTimeStep() < (std::time_t)T);
+		//bool Skip = ((std::time_t)T != targetTime);
 
 		/*
 		for (auto & x : Xs)

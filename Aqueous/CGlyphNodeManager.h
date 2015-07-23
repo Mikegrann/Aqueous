@@ -53,12 +53,6 @@ protected:
 	
 	vector<f32> Positions;
 	vector<f32> Colors;
-	vector<std::time_t> Times;
 	ion::GL::VertexBuffer * PositionBuffer = nullptr;
 	ion::GL::VertexBuffer * ColorBuffer = nullptr;
-	ion::GL::VertexBuffer * TimeBuffer = nullptr;
-
-	//CUniformValue<int> timeUniformMin;
-	//CUniformValue<int> timeUniformMax;
-
 };

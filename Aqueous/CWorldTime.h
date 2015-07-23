@@ -17,6 +17,8 @@ public:
 
 	bool HasTimeChanged() const;
 
+	static uint GetTimeStep();
+
 protected:
 	std::time_t WorldTime;
 	bool DirtyTime = false;

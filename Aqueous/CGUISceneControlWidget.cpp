@@ -11,7 +11,6 @@
 #include <Gwen/Controls.h>
 #include <Gwen/Controls/ComboBox.h>
 
-
 CGUISceneControlWidget::CGUISceneControlWidget()
 {
 	Window = new Gwen::Controls::WindowControl(GUIManager->GetCanvas());
@@ -85,7 +84,7 @@ void CGUISceneControlWidget::OnTimeDecrease(Gwen::Controls::Base * Control)
 	GUIContext->GetConsole()->AddMessage("Time Decreased");
 
 	CProgramContext * Context = &CProgramContext::Get();
-	Context->WorldTime->DecreaseTime(GetTimeStep());
+	Context->WorldTime->DecreaseTime(CWorldTime::GetTimeStep());
 	SetDateTime();
 }
 
@@ -94,6 +93,6 @@ void CGUISceneControlWidget::OnTimeIncrease(Gwen::Controls::Base * Control)
 	GUIContext->GetConsole()->AddMessage("Time Increased");
 
 	CProgramContext * Context = &CProgramContext::Get();
-	Context->WorldTime->IncreaseTime(GetTimeStep());
+	Context->WorldTime->IncreaseTime(CWorldTime::GetTimeStep());
 	SetDateTime();
 }

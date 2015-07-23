@@ -1,16 +1,16 @@
 #include "EXEreader.h"
 #include <algorithm>
 
-//EXEreader::EXEreader() {
-    /*prevTime = minlat = minlong = maxlat = maxlong = 0.0;
+EXEreader::EXEreader() {
+    dt = prevTime = minlat = minlong = maxlat = maxlong = 0.0;
 
     minlat = DBL_MAX;
     minlong = DBL_MAX;
     maxlat = -DBL_MAX;
-    maxlong = -DBL_MAX;*/
-//}
+    maxlong = -DBL_MAX;
+}
 
-/*void EXEreader::parseFile(const char* filename)
+void EXEreader::parseFile(const char* filename)
 {
     ifstream trackFile;
     trackFile.open(filename);
@@ -39,16 +39,13 @@
         f64 sharkY = 0.0; // true y
         f64 sharkHeading = 0.0; // TODO make sure if this is angle (radians) from north
         f64 sharkSpeed = 0.0;
-        char* junk = "";
 
         // csv format: Time,AUV x,AUV y,AUV z,AUV heading x,AUV heading y,AUV heading z,Angle,Distance,Depth,Estimate x,Estimate y,Estimate z,True x,True y,Heading,Speed,Acceleration,Mag_uy,Mag_uz,Mag_cy,Mag_cz
-        sscanf(line.c_str(), "%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%s\n", &timestamp, 
+        sscanf(line.c_str(), "%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf", &timestamp, 
       	    &auvX, &auvY, &auvZ, &auvHeadingX, &auvHeadingY, &auvHeadingZ, &angle, &distance, &sharkDepth, &estX, &estY, 
-      	    &estZ, &sharkX, &sharkY, &sharkHeading, &sharkSpeed, junk);
+      	    &estZ, &sharkX, &sharkY, &sharkHeading, &sharkSpeed);
 
         //printf("timestamp: %lf, latitude: %f, longitude: %f\n", timestamp, latitude, longitude);
-
-        f64 dt;
 
         if (prevTime > 0.0) {
             dt = timestamp - prevTime;
@@ -75,8 +72,11 @@
                 maxlat = sharkX;
             }
         }
+        else {
+            prevTime = 0.0;
+        }
       
         i++;
     }
     trackFile.close();
-}*/
+}

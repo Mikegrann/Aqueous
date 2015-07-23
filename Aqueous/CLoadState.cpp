@@ -95,6 +95,8 @@ void CLoadState::LoadShaders()
 	Indent = 60;
 	bool Failed = false;
 
+    if (! (Context->Shaders.Line = SceneManager->GetShaderLibrary()->Load("Line")))
+        AddLabel(L"Failed to load Line Shader - Spline curves will not draw.", Gwen::Color(255, 64, 64, 192)), Failed = true;
 	if (! (Context->Shaders.Shark = SceneManager->GetShaderLibrary()->Load("Shark")))
 		AddLabel(L"Failed to load Shark Shader - Shark will not draw.", Gwen::Color(255, 32, 32, 192)), Failed = true;
 	if (! (Context->Shaders.Glyph = SceneManager->GetShaderLibrary()->Load("Glyph")))

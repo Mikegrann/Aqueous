@@ -194,6 +194,15 @@
     <ClCompile Include="EXEreader.cpp">
       <Filter>MainState\Data Management\Parsers</Filter>
     </ClCompile>
+    <ClCompile Include="CSplinePath.cpp">
+      <Filter>MainState\Spline</Filter>
+    </ClCompile>
+    <ClCompile Include="GPSconverter.cpp">
+      <Filter>Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="ParamFunctions.cpp">
+      <Filter>Utilities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CMainState.h">
@@ -433,6 +442,24 @@
     <ClInclude Include="EXEreader.h">
       <Filter>MainState\Data Management\Parsers</Filter>
     </ClInclude>
+    <ClInclude Include="CSplinePath.h">
+      <Filter>MainState\Spline</Filter>
+    </ClInclude>
+    <ClInclude Include="GPSconverter.h">
+      <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="CSplineTable.h">
+      <Filter>MainState\Spline</Filter>
+    </ClInclude>
+    <ClInclude Include="ParamFunctions.h">
+      <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="ParamStructures.h">
+      <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="CSplineFunctions.h">
+      <Filter>MainState\Spline</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="MainState">
@@ -443,9 +470,6 @@
     </Filter>
     <Filter Include="MainState\Terrain">
       <UniqueIdentifier>{a4f68102-11cd-4453-81b7-0a605414752b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="MainState\Volume">
-      <UniqueIdentifier>{33cba1aa-9e33-457c-912a-78dab6c782db}</UniqueIdentifier>
     </Filter>
     <Filter Include="MainState\Data Management">
       <UniqueIdentifier>{015f304c-d126-40d8-8034-ca7d06cd4ff3}</UniqueIdentifier>
@@ -509,6 +533,9 @@
     </Filter>
     <Filter Include="MainState\Spline">
       <UniqueIdentifier>{0cb1b1d7-c638-4590-9d2f-52a07f3f6b90}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainState\Volume">
+      <UniqueIdentifier>{33cba1aa-9e33-457c-912a-78dab6c782db}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

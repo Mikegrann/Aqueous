@@ -2,6 +2,7 @@
 #pragma once
 
 #include "CLocation.h"
+#include "CSplinePath.h"
 #include "CDataSet.h"
 
 
@@ -28,12 +29,15 @@ public:
 	std::vector<CLocation *> const & GetLocations() const;
 	std::vector<CDataSet *> const & GetDataSets() const;
 
+    std::vector<CSplinePath *> GetTracks() { return Tracks; };
+
 	void SetSelectedLocation(int const SelectedLocation);
 
 protected:
 	
 	std::vector<CLocation *> Locations;
 	std::vector<CDataSet *> DataSets;
+    std::vector<CSplinePath *> Tracks;
 
 	int SelectedLocation = 0;
 	int SelectedDataSet = 0;

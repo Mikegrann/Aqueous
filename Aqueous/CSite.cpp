@@ -63,9 +63,9 @@ void CSite::ReadConfiguration()
 				if (dDataSet.HasMember("Assets"))
 				{
 					auto & dAssets = dDataSet["Assets"];
-					for (uint i = 0; i < dAssets.Size(); ++ i)
+					for (uint j = 0; j < dAssets.Size(); ++ j)
 					{
-						auto & dAsset = dAssets[i];
+						auto & dAsset = dAssets[j];
 						CDataSet::SAsset Asset;
 
 						if (dAsset.HasMember("File") && dAsset["File"].IsString())
@@ -132,6 +132,44 @@ void CSite::ReadConfiguration()
 	{
 		cerr << "Failed to read site configuration file: " << "unable to find Locations member" << endl;
 	}
+
+    if (d.HasMember("Tracks")) 
+    {
+        auto & dTracks = d["Tracks"];
+        if (dTracks.IsArray())
+        {
+            for (uint i = 0; i < dTracks.Size(); ++i) {
+                auto & dTrack = dTracks[i];
+
+                if (dTrack.HasMember("TrackFiles"))
+                {
+                    auto & dTrackFiles = dTrack["TrackFiles"];
+                    for (uint j = 0; j < dTrackFiles.Size(); ++j) 
+                    {
+                        auto & dTrackFile = dTrackFiles[j];
+
+                        CSplinePath* splinePath = new CSplinePath();
+
+                        if (dTrackFile.HasMember("File") && dTrackFile["File"].IsString())
+                        {
+                            cout << "Creating SplinePath using file: " << Path + dTrackFile["File"].GetString() << endl;
+                            splinePath->setFileName(Path + dTrackFile["File"].GetString());
+                        }
+                        else
+                        {
+                            cerr << "Error parsing file name of shark file " << j << endl;
+                        }
+
+                        Tracks.push_back(splinePath);
+                    }
+                }
+            }
+        }
+    }
+    else 
+    {
+        cerr << "Site directory does not contain any tracking files, or the files have not been formatted into site.json" << endl;
+    }
 }
 
 void CSite::Load(IProgressBar * Progress)
@@ -139,11 +177,15 @@ void CSite::Load(IProgressBar * Progress)
 	Progress->BeginProgress();
 
 	f64 Total = Locations.size() + DataSets.size();
-	for (auto Location : Locations)
-		Location->Load(Progress->NewTask(1 / Total));
-	for (auto DataSet : DataSets)
-		DataSet->Load(Progress->NewTask(1 / Total));
-
+    for (auto Location : Locations) {
+        Location->Load(Progress->NewTask(1 / Total));
+    }
+    for (auto DataSet : DataSets) {
+        DataSet->Load(Progress->NewTask(1 / Total));
+    }
+    for (CSplinePath* Track : Tracks) {
+        Track->initSpline();
+    }
 	Progress->EndProgress();
 }
 

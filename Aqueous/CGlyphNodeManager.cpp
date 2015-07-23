@@ -75,7 +75,7 @@ void CGlyphNodeManager::LoadSceneElementsAtTime(std::time_t curTime)
 		Node->SetUniform("Model", &Node->GetTransformationUniform());
 		//Node->SetUniform("timeMin", &timeUniformMin);
 		//Node->SetUniform("timeMax", &timeUniformMax);
-		Node->SetPrimitiveType(ion::GL::EPrimitiveType::Points);
+		Node->SetPrimitiveType(ion::GL::EPrimitiveType::Points); 
 	}
 
 	PositionBuffer->SubData(Positions);

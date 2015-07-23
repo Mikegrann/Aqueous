@@ -117,8 +117,11 @@ void CMainState::Update(f32 const Elapsed)
 	//Context->Scene.SkyBox->draw(SceneManager, SceneManager->getDefaultColorRenderPass(), false);
 	glEnable(GL_DEPTH_TEST);
 
+    Scene.Spline->setCurrentSite(Context->CurrentSite);
+
 	Scene.Volume->Update();
 	Scene.Shark->Update(Elapsed);
+    Scene.Spline->Update(Elapsed);
 
 	SceneManager->DrawAll();
 
@@ -292,8 +295,10 @@ void CMainState::CalculateDataAlignment()
 	static vec3d const Multiplier = vec3d(1, YExaggeration, 1);
 	
 	Scene.Glyphs->GetNode()->SetScale(DataScale * Multiplier);
+    Scene.Spline->GetNode()->SetScale(DataScale * Multiplier);
 	Scene.Volume->GetNode()->SetScale(DataScale * Multiplier);
 	Scene.Glyphs->GetNode()->SetTranslation(vec3f(0, -DataScale.Y * YExaggeration / 2, 0));
+    Scene.Spline->GetNode()->SetTranslation(vec3f(0, -DataScale.Y * YExaggeration / 2, 0));
 	Scene.Volume->GetNode()->SetTranslation(vec3f(0, -DataScale.Y * YExaggeration / 2, 0));
 	
 	Scene.Terrain->GetNode()->SetScale(MapScale * Multiplier / CTerrainNodeManager::Size);
@@ -304,13 +309,15 @@ void CMainState::CalculateDataAlignment()
 
 	//// Flip for RHC->LHC
 	Scene.Glyphs->GetNode()->SetScale(Scene.Glyphs->GetNode()->GetScale() * vec3f(1, 1, -1));
+    Scene.Spline->GetNode()->SetScale(Scene.Spline->GetNode()->GetScale() * vec3f(1, 1, -1));
 	Scene.Volume->GetNode()->SetScale(Scene.Volume->GetNode()->GetScale() * vec3f(1, 1, -1));
 	Scene.Terrain->GetNode()->SetScale(Scene.Terrain->GetNode()->GetScale() * vec3f(1, 1, -1));
 	//Scene.Water->SetScale(Scene.Water->GetScale() * vec3f(1, 1, -1));
 
 	//// Flip Height -> Depth
 	Scene.Volume->GetNode()->SetScale(Scene.Volume->GetNode()->GetScale() * vec3f(1, -1, 1));
-	Scene.Glyphs->GetNode()->SetScale(Scene.Glyphs->GetNode()->GetScale() * vec3f(1, -1, 1));
+    Scene.Glyphs->GetNode()->SetScale(Scene.Glyphs->GetNode()->GetScale() * vec3f(1, -1, 1));
+    Scene.Spline->GetNode()->SetScale(Scene.Spline->GetNode()->GetScale() * vec3f(1, -1, 1));
 }
 
 void CMainState::SetSite(int site)

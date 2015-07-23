@@ -1,5 +1,5 @@
-
 #pragma once
+
 #include <ionCore.h>
 #include <ionScene.h>
 

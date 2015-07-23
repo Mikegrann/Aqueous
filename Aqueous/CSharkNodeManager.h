@@ -4,6 +4,8 @@
 #include <ionScene.h>
 
 #include "CProgramContext.h"
+#include "Shark.h"
+#include "SharkMesh.h"
 
 class CSharkNodeManager : public Singleton<CSharkNodeManager>, public IEventListener
 {
@@ -21,5 +23,7 @@ protected:
 	void LoadSceneElements();
 	CSceneNode * Node;
 	CMesh * Mesh;
+
+    Shark shark;
 
 };

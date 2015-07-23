@@ -11,7 +11,7 @@
 /*reads excel files with points in them */
 class EXEreader
 {
-   /* public:
+    public:
         EXEreader();
 		~EXEreader(){}
 		void parseFile(const char* argv);
@@ -24,14 +24,16 @@ class EXEreader
 		f64 gMinLongitude(){return minlong;}
 		f64 gMaxLongitude(){return maxlong;}
 
+    protected:
+        f64 dt;
+        f64 prevTime; //to calculate dt with
+        f64 minlat;
+        f64 minlong;
+        f64 maxlat;
+        f64 maxlong;
+
 	private:
 		FILE* readFile;
 		vector<glm::vec3> latLong;
 		vector<f64> dts;
-		f64 prevT'
-            ime; //to calculate dt with
-		f64 minlat;
-		f64 minlong;
-		f64 maxlat;
-		f64 maxlong;*/
 };

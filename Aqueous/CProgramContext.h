@@ -56,6 +56,7 @@ public:
 		CShader * Terrain = nullptr;
 		CShader * Volume = nullptr;
 		CShader * Glyph = nullptr;
+        CShader * Line = nullptr;
 		CShader * Shark = nullptr;
 		CShader * Water = nullptr;
 		CShader * Merge = nullptr;

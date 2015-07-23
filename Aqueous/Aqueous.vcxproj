@@ -77,6 +77,7 @@
     <ClCompile Include="CVolumeNodeManager.cpp" />
     <ClCompile Include="EXEreader.cpp" />
     <ClCompile Include="GifWriter.cpp" />
+    <ClCompile Include="GPSconverter.cpp" />
     <ClCompile Include="InvDistWeight.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include=".\SciDataParserSimpleTXT.cpp" />
@@ -106,6 +107,7 @@
     <ClCompile Include="newmat\sort.cpp" />
     <ClCompile Include="newmat\submat.cpp" />
     <ClCompile Include="newmat\svd.cpp" />
+    <ClCompile Include="ParamFunctions.cpp" />
     <ClCompile Include="PolyRegress.cpp" />
     <ClCompile Include="RBFInterpolator\RBFInterpolator.cpp" />
     <ClCompile Include="SciDataParser.cpp" />
@@ -113,6 +115,7 @@
     <ClCompile Include="SciDataParserSmartTether.cpp" />
     <ClCompile Include="SciDataParserCSV.cpp" />
     <ClCompile Include="SciDataParserPieSlices.cpp" />
+    <ClCompile Include="CSplinePath.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BathymetyGenerator.h" />
@@ -132,6 +135,7 @@
     <ClInclude Include="CLoadState.h" />
     <ClInclude Include="CGUISiteWidget.h" />
     <ClInclude Include="CSharkNodeManager.h" />
+    <ClInclude Include="CSplineFunctions.h" />
     <ClInclude Include="EXEreader.h" />
     <ClInclude Include="GifWriter.h" />
     <ClInclude Include="CLocation.h" />
@@ -150,6 +154,7 @@
     <ClInclude Include="CGUITitleLabelsWidget.h" />
     <ClInclude Include="CVolumeNodeManager.h" />
     <ClInclude Include="CSplineNodeManager.h" />
+    <ClInclude Include="GPSconverter.h" />
     <ClInclude Include="InvDistWeight.h" />
     <ClInclude Include="newmat\boolean.h" />
     <ClInclude Include="newmat\controlw.h" />
@@ -163,6 +168,8 @@
     <ClInclude Include="newmat\newmatrm.h" />
     <ClInclude Include="newmat\precisio.h" />
     <ClInclude Include="newmat\solution.h" />
+    <ClInclude Include="ParamFunctions.h" />
+    <ClInclude Include="ParamStructures.h" />
     <ClInclude Include="PolyRegress.h" />
     <ClInclude Include="rapidjson\allocators.h" />
     <ClInclude Include="rapidjson\document.h" />
@@ -194,6 +201,8 @@
     <ClInclude Include="rapidjson\writer.h" />
     <ClInclude Include="RBFInterpolator\RBFInterpolator.h" />
     <ClInclude Include="SciDataParser.h" />
+    <ClInclude Include="CSplinePath.h" />
+    <ClInclude Include="CSplineTable.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
 </Project>

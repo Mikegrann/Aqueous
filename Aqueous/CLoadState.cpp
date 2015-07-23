@@ -4,6 +4,7 @@
 #include "CMainState.h"
 #include "CMainMenuState.h"
 #include "CSite.h"
+#include "CWorldTime.h"
 
 #include "CTerrainNodeManager.h"
 #include "CVolumeNodeManager.h"
@@ -183,6 +184,7 @@ void CLoadState::LoadScene()
 	// Nodes
 	Scene.SkyBox = SceneManager->GetFactory()->AddSkySphereNode("SkyMap.jpg");
 
+	Context->WorldTime->SetTime(0);
 	Scene.Glyphs->Init();
 	Scene.Terrain->Load();
 	Scene.Shark->Init();

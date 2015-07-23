@@ -5,7 +5,6 @@
 #include "CProgramContext.h"
 #include "CDataSet.h"
 
-
 vec3f CGlyph::GetPosition() const
 {
 	return Position;
@@ -28,17 +27,11 @@ void CGlyphNodeManager::Init()
 	
 	Node = SceneManager->GetFactory()->AddSceneNode("Glyph");
 
-	curTimeDex = 0;
+	GlyphSize = 0.02f;
 }
 
-void CGlyphNodeManager::UpdateTime() {
-	if (curTimeDex < 0 || curTimeDex >= Glyphs.size()) {
-		curTimeDex = 0; // Reset to start
-	}
-	if (Glyphs.size()) {
-		timeUniformMax = timeUniformMin = Glyphs[curTimeDex]->Time;
-		LoadSceneElementsAtTime(Glyphs[curTimeDex]->Time);
-	}
+void CGlyphNodeManager::UpdateTime(std::time_t t) {
+	LoadSceneElementsAtTime(t);
 }
 
 void CGlyphNodeManager::LoadSceneElementsAtTime(std::time_t curTime)
@@ -75,7 +68,8 @@ void CGlyphNodeManager::LoadSceneElementsAtTime(std::time_t curTime)
 		Node->SetUniform("Model", &Node->GetTransformationUniform());
 		//Node->SetUniform("timeMin", &timeUniformMin);
 		//Node->SetUniform("timeMax", &timeUniformMax);
-		Node->SetPrimitiveType(ion::GL::EPrimitiveType::Points); 
+		Node->SetUniform("size", &GlyphSize);
+		Node->SetPrimitiveType(ion::GL::EPrimitiveType::Points);
 	}
 
 	PositionBuffer->SubData(Positions);
@@ -92,60 +86,6 @@ void CGlyphNodeManager::LoadSceneElementsAtTime(std::time_t curTime)
 void CGlyphNodeManager::LoadSceneElements()
 {
 	LoadSceneElementsAtTime(Glyphs[0]->Time);
-	/*
-	size_t const FloatsNeeded = Glyphs.size() * 3;
-	size_t const TimesNeeded = Glyphs.size();
-	PositionBuffer = new ion::GL::VertexBuffer;
-	PositionBuffer->Data<f32>(FloatsNeeded * sizeof(f32), nullptr, 3);
-	ColorBuffer = new ion::GL::VertexBuffer;
-	ColorBuffer->Data<f32>(FloatsNeeded * sizeof(f32), nullptr, 3);
-	TimeBuffer = new ion::GL::VertexBuffer;
-	TimeBuffer->Data<u32>(TimesNeeded * sizeof(u32), nullptr, 1);
-	
-	if (Node)
-	{
-		Node->SetVertexBuffer("vPosition", PositionBuffer);
-		Node->SetVertexBuffer("vColor", ColorBuffer);
-		Node->SetVertexBuffer("vTime", TimeBuffer);
-		Node->SetUniform("Model", & Node->GetTransformationUniform());
-		Node->SetUniform("timeMin", &timeUniformMin);
-		Node->SetUniform("timeMax", &timeUniformMax);
-		Node->SetPrimitiveType(ion::GL::EPrimitiveType::Points);
-	}
-
-	Positions.clear();
-	Colors.clear();
-	Times.clear();
-
-	if (Positions.size() < FloatsNeeded)
-	{
-		Positions.resize(FloatsNeeded);
-		Colors.resize(FloatsNeeded);
-		Times.resize(TimesNeeded);
-	}
-
-	for (uint i = 0; i < Glyphs.size(); ++ i)
-	{
-		Positions[i*3 + 0] = Glyphs[i]->Position.X;
-		Positions[i*3 + 1] = Glyphs[i]->Position.Y;
-		Positions[i*3 + 2] = Glyphs[i]->Position.Z;
-		Colors[i*3 + 0] = Glyphs[i]->Color.Red;
-		Colors[i*3 + 1] = Glyphs[i]->Color.Green;
-		Colors[i*3 + 2] = Glyphs[i]->Color.Blue;
-		Times[i] = Glyphs[i]->Time;
-	}
-	
-	PositionBuffer->SubData(Positions);
-	ColorBuffer->SubData(Colors);
-	TimeBuffer->SubData(Times);
-	UpdateTime();
-
-	if (Node)
-	{
-		Node->SetElementCount((uint) Glyphs.size());
-		Node->SetVisible(Glyphs.size() != 0);
-	}
-	*/
 }
 
 void CGlyphNodeManager::LoadGlyphs(CDataSet * DataSet, IColorMapper * ColorMapper)
@@ -157,6 +97,7 @@ void CGlyphNodeManager::LoadGlyphs(CDataSet * DataSet, IColorMapper * ColorMappe
 	SRange<f64> XRange = DataSet->Points.GetFieldRange(DataSet->Traits.PositionXField, 15.0);
 	SRange<f64> YRange = DataSet->Points.GetFieldRange(DataSet->Traits.PositionYField, 15.0);
 	SRange<f64> ZRange = DataSet->Points.GetFieldRange(DataSet->Traits.PositionZField, 15.0);
+	SRange<f64> CRange = DataSet->Points.GetFieldRange(DataSet->ColorField, 15.0);
 
 	if (XRange.IsEmpty())
 		XRange = SRange<f64>(-1, 1);
@@ -215,38 +156,4 @@ CSceneNode * CGlyphNodeManager::GetNode()
 CSceneNode const * CGlyphNodeManager::GetNode() const
 {
 	return Node;
-}
-
-std::time_t CGlyphNodeManager::GetTime() const
-{
-	return Glyphs[curTimeDex]->Time;
-}
-
-std::string CGlyphNodeManager::GetTimeFormatted() const
-{
-	std::string retVal;
-	stringstream ss(retVal);
-	std::tm *timeOBJ = std::localtime(&Glyphs[curTimeDex]->Time);
-
-	ss << std::put_time(timeOBJ, "%Y-%m-%d %H:%M:%S");
-
-	return ss.str();
-}
-
-void CGlyphNodeManager::DecreaseTime() {
-	if (curTimeDex > 0) {
-		do {
-			--curTimeDex;
-		} while (curTimeDex > 0 && Glyphs[curTimeDex]->Time == Glyphs[curTimeDex + 1]->Time);
-	}
-	UpdateTime();
-}
-
-void CGlyphNodeManager::IncreaseTime() {
-	if (curTimeDex < Glyphs.size() - 1) {
-		do {
-			++curTimeDex;
-		} while (curTimeDex < Glyphs.size() - 1 && Glyphs[curTimeDex]->Time == Glyphs[curTimeDex - 1]->Time);
-	}
-	UpdateTime();
 }

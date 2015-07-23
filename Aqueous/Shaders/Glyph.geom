@@ -6,6 +6,7 @@ layout(triangle_strip, max_vertices = 5) out;
 
 uniform mat4 View;
 uniform mat4 Projection;
+uniform float size;
 
 in vec3 geColor[];
 
@@ -14,7 +15,7 @@ out vec3 fColor;
 
 void MakePoint(vec3 CameraRight, vec3 CameraUp, vec2 Offset)
 {
-	const vec2 BillboardSize = vec2(0.02);
+	vec2 BillboardSize = vec2(size);
 
 	vec3 Vertex = gl_in[0].gl_Position.xyz
 		+ CameraRight * Offset.x * BillboardSize.x * 0.5

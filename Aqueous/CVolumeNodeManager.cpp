@@ -1,4 +1,6 @@
 #include "CVolumeNodeManager.h"
+#include "CSite.h"
+#include "CDataSet.h"
 
 #include <ionWindow.h>
 
@@ -12,7 +14,7 @@ CVolumeNodeManager::SControl::SControl()
 	StepSize(100.f), DebugLevel(0), UseShading(0)
 {}
 
-CVolumeNodeManager::CVolumeNodeManager() : Interp((InterpMode)0)
+CVolumeNodeManager::CVolumeNodeManager() : interp((Interp::Mode)0, (Interp::RadialFunc)0, 2, true)
 {}
 
 bool CVolumeNodeManager::Load()
@@ -147,6 +149,13 @@ void CVolumeNodeManager::Update()
 		InvModelMatrix = glm::inverse(Node->GetTransformationUniform().GetValue());
 		Control.StepSizeUniform = 1.f / Control.StepSize;
 	}
+}
+
+void CVolumeNodeManager::UpdateTime(std::time_t t)
+{
+	CProgramContext * Context = &CProgramContext::Get();
+
+	Context->CurrentSite->GetCurrentDataSet()->GenerateVolume(t, GetInterp());
 }
 
 CSceneNode * CVolumeNodeManager::GetNode()

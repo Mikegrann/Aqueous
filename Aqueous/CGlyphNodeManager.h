@@ -39,11 +39,9 @@ public:
 	CSceneNode * GetNode();
 	CSceneNode const * GetNode() const;
 
-	std::time_t GetTime() const;
-	std::string GetTimeFormatted() const;
+	void UpdateTime(std::time_t);
 
-	void DecreaseTime();
-	void IncreaseTime();
+	CUniformValue<float> GlyphSize;
 
 protected:
 
@@ -60,9 +58,7 @@ protected:
 	ion::GL::VertexBuffer * ColorBuffer = nullptr;
 	ion::GL::VertexBuffer * TimeBuffer = nullptr;
 
-	int curTimeDex;
-	CUniformValue<int> timeUniformMin;
-	CUniformValue<int> timeUniformMax;
-	void UpdateTime();
+	//CUniformValue<int> timeUniformMin;
+	//CUniformValue<int> timeUniformMax;
 
 };

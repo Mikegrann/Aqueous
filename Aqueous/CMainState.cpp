@@ -6,6 +6,7 @@
 #include "CSharkNodeManager.h"
 #include "CSplineNodeManager.h"
 #include "CSite.h"
+#include "CWorldTime.h"
 #include "CSpectrumColorMapper.h"
 #include "CGUIContext.h"
 
@@ -56,8 +57,6 @@ void CMainState::EndGifDraw()
 	delete gifWriter;
 	gifWriter = 0;
 }
-
-f64 GlobalMin, GlobalMax;
 
 void CMainState::Update(f32 const Elapsed)
 {
@@ -119,6 +118,13 @@ void CMainState::Update(f32 const Elapsed)
 
     Scene.Spline->setCurrentSite(Context->CurrentSite);
 
+	// Time Management
+	if (Context->WorldTime->HasTimeChanged())  {
+		Scene.Glyphs->UpdateTime(Context->WorldTime->GetTime());
+		Scene.Volume->UpdateTime(Context->WorldTime->GetTime());
+	}
+	Context->WorldTime->Update();
+
 	Scene.Volume->Update();
 	Scene.Shark->Update(Elapsed);
     Scene.Spline->Update(Elapsed);
@@ -170,11 +176,15 @@ void CMainState::Update(f32 const Elapsed)
 	
 	if (ShowKey && Font)
 	{
-		auto GetValueAt = [](f32 const v)
+		CSite * CurrentSite = Context->CurrentSite;
+		CDataSet const * const DataSet = CurrentSite->GetCurrentDataSet();
+		f64 minVal = DataSet->GetMinColorValue(), maxVal = DataSet->GetMaxColorValue();
+		auto GetValueAt = [=](f32 const v)
 		{
 			color4f Color = CSpectrumColorMapper::MapColor(v);
 			glColor3f(Color.Red, Color.Green, Color.Blue);
-			return GlobalMin * (1 - v) + GlobalMax * v;
+
+			return minVal * (1 - v) + maxVal * v;
 		};
 		int Counter = 10;
 		auto DrawColor = [this, & Counter, GetValueAt](c8 const * const Label, f32 const v)

@@ -1,5 +1,6 @@
 
 #include "CSite.h"
+#include "CWorldTime.h"
 
 #include "CLocation.h"
 
@@ -201,8 +202,13 @@ void CSite::InitSceneElements(CProgramContext::SScene & Scene)
 {
 	if (Locations.size())
 		Locations[SelectedLocation]->InitSceneElements(Scene);
-	if (DataSets.size())
+	if (DataSets.size()) {
 		DataSets[SelectedDataSet]->InitSceneElements(Scene);
+
+		SRange<f64> TRange = DataSets[SelectedDataSet]->Points.GetFieldRange(DataSets[SelectedDataSet]->Traits.TField, 15.0);
+		CProgramContext & Context = CProgramContext::Get();
+		Context.WorldTime->SetTime(TRange.Minimum);
+	}
 }
 
 void CSite::AddDataSet(CDataSet * DataSet)

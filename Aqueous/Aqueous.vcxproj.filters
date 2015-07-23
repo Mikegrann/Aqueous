@@ -202,6 +202,11 @@
     </ClCompile>
     <ClCompile Include="ParamFunctions.cpp">
       <Filter>Utilities</Filter>
+    <ClCompile Include="CWorldTime.cpp">
+      <Filter>MainState\Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="HorizontalSliderTooltip.cpp">
+      <Filter>MainState\GUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -459,6 +464,14 @@
     </ClInclude>
     <ClInclude Include="CSplineFunctions.h">
       <Filter>MainState\Spline</Filter>
+    <ClInclude Include="CWorldTime.h">
+      <Filter>MainState\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="HorizontalSliderTooltip.h">
+      <Filter>MainState\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Interp.h">
+      <Filter>MainState\Util</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -27,4 +27,6 @@ public:
 
 	void toggle();
 
+	uint GetTimeStep() const { return 300; }
+
 };

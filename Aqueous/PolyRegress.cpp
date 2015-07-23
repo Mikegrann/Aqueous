@@ -30,18 +30,14 @@ PolyRegress::PolyRegress(vector<float> const &xVals, vector<float> const &yVals,
 		int j = 1;
 		float curVal = 1;
 		do {
-			if (useLog && j > 1) {
-				X(i, j) = log(curVal);
-			}
-			else {
-				X(i, j) = curVal;
-			}
-			curVal *= xVals[i - 1];
+			X(i, j) = curVal;
+			curVal *= (logVals) ? log(xVals[i - 1] + 1) : xVals[i - 1];
 		} while (j++ < degree + 1);
 	}
 
 	coeffs = (X.t() * X).i() * X.t() * y; //inv(trans(X) * X) * trans(X) * y
-	
+	std::cout << coeffs << std::endl;
+
 	success = true;
 }
 
@@ -60,13 +56,8 @@ float PolyRegress::interpolate(float x) {
 	float curX = 1;
 
 	for (int i = 0; i < deg + 1; ++i) {
-		if (logVals) {
-			result += log(curX) * coeffs(i + 1);
-		}
-		else {
-			result += curX * coeffs(i + 1);
-		}
-		curX *= x;
+		result += curX * coeffs(i + 1);
+		curX *= (logVals) ? log(x + 1) : x;
 	}
 
 	return result;

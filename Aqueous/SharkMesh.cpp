@@ -17,7 +17,7 @@ string SharkMesh::nextToken(char delimit, FILE* readFile)
 //FILE* SharkMesh::buildAOBJ(string filename)
 void SharkMesh::buildAOBJ(FILE* readFile)
 {
-	vector<Vector3f> localVerts = vector<Vector3f>();   //in order to use OBJs as keys, need to remember their order.
+	vector<glm::vec3> localVerts = vector<glm::vec3>();   //in order to use OBJs as keys, need to remember their order.
 	while(!feof(readFile))
 	{
 		//tokenize the line identifier. It's only one character and 
@@ -37,19 +37,19 @@ void SharkMesh::buildAOBJ(FILE* readFile)
 				SharkVertex* sv = new SharkVertex();
 
 				//location of vertex    
-				Vector3f vert;
+				glm::vec3 vert;
 				vert.x = atof(nextToken(' ', readFile).c_str());
 				vert.y = atof(nextToken(' ', readFile).c_str());
 				vert.z = atof(nextToken(' ', readFile).c_str());
 				sv->sLocal(vert);
 
-				Vector3f nor; //normal
+				glm::vec3 nor; //normal
 				nor.x = atof(nextToken(' ', readFile).c_str());
 				nor.y = atof(nextToken(' ', readFile).c_str());
 				nor.z = atof(nextToken(' ', readFile).c_str());
-				sv->sNormal(nor*-1.0);  //TODO magic.  fix blender normals. shouldn't need to reverse them.
+				sv->sNormal(nor*-1.0f);  //TODO magic.  fix blender normals. shouldn't need to reverse them.
 
-				sv->sTransformed(Vector3f(0,0,0));
+				sv->sTransformed(glm::vec3(0,0,0));
 				//bone / weight repeats
 				fseek(readFile, -1, SEEK_CUR);
 				cur = fgetc(readFile);
@@ -62,7 +62,7 @@ void SharkMesh::buildAOBJ(FILE* readFile)
 					cur = fgetc(readFile);
 				}
 				localVerts.push_back(vert);
-				insertVec(pair<Vector3f, SharkVertex*>(vert, sv));
+				insertVec(pair<glm::vec3, SharkVertex*>(vert, sv));
 			}
 		}
 		//faces
@@ -72,7 +72,7 @@ void SharkMesh::buildAOBJ(FILE* readFile)
 			char cur = fgetc(readFile); //space
 			if(ferror(readFile)){ printf("4Error reading FILE\n"); exit(-1);}
 			Quad *curQuad = new Quad();
-			curQuad->sNormal(Vector3f(0,0,0));
+			curQuad->sNormal(glm::vec3(0,0,0));
 
 			//caution. Vertices listed in mesh may not be consistant with other quads 
 			int vertex1 = atoi(nextToken(' ', readFile).c_str());
@@ -111,11 +111,11 @@ void SharkMesh::buildAOBJ(FILE* readFile)
 /*Restores vertex transformation back to rest pose (joint space) */
 void SharkMesh::restPosition()
 {
-	map<Vector3f, SharkVertex*, compareVect3>::iterator im;
+	map<glm::vec3, SharkVertex*, compareVect3>::iterator im;
 	for(im = vertices.begin(); im != vertices.end(); im++ )
 	{
 		//im->second->transformed = im->second->local;
-		im->second->transformed = Vector3f(0,0,0);//im->second->local;
+		im->second->transformed = glm::vec3(0,0,0);//im->second->local;
 	}
 
 	skinTransforms = map<string, MyMat>();  //wipe out bone information
@@ -125,7 +125,7 @@ void SharkMesh::restPosition()
  *  * Vertex weights taken from the bone name affect the strength of the  */
 void SharkMesh::linearBlendTransform(MyMat matrix, string boneName)
 {
-	map<Vector3f, SharkVertex*, compareVect3>::iterator im;
+	map<glm::vec3, SharkVertex*, compareVect3>::iterator im;
 	for(im = vertices.begin(); im != vertices.end(); im++ )
 	{
 		float weight = (*im).second->checkBone(boneName);
@@ -141,7 +141,7 @@ void SharkMesh::linearBlendTransform(MyMat matrix, string boneName)
  *  * Vertex weights taken from the bone name affect the strength of the  */
 void SharkMesh::linearBlendTransform()
 {
-	map<Vector3f, SharkVertex*, compareVect3>::iterator im;
+	map<glm::vec3, SharkVertex*, compareVect3>::iterator im;
 	for(im = vertices.begin(); im != vertices.end(); im++ )
 	{
 		//float bbr = 0;
@@ -155,7 +155,7 @@ void SharkMesh::linearBlendTransform()
 				MyMat matrix = gSkinMatrix(ib->first); 
 				MyMat scale = MyMat(); //weight mess ups
 				//float sk = 1.0/matrix.diagonalMagnitude();
-				//scale.makeScale(Vector3f(sk,sk,sk));
+				//scale.makeScale(glm::vec3(sk,sk,sk));
 				//matrix.multRight(scale);
 				(*im).second->transformed += 
 					matrix.multScalar(weight).multVec((*im).second->local, true);
@@ -169,7 +169,7 @@ void SharkMesh::linearBlendTransform()
 /*Adjusts bone weights so they always add up to one */
 void SharkMesh::countWeights()
 {
-	map<Vector3f, SharkVertex*, compareVect3>::iterator im;
+	map<glm::vec3, SharkVertex*, compareVect3>::iterator im;
 	for(im = vertices.begin(); im != vertices.end(); im++ )
 	{
 		float summ = 0;
@@ -188,7 +188,7 @@ void SharkMesh::countWeights()
 //TODO delete Heap properly.
 void SharkMesh::deleteHeap()
 {
-	map<Vector3f, SharkVertex*, compareVect3>::iterator im;
+	map<glm::vec3, SharkVertex*, compareVect3>::iterator im;
 	for(im = vertices.begin(); im != vertices.end(); im++ )
 	{
 		//delete each element

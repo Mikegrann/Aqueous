@@ -80,14 +80,19 @@
     <ClCompile Include="CVolumeNodeManager.cpp" />
     <ClCompile Include="CWorldTime.cpp" />
     <ClCompile Include="EXEreader.cpp" />
+    <ClCompile Include="FrameSequence.cpp" />
     <ClCompile Include="GifWriter.cpp" />
+    <ClCompile Include="glQuaternion.cpp" />
     <ClCompile Include="GPSconverter.cpp" />
     <ClCompile Include="HorizontalSliderTooltip.cpp" />
     <ClCompile Include="InvDistWeight.cpp" />
+    <ClCompile Include="Keyframe.cpp" />
+    <ClCompile Include="KeyframeSystem.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include=".\SciDataParserSimpleTXT.cpp" />
     <ClCompile Include=".\SciDataParserGrid1.cpp" />
     <ClCompile Include=".\SciDataParserCTD.cpp" />
+    <ClCompile Include="MyMat.cpp" />
     <ClCompile Include="newmat\bandmat.cpp" />
     <ClCompile Include="newmat\cholesky.cpp" />
     <ClCompile Include="newmat\evalue.cpp" />
@@ -114,6 +119,8 @@
     <ClCompile Include="newmat\svd.cpp" />
     <ClCompile Include="ParamFunctions.cpp" />
     <ClCompile Include="PolyRegress.cpp" />
+    <ClCompile Include="Quad.cpp" />
+    <ClCompile Include="SharkQuadObject.cpp" />
     <ClCompile Include="RBFInterpolator\RBFInterpolator.cpp" />
     <ClCompile Include="SciDataParser.cpp" />
     <ClCompile Include="SciDataParserMergedCSV.cpp" />
@@ -121,6 +128,12 @@
     <ClCompile Include="SciDataParserCSV.cpp" />
     <ClCompile Include="SciDataParserPieSlices.cpp" />
     <ClCompile Include="CSplinePath.cpp" />
+    <ClCompile Include="Shark.cpp" />
+    <ClCompile Include="SharkBone.cpp" />
+    <ClCompile Include="SharkLoco.cpp" />
+    <ClCompile Include="SharkMesh.cpp" />
+    <ClCompile Include="SharkSkeleton.cpp" />
+    <ClCompile Include="SharkVertex.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BathymetyGenerator.h" />
@@ -143,6 +156,7 @@
     <ClInclude Include="CSplineFunctions.h" />
     <ClInclude Include="CWorldTime.h" />
     <ClInclude Include="EXEreader.h" />
+    <ClInclude Include="FrameSequence.h" />
     <ClInclude Include="GifWriter.h" />
     <ClInclude Include="CLocation.h" />
     <ClInclude Include="CMainMenuState.h" />
@@ -160,10 +174,14 @@
     <ClInclude Include="CGUITitleLabelsWidget.h" />
     <ClInclude Include="CVolumeNodeManager.h" />
     <ClInclude Include="CSplineNodeManager.h" />
+    <ClInclude Include="glQuaternion.h" />
     <ClInclude Include="GPSconverter.h" />
     <ClInclude Include="HorizontalSliderTooltip.h" />
     <ClInclude Include="Interp.h" />
     <ClInclude Include="InvDistWeight.h" />
+    <ClInclude Include="Keyframe.h" />
+    <ClInclude Include="KeyframeSystem.h" />
+    <ClInclude Include="MyMat.h" />
     <ClInclude Include="newmat\boolean.h" />
     <ClInclude Include="newmat\controlw.h" />
     <ClInclude Include="newmat\include.h" />
@@ -179,6 +197,8 @@
     <ClInclude Include="ParamFunctions.h" />
     <ClInclude Include="ParamStructures.h" />
     <ClInclude Include="PolyRegress.h" />
+    <ClInclude Include="Quad.h" />
+    <ClInclude Include="SharkQuadObject.h" />
     <ClInclude Include="rapidjson\allocators.h" />
     <ClInclude Include="rapidjson\document.h" />
     <ClInclude Include="rapidjson\encodedstream.h" />
@@ -211,6 +231,13 @@
     <ClInclude Include="SciDataParser.h" />
     <ClInclude Include="CSplinePath.h" />
     <ClInclude Include="CSplineTable.h" />
+    <ClInclude Include="Shark.h" />
+    <ClInclude Include="SharkBone.h" />
+    <ClInclude Include="SharkFacts.h" />
+    <ClInclude Include="SharkLoco.h" />
+    <ClInclude Include="SharkMesh.h" />
+    <ClInclude Include="SharkSkeleton.h" />
+    <ClInclude Include="SharkVertex.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
 </Project>

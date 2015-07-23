@@ -63,7 +63,7 @@ void SharkLoco::buildSkeleton(string modelFile)
 {
 	skeleton.sRoot("Root");
 	skeleton.buildSkeletonAOBJ(modelFile);
-	totalLength = (skeleton.gTail(spineKeys[0]) - skeleton.gTail(spineKeys[9])).Magnitude();
+	totalLength = glm::length((skeleton.gTail(spineKeys[0]) - skeleton.gTail(spineKeys[9])));
 	beatDirection = true;
 	prevBeatDirection = false;
 	phaseOff = 0;
@@ -108,7 +108,8 @@ float SharkLoco::deriveFrequency(void)
 
 	//Velocity L/s range .1 - 1.30 before exaustion
 	//high freq at 2, low freq at one
-	float sharkLVel = velocity.Magnitude() * TSEMI_LENGTH_M;
+	//float sharkLVel = velocity.Magnitude() * TSEMI_LENGTH_M;
+    float sharkLVel = glm::length(velocity) * TSEMI_LENGTH_M;
 	float lerp = 1.00 + (sharkLVel/(1.30-.1));  //value the beat should be at this velocity;
 	if(lerp > 2.1){ lerp = 2.1;}
 	if(lerp < .9){ lerp = .9;}
@@ -135,7 +136,7 @@ float SharkLoco::deriveFrequency(void)
 
 /*main update method for the simulation 
  * Rail angle is the angle provided from the world, showing the sharpness of the turn on the point of the rail the shark is at.*/
-void SharkLoco::update(int dt, int railAngle, Vector3f velocit)
+void SharkLoco::update(int dt, int railAngle, glm::vec3 velocit)
 {
 	if(beatDirection != prevBeatDirection)
 	{
@@ -427,7 +428,7 @@ void SharkLoco::lateralFins()
 	}
 
 	//pitch shark body, between 11 degrees (slowest) to zero(fastest)
-	int pitchAng = 11 + (-11)*(velocity.Magnitude()/2.0);
+	int pitchAng = 11 + (-11)*(glm::length(velocity)/2.0);
 	if (pitchAng < 0) { pitchAng = 0;}
 	bodyPitch += pitchAng;
 }

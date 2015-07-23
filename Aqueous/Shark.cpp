@@ -85,7 +85,7 @@ KeyframeSystem Shark::genKeyframes(bool dynamicMode, SharkMesh *shm)
 	if(dynamicMode)
 	{
       printf("in nondynamic mode\n");
-      QuadObject* sharkObject = new QuadObject(shaderProg, shm);
+      SharkQuadObject* sharkObject = new SharkQuadObject(shaderProg, shm);
       sharkObject->init();   
 
 		kfSys = KeyframeSystem(shaderProg, sharkObject, true);
@@ -93,7 +93,7 @@ KeyframeSystem Shark::genKeyframes(bool dynamicMode, SharkMesh *shm)
 		//animation sequence #1 is the slow swim. TODO, less magic nubmers
 		int numAngles = segments;
 		skeleton.buildAnimations(numAngles, *(segmentRot[1]), numAngles);
-		skeleton.update(0, 0, Vector3f(0,0,0)); //force one update cycle to happen before startup, initializes the system this way.
+		skeleton.update(0, 0, glm::vec3(0,0,0)); //force one update cycle to happen before startup, initializes the system this way.
 		kfSys.initFrames();
 	}
 	else
@@ -211,7 +211,7 @@ void Shark::drawShark(int frame, GLUquadricObj *quadratic)
 /*The general update function that is to be called regularly and predicitibly.
  * It needs to know what the curvature of the path is. */
 //void Shark::timedUpdate(int railAngle)
-void Shark::timedUpdate(int dt, int railAngle, Vector3f vel)
+void Shark::timedUpdate(int dt, int railAngle, glm::vec3 vel)
 {
 	kfSys.update();
 	velocity = vel;
@@ -232,10 +232,11 @@ double doubleLerpFrames(double input, double minx, double maxx)
 }
 
 
-void Shark::updateVelocity(Vector3f start, Vector3f end, double dt)
+void Shark::updateVelocity(glm::vec3 start, glm::vec3 end, double dt)
 {
 	//velocity = start-end;
-	double dist = (end-start).Magnitude();
+	//double dist = (end-start).Magnitude();
+    double dist = glm::length(end - start);
 	double unitTime = dt / dist;
 	int Lframe = doubleLerpFrames(unitTime, 0.1, 10.0); //+1;
 

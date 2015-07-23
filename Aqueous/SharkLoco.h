@@ -1,13 +1,14 @@
 #ifndef SHARK_LOCOMOTION_PROCEDURAL_KEYFRAME_GENERATION
 #define SHARK_LOCOMOTION_PROCEDURAL_KEYFRAME_GENERATION
 
+#include <ionEngine.h>
 #include "SharkSkeleton.h"
 #include "Keyframe.h"
 #include "MyMat.h"
 //#include "Mesh.h"
 #include "SharkFacts.h"
-#include <cmath>
 
+#define velocityToAmp 14.0f
 
 /*Sets the angles in the skeleton. Represents the sinusodial motion of a shark */
 class SharkLoco {
@@ -28,7 +29,7 @@ class SharkLoco {
 		//void buildSkeleton(Mesh* mesh, int numSegments, float *segLength);
 		void buildSkeleton(string modelFilename);
 		int calcTimestep(); //finds the point in time where it is optimal to make a new keyframe.  //TODO
-		void update(int dt, int railAngle, Vector3f velocity); //main update call
+		void update(int dt, int railAngle, glm::vec3 velocity); //main update call
 		void setNewAngles(); //modifies the underlying bones
 		void applyTransformation();    //commits all recent changes to the mesh 
 		void setMesh(SharkMesh *s){skeleton.setMesh(s);}
@@ -48,7 +49,7 @@ class SharkLoco {
 
 	private:
 		SharkSkeleton skeleton;
-		Vector3f velocity;   //velocity of the shark. magnitude gets the scalar speed
+		glm::vec3 velocity;   //velocity of the shark. magnitude gets the scalar speed
 
 		int framesPerSequence;
 		int anglesPerFrame;
@@ -92,7 +93,7 @@ class SharkLoco {
 		bool prevBeatDirection;  //direction tail was swinging last update 
 		float phaseOff;	//phase offset of tailbeat. (radians) 
 
-		static float const velocityToAmp = 14.0;  //divides velocity    by this value to determine the amplitude of a stroke
+		//static float const velocityToAmp = 14.0;  //divides velocity    by this value to determine the amplitude of a stroke
 
 		//angle calculation funcs
 		float calcTurningAngle();

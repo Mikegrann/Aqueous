@@ -1,6 +1,6 @@
-#include "QuadObject.h"
+#include "SharkQuadObject.h"
 
-QuadObject::QuadObject(GLuint _shadeProg, SharkMesh* sMesh) {
+SharkQuadObject::SharkQuadObject(GLuint _shadeProg, SharkMesh* sMesh) {
 
    // initialize shader program id
    shadeProg = _shadeProg;
@@ -41,7 +41,7 @@ QuadObject::QuadObject(GLuint _shadeProg, SharkMesh* sMesh) {
    }
 } 
 
-QuadObject::QuadObject(GLuint _shadeProg, vector<Vector3f> positions, vector<Vector3f> normals, vector<Vector2f> texCoords) {
+SharkQuadObject::SharkQuadObject(GLuint _shadeProg, vector<glm::vec3> positions, vector<glm::vec3> normals, vector<glm::vec2> texCoords) {
 
    // initialize shader program id
    shadeProg = _shadeProg;
@@ -82,7 +82,7 @@ QuadObject::QuadObject(GLuint _shadeProg, vector<Vector3f> positions, vector<Vec
    }*/
 } 
 
-void QuadObject::init() {
+void SharkQuadObject::init() {
    // generate buffer IDs and objects
    glGenBuffers(1, &posBufID);
    glBindBuffer(GL_ARRAY_BUFFER, posBufID);
@@ -118,7 +118,7 @@ void QuadObject::init() {
    assert(glGetError() == GL_NO_ERROR);
 }
 
-void QuadObject::update(vector<Vector3f> newPositions, vector<Vector3f> newNormals) {
+void SharkQuadObject::update(vector<glm::vec3> newPositions, vector<glm::vec3> newNormals) {
    posBuf.clear();
    norBuf.clear();
    for (int i = 0; i < (int)newPositions.size(); ++i) {
@@ -140,10 +140,10 @@ void QuadObject::update(vector<Vector3f> newPositions, vector<Vector3f> newNorma
    glBufferData(GL_ARRAY_BUFFER, norBuf.size()*sizeof(float), &norBuf[0], GL_DYNAMIC_DRAW);
 }
 
-void QuadObject::draw(GLint h_pos, GLint h_nor) const
+void SharkQuadObject::draw(GLint h_pos, GLint h_nor) const
 {
    // Enable and bind position array for drawing
-   GLSL::enableVertexAttribArray(h_pos);
+  /* GLSL::enableVertexAttribArray(h_pos);
    glBindBuffer(GL_ARRAY_BUFFER, posBufID);
    glVertexAttribPointer(h_pos, 3, GL_FLOAT, GL_FALSE, 0, 0);
    
@@ -167,5 +167,5 @@ void QuadObject::draw(GLint h_pos, GLint h_nor) const
    }
    GLSL::disableVertexAttribArray(h_pos);
    glBindBuffer(GL_ARRAY_BUFFER, 0);
-   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);*/
 }

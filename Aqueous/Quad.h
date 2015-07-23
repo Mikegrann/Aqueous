@@ -1,11 +1,9 @@
 #ifndef _QUADERLATERIAL_3D_THING
 #define _QUADERLATERIAL_3D_THING
-#include <cstdio>
-#include <cstdlib>
-#include <vector>
-#include "Vector.h"
+#include <ionEngine.h>
 #include "SharkVertex.h"
 #include "MyMat.h"
+#include "CSplineFunctions.h"
 
 /*A quad is a set of four points that make a rectangle. */
 class Quad
@@ -25,26 +23,26 @@ class Quad
 		bool compareRight(Quad oth);
 		bool compareFront(Quad oth);
 		bool compareBack(Quad oth);
-		Vector3f calcNormal();	
+		glm::vec3 calcNormal();	
 		static double attenuate(int numedges, int iteration, int k);		
 
 		//inside class manipulation
 		SharkVertex *gVert(int index){return verts[index];}   //index is the vertex number on the quad
 		void sVert(int index, SharkVertex* n){verts[index] = n;}   //index is the vertex number on the quad
-		Vector3f gLocalVert(int index){return verts[index]->gLocal();}
-		Vector3f gTransformedVert(int index){return verts[index]->gTransformed();}
-		Vector3f gNormalVert(int index){return verts[index]->gNormal();}
-		void sNormalVert(int index, Vector3f vert){verts[index]->sNormal(vert);}
-		void sTransformedVert(int index, Vector3f vert){verts[index]->sTransformed(vert);}
-		void sLocalVert(int index, Vector3f vert){verts[index]->sLocal(vert);}
+		glm::vec3 gLocalVert(int index){return verts[index]->gLocal();}
+		glm::vec3 gTransformedVert(int index){return verts[index]->gTransformed();}
+		glm::vec3 gNormalVert(int index){return verts[index]->gNormal();}
+		void sNormalVert(int index, glm::vec3 vert){verts[index]->sNormal(vert);}
+		void sTransformedVert(int index, glm::vec3 vert){verts[index]->sTransformed(vert);}
+		void sLocalVert(int index, glm::vec3 vert){verts[index]->sLocal(vert);}
 	
 		void matrixTransform(MyMat stackmatri);  //rigid body transformation
 		//void linearBlendTransform(MyMat stackmatri, string boneName);   //skinned transformation 
 		void restPosition();  //returns quad to rest position (clears transformations). 
 		
 
-		Vector3f gNormal(){return faceNormal;}	
-		void sNormal(Vector3f newNormal){faceNormal = newNormal;}
+		glm::vec3 gNormal(){return faceNormal;}	
+		void sNormal(glm::vec3 newNormal){faceNormal = newNormal;}
 
 		int gBoneNo(){return boneNo;}
 		void sBoneNo(int bone){boneNo = bone;}
@@ -61,7 +59,7 @@ class Quad
 
 	private:		
 		SharkVertex* verts[4];
-		Vector3f faceNormal;
+		glm::vec3 faceNormal;
 		int boneNo;
 		Quad* front;
 		Quad* back;

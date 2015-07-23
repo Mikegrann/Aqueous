@@ -202,11 +202,51 @@
     </ClCompile>
     <ClCompile Include="ParamFunctions.cpp">
       <Filter>Utilities</Filter>
+    </ClCompile>
     <ClCompile Include="CWorldTime.cpp">
       <Filter>MainState\Misc</Filter>
     </ClCompile>
     <ClCompile Include="HorizontalSliderTooltip.cpp">
       <Filter>MainState\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Shark.cpp">
+      <Filter>MainState\Shark</Filter>
+    </ClCompile>
+    <ClCompile Include="SharkBone.cpp">
+      <Filter>MainState\Shark</Filter>
+    </ClCompile>
+    <ClCompile Include="SharkLoco.cpp">
+      <Filter>MainState\Shark</Filter>
+    </ClCompile>
+    <ClCompile Include="SharkMesh.cpp">
+      <Filter>MainState\Shark</Filter>
+    </ClCompile>
+    <ClCompile Include="SharkSkeleton.cpp">
+      <Filter>MainState\Shark</Filter>
+    </ClCompile>
+    <ClCompile Include="SharkVertex.cpp">
+      <Filter>MainState\Shark</Filter>
+    </ClCompile>
+    <ClCompile Include="Keyframe.cpp">
+      <Filter>Utilities\Shark Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="KeyframeSystem.cpp">
+      <Filter>Utilities\Shark Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="Quad.cpp">
+      <Filter>Utilities\Shark Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="MyMat.cpp">
+      <Filter>Utilities\Shark Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="glQuaternion.cpp">
+      <Filter>Utilities\Shark Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="FrameSequence.cpp">
+      <Filter>Utilities\Shark Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="SharkQuadObject.cpp">
+      <Filter>Utilities\Shark Animation</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -464,6 +504,7 @@
     </ClInclude>
     <ClInclude Include="CSplineFunctions.h">
       <Filter>MainState\Spline</Filter>
+    </ClInclude>
     <ClInclude Include="CWorldTime.h">
       <Filter>MainState\Misc</Filter>
     </ClInclude>
@@ -472,6 +513,48 @@
     </ClInclude>
     <ClInclude Include="Interp.h">
       <Filter>MainState\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="Shark.h">
+      <Filter>MainState\Shark</Filter>
+    </ClInclude>
+    <ClInclude Include="SharkBone.h">
+      <Filter>MainState\Shark</Filter>
+    </ClInclude>
+    <ClInclude Include="SharkLoco.h">
+      <Filter>MainState\Shark</Filter>
+    </ClInclude>
+    <ClInclude Include="SharkMesh.h">
+      <Filter>MainState\Shark</Filter>
+    </ClInclude>
+    <ClInclude Include="SharkSkeleton.h">
+      <Filter>MainState\Shark</Filter>
+    </ClInclude>
+    <ClInclude Include="SharkVertex.h">
+      <Filter>MainState\Shark</Filter>
+    </ClInclude>
+    <ClInclude Include="Keyframe.h">
+      <Filter>Utilities\Shark Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="KeyframeSystem.h">
+      <Filter>Utilities\Shark Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="Quad.h">
+      <Filter>Utilities\Shark Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="MyMat.h">
+      <Filter>Utilities\Shark Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="glQuaternion.h">
+      <Filter>Utilities\Shark Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="FrameSequence.h">
+      <Filter>Utilities\Shark Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="SharkFacts.h">
+      <Filter>MainState\Shark</Filter>
+    </ClInclude>
+    <ClInclude Include="SharkQuadObject.h">
+      <Filter>Utilities\Shark Animation</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -549,6 +632,9 @@
     </Filter>
     <Filter Include="MainState\Volume">
       <UniqueIdentifier>{33cba1aa-9e33-457c-912a-78dab6c782db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utilities\Shark Animation">
+      <UniqueIdentifier>{f0d6ab80-a955-49d1-babf-7322516a5a82}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

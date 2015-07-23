@@ -1,13 +1,7 @@
 #ifndef SHARK_MAIN_SYSTEM
 #define SHARK_MAIN_SYSTEM
 
-//#include <GL\glui.h>
-//#include <GL/glui.h>
-//#include "GL/glui.h"
-// include/GL/glui.h"
-
-//#include "Mesh.h"
-#include "QuadObject.h"
+#include "SharkQuadObject.h"
 #include "glQuaternion.h"
 #include "Keyframe.h"
 #include "FrameSequence.h"
@@ -33,12 +27,12 @@ class Shark
 		//void drawSegment(int index, float rot, GLUquadricObj *quadratic);
 		//void drawSpine(int frame, GLUquadricObj *quadratic);
 		void drawShark(int frame, GLUquadricObj *quadratic);
-		void timedUpdate(int dt, int railAngle, Vector3f velociity);  
+		void timedUpdate(int dt, int railAngle, glm::vec3 velociity);  
 		void materials(materialStruct materials);
 		//void segUpdate();
 		KeyframeSystem genKeyframes(bool dynamicMode, SharkMesh *sharkmesh);
 		void deinitialize(){kfSys.deleteFrameHeaps();}
-		void updateVelocity(Vector3f start, Vector3f end, double dt);
+		void updateVelocity(glm::vec3 start, glm::vec3 end, double dt);
 
 		float scaleRatio(){return skeleton.scaleRatio();}
 	
@@ -95,8 +89,8 @@ class Shark
 		bool showSkin;			//toggle to draw the skin
 		bool ismoving;				//toggle shark movement
 		bool play;				//toggle shark movement frame by frame
-		Vector3f velocity;
-		Vector3f lastpt;	//to help calculate velocity
+		glm::vec3 velocity;
+		glm::vec3 lastpt;	//to help calculate velocity
 
 		//used to draw spine
 		double	segPercent;			//percent of the totalLength 1 segment is (used in segUpdate)

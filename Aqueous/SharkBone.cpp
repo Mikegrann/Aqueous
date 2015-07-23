@@ -17,19 +17,19 @@
 		if(center >= start && center <= end )
 		{
 			Quad *curQuad = new Quad();
-			curQuad->sNormal(Vector3f(0,0,0));
+			curQuad->sNormal(glm::vec3(0,0,0));
 			for(int corn = 0; corn < 4; corn++) //corner iteration
 			{
 				SharkVertex *curVert = new SharkVertex();
 				curVert->local = mesh->vertList[in+corn];
-				curVert->transformed = Vector3f(0,0,0); // not transformed yet here
-				curVert->normal = Vector3f(0,0,0); //normal is initially set to zero until it can be compared later. 
-				map<Vector3f, SharkVertex*, compareVect3>::iterator findTest
+				curVert->transformed = glm::vec3(0,0,0); // not transformed yet here
+				curVert->normal = glm::vec3(0,0,0); //normal is initially set to zero until it can be compared later. 
+				map<glm::vec3, SharkVertex*, compareVect3>::iterator findTest
 					= sMesh->vertices.find(mesh->vertList[in+corn]);
 				if(findTest == sMesh->vertices.end())  //this vertex isn't in the smart Mesh yet.
 				{
-					//uVertices.insert(pair<Vector3f, SharkVertex*>(mesh->vertList[in+corn]
-					sMesh->vertices.insert(pair<Vector3f, SharkVertex*>(mesh->vertList[in+corn]
+					//uVertices.insert(pair<glm::vec3, SharkVertex*>(mesh->vertList[in+corn]
+					sMesh->vertices.insert(pair<glm::vec3, SharkVertex*>(mesh->vertList[in+corn]
 								, curVert));
 					curQuad->sVert(corn, curVert);
 				}
@@ -52,33 +52,36 @@
 
 /*builds a bone from an aobj file. Copies over the vertices. Does not set child bones; That has to be done separate 
  * The shark mesh should be loaded already*/
-void SharkBone::buildBoneAOBJ(string bName, Vector3f headpt, Vector3f tailpt )
+void SharkBone::buildBoneAOBJ(string bName, glm::vec3 headpt, glm::vec3 tailpt )
 {
 	boneName = bName;
 	headPoint = headpt;
 	tailPoint = tailpt;
 
 	//length of bone
-	boneLength = headpt.EuclDistance(tailpt);
+	//boneLength = headpt.EuclDistance(tailpt);
+    boneLength = glm::distance(headpt, tailpt);
 	
 	//get rotation
-	Vector3f boneVec = headpt - tailpt;
-	//Vector3f boneVec = tailpt - headpt;
-	Vector3f rot = boneVec.Normalize();
-	float theta = acos(rot.Dot(Vector3f(1,0,0)));
+	glm::vec3 boneVec = headpt - tailpt;
+	//glm::vec3 boneVec = tailpt - headpt;
+	//glm::vec3 rot = boneVec.Normalize();
+    glm::vec3 rot = glm::normalize(boneVec);
+	//float theta = acos(rot.Dot(glm::vec3(1,0,0)));
+    float theta = acos(glm::dot(rot, glm::vec3(1.0f, 0.0f, 0.0f)));
         changeAngle(theta);	
 }
 
 
 /*creates translation matrices for this bone and all child bones */
-//void SharkBone::buildTranslation(Vector3f root, Vector3f headL, Vector3f tailL)
+//void SharkBone::buildTranslation(glm::vec3 root, glm::vec3 headL, glm::vec3 tailL)
 void SharkBone::buildTranslation()
 {
-	Vector3f locTrans = (headPoint - (headPoint-tailPoint))*-1;
+	glm::vec3 locTrans = (headPoint - (headPoint-tailPoint))*-1.0f;
 	transMatLocal.makeTranslate(locTrans);   //skin space to joint space
 	
-	Vector3f transHeir = headPoint-tailPoint;
-	transHeir = transHeir * -1;
+	glm::vec3 transHeir = headPoint-tailPoint;
+	transHeir = transHeir * -1.0f;
 	transMatHeir.makeTranslate(transHeir);   //joint space to shark space
 
 	vector<SharkBone*>::iterator ic;
@@ -96,8 +99,8 @@ void SharkBone::boneLengthToTranslation(bool downstream)
 	double xtrans = downstream ? boneLength : -boneLength;
 	double xend = downstream ? -endB : -startB;	//start and end points on the bone.
 
-	transMatHeir.makeTranslate(Vector3f(xtrans, 0, 0));
-	transMatLocal.makeTranslate(Vector3f(xend, 0, 0));
+	transMatHeir.makeTranslate(glm::vec3(xtrans, 0, 0));
+	transMatLocal.makeTranslate(glm::vec3(xend, 0, 0));
 }
 
 /*This changes the angles for this bone.
@@ -188,11 +191,13 @@ void SharkBone::transformBone(MyMat *stackMatrix, bool rigidBody)
 
 void SharkBone::drawTri(MyMat matrix)
 {
-	Vector3f perpen = headPoint.Cross(tailPoint);
-	perpen = perpen / perpen.Magnitude();
-	Vector3f tailV = Vector3f(matrix.multVec(tailPoint, true));
-	Vector3f headVa = Vector3f(matrix.multVec(headPoint, true)) + (perpen*.15);
-	Vector3f headVb = Vector3f(matrix.multVec(headPoint, true)) - (perpen*.15);
+	//glm::vec3 perpen = headPoint.Cross(tailPoint);
+    glm::vec3 perpen = glm::cross(headPoint, tailPoint);
+	//perpen = perpen / perpen.Magnitude();
+    perpen = perpen / glm::length(perpen);
+	glm::vec3 tailV = glm::vec3(matrix.multVec(tailPoint, true));
+	glm::vec3 headVa = glm::vec3(matrix.multVec(headPoint, true)) + (perpen*.15f);
+	glm::vec3 headVb = glm::vec3(matrix.multVec(headPoint, true)) - (perpen*.15f);
 
 	glColor3f(0,1.0,0);
 	glBegin(GL_TRIANGLES);

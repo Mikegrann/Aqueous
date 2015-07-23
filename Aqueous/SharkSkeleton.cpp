@@ -93,12 +93,12 @@ void SharkSkeleton::buildSkeletonAOBJ(string filename)
 			while(cur != '\n')  //per line
 			{
 				string bName = nextToken(' ', readFile);	
-				Vector3f headr;
+				glm::vec3 headr;
 				headr.x = atof(nextToken(' ', readFile).c_str());
 				headr.y = atof(nextToken(' ', readFile).c_str());
 				headr.z = atof(nextToken(' ', readFile).c_str());
 
-				Vector3f tailr;
+				glm::vec3 tailr;
 				tailr.x = atof(nextToken(' ', readFile).c_str());
 				tailr.y = atof(nextToken(' ', readFile).c_str());
 				tailr.z = atof(nextToken(' ', readFile).c_str());
@@ -170,7 +170,7 @@ void SharkSkeleton::buildSkeletonAOBJ(string filename)
 		newBone->buildBone(mesh, start, end, multiplier);
 		if(i == rootNum-1){     //the translation ahead of the root node will not line up w/o an additional translation	
 			MyMat forwardtrans;
-			forwardtrans.makeTranslate(Vector3f(newBone->gLength(), 0, 0));
+			forwardtrans.makeTranslate(glm::vec3(newBone->gLength(), 0, 0));
 			newBone->sJointTranslation(forwardtrans);
 			newBone->boneLengthToTranslation(i < rootNum);
 		}
@@ -191,7 +191,7 @@ void SharkSkeleton::buildSkeletonAOBJ(string filename)
 	{
 		gBone(i-1)->addChild(gBone(i));
 	}
-	armTranslation.makeTranslate(Vector3f(gBone(rootNode)->boneLength, 0, 0));
+	armTranslation.makeTranslate(glm::vec3(gBone(rootNode)->boneLength, 0, 0));
 	nmesh->newUpdateApproved = true;
 }*/
 

@@ -1,14 +1,11 @@
 #ifndef SHARK_SKELETON_BONES_ANIMATION_3D
 #define SHARK_SKELETON_BONES_ANIMATION_3D
 
+#include <ionEngine.h>
 #include "Keyframe.h"
 #include "SharkBone.h"
 #include "MyMat.h"
-//#include "Mesh.h"
-//#include "SharkFacts.h"
 #include "glQuaternion.h"
-#include <cmath>
-#include <map>
 
 
 /*This is the Skeletel model of an animated kinematic system. An armature. 
@@ -35,8 +32,8 @@ class SharkSkeleton
 		void sAngle(string boneName, glQuaternion rotation);      
 		void sRoot(string newRoot){rootNode = newRoot;}
 
-		Vector3f gTail(string key){return gBone(key)->gTail();}
-		Vector3f gHead(string key){return gBone(key)->gHead();}
+		glm::vec3 gTail(string key){return gBone(key)->gTail();}
+		glm::vec3 gHead(string key){return gBone(key)->gHead();}
 
 		//transformation related functions
 		void applyTransformation();	//export sketon to the smart SharkMesh  so it can be drawn by the Keyframe

@@ -4,10 +4,10 @@
 //unsure that x and y are the hieght and lenght numbers. hoping z is the shark's width. 
 // axis alighed surface problem? nah
 
-Vector3f Quad::calcNormal()
+glm::vec3 Quad::calcNormal()
 {
-	//Vector3f vectorA, vectorB, normal;
-	Vector3f nor = Vector3f(0,0,0);
+	//glm::vec3 vectorA, vectorB, normal;
+	glm::vec3 nor = glm::vec3(0,0,0);
 	int i;
 	/*for ( i = 0; i < vertCounter; i+=4 ) 
 	{
@@ -24,7 +24,7 @@ Vector3f Quad::calcNormal()
 	{
 		nor = nor + verts[i]->normal;
 	}
-	faceNormal = nor / 4.0;
+	faceNormal = nor / 4.0f;
 	return nor;
 }
 
@@ -69,8 +69,8 @@ void Quad::locateAdjacants(vector<Quad*> lisq)
 bool Quad::compareFront(Quad oth)
 {
 	//compares edges 0 and 3, if not, switch the function names
-	bool topmatch = gLocalVert(0).fEquals(oth.gLocalVert(1), .00001);	
-	bool bottmatch = gLocalVert(3).fEquals(oth.gLocalVert(2), .00001);	
+    bool topmatch = CSplineFunctions::fEquals(gLocalVert(0), oth.gLocalVert(1), .00001);
+    bool bottmatch = CSplineFunctions::fEquals(gLocalVert(3), oth.gLocalVert(2), .00001);
 	
 	return topmatch && bottmatch;
 }
@@ -78,8 +78,10 @@ bool Quad::compareFront(Quad oth)
 bool Quad::compareBack(Quad oth)
 {
 	//compares edges 1 and 2
-	bool topmatch = gLocalVert(1).fEquals(oth.gLocalVert(0), .00001);
-	bool bottmatch = gLocalVert(2).fEquals(oth.gLocalVert(3), .00001);
+	//bool topmatch = gLocalVert(1).fEquals(oth.gLocalVert(0), .00001);
+    bool topmatch = CSplineFunctions::fEquals(gLocalVert(1), oth.gLocalVert(0), .00001);
+	//bool bottmatch = gLocalVert(2).fEquals(oth.gLocalVert(3), .00001);
+    bool bottmatch = CSplineFunctions::fEquals(gLocalVert(2), oth.gLocalVert(3), .00001);
 	
 	return topmatch && bottmatch;
 }
@@ -87,8 +89,10 @@ bool Quad::compareBack(Quad oth)
 bool Quad::compareLeft(Quad oth)
 {
 	//compares edges 2 and 3
-	bool topmatch = gLocalVert(2).fEquals(oth.gLocalVert(1), .00001);
-	bool bottmatch = gLocalVert(3).fEquals(oth.gLocalVert(0), .00001);
+	//bool topmatch = gLocalVert(2).fEquals(oth.gLocalVert(1), .00001);
+    //bool bottmatch = gLocalVert(3).fEquals(oth.gLocalVert(0), .00001);
+    bool topmatch = CSplineFunctions::fEquals(gLocalVert(2), oth.gLocalVert(1), .00001);
+    bool bottmatch = CSplineFunctions::fEquals(gLocalVert(3), oth.gLocalVert(0), .00001);
 	
 	return topmatch && bottmatch;
 }
@@ -96,8 +100,10 @@ bool Quad::compareLeft(Quad oth)
 bool Quad::compareRight(Quad oth)
 {
 	//compares edges 0 and 1
-	bool topmatch = gLocalVert(0).fEquals(oth.gLocalVert(3), .00001);
-	bool bottmatch = gLocalVert(1).fEquals(oth.gLocalVert(2), .00001);
+	//bool topmatch = gLocalVert(0).fEquals(oth.gLocalVert(3), .00001);
+    //bool bottmatch = gLocalVert(1).fEquals(oth.gLocalVert(2), .00001);
+    bool topmatch = CSplineFunctions::fEquals(gLocalVert(0), oth.gLocalVert(3), .00001);
+    bool bottmatch = CSplineFunctions::fEquals(gLocalVert(1), oth.gLocalVert(2), .00001);
 	
 	return topmatch && bottmatch;
 }
@@ -115,11 +121,11 @@ void Quad::restPosition()
  * Transformation is Rigid body (absolute) and does not consider vertex weights */
 void Quad::matrixTransform(MyMat matrix)
 {
-	verts[0]->transformed = Vector3f(matrix.multVec(verts[0]->local, true));
-	verts[3]->transformed = Vector3f(matrix.multVec(verts[3]->local, true));
+	verts[0]->transformed = glm::vec3(matrix.multVec(verts[0]->local, true));
+	verts[3]->transformed = glm::vec3(matrix.multVec(verts[3]->local, true));
 
-	verts[1]->transformed = Vector3f(matrix.multVec(verts[1]->local, true));
-	verts[2]->transformed = Vector3f(matrix.multVec(verts[2]->local, true));
+	verts[1]->transformed = glm::vec3(matrix.multVec(verts[1]->local, true));
+	verts[2]->transformed = glm::vec3(matrix.multVec(verts[2]->local, true));
 }
 
 /*Returns the weight on the first vertex that matches this bone */

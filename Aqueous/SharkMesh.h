@@ -2,11 +2,7 @@
 #define D_SHARK_MESH_VERTEX_QUAD
 
 /*This is a "smart mesh" structure that remembers unique vertices. The other mesh structure is to read blender files with */
-#include <cstdlib>
-#include <vector>
-#include <map>
-#include <string>
-#include <utility>
+#include <ionEngine.h>
 
 #include "SharkVertex.h"
 #include "Quad.h"
@@ -15,7 +11,7 @@
 /*Compares two vertices to make sure they don't already exist in the mesh. */
 struct compareVect3
 {
-        bool operator() (Vector3f one, Vector3f two) const
+        bool operator() (glm::vec3 one, glm::vec3 two) const
         {
 
                 if (!(one.x < two.x+.00001 && one.x > two.x-.00001))
@@ -39,17 +35,17 @@ using namespace std;
 class SharkMesh
 {
 	public:
-		SharkMesh(){ vertices = map<Vector3f, SharkVertex*, compareVect3>(); faces = vector<Quad*>();	}
+		SharkMesh(){ vertices = map<glm::vec3, SharkVertex*, compareVect3>(); faces = vector<Quad*>();	}
 		~SharkMesh(){}
 		void deleteHeap(); 
 
 		//FILE* buildAOBJ(string filename);   //returns the pointer to the point it read the first b
 		void buildAOBJ(FILE* readFile);   //returns the pointer to the point it read the first b
 
-		SharkVertex *gVertex(Vector3f key){return vertices.find(key)->second;}	
-		map<Vector3f, SharkVertex*, compareVect3>::iterator gVertices(){return vertices.begin();}
-		map<Vector3f, SharkVertex*, compareVect3>::iterator gVerticesEnd(){return vertices.end();}
-		void insertVec (pair< Vector3f, SharkVertex*> u ){vertices.insert(u);}
+		SharkVertex *gVertex(glm::vec3 key){return vertices.find(key)->second;}	
+		map<glm::vec3, SharkVertex*, compareVect3>::iterator gVertices(){return vertices.begin();}
+		map<glm::vec3, SharkVertex*, compareVect3>::iterator gVerticesEnd(){return vertices.end();}
+		void insertVec (pair< glm::vec3, SharkVertex*> u ){vertices.insert(u);}
 
 
 		Quad* gFace(int index){return faces[index];}
@@ -59,8 +55,8 @@ class SharkMesh
 		void pushFace(Quad* f){faces.push_back(f);}
 		vector<Quad*>::iterator gFaceBegin(){return faces.begin();}
 		vector<Quad*>::iterator gFaceEnd(){return faces.end();}
-		map<Vector3f, SharkVertex*,compareVect3>::iterator gVertBegin(){return vertices.begin();}
-		map<Vector3f, SharkVertex*,compareVect3>::iterator gVertEnd(){return vertices.end();}
+		map<glm::vec3, SharkVertex*,compareVect3>::iterator gVertBegin(){return vertices.begin();}
+		map<glm::vec3, SharkVertex*,compareVect3>::iterator gVertEnd(){return vertices.end();}
 
 		bool isTransformReady(){return hasNewTransform;}
 		bool isUpdateApproved(){return newUpdateApproved;}
@@ -74,7 +70,7 @@ class SharkMesh
 		void countWeights();  //prints out combined weights of all the vertices
 
 	//private:
-		map<Vector3f, SharkVertex*, compareVect3> vertices;
+		map<glm::vec3, SharkVertex*, compareVect3> vertices;
 		map<string, MyMat> skinTransforms;
 		MyMat gSkinMatrix(string name){return skinTransforms.find(name)->second;}
 		vector<Quad*> faces;

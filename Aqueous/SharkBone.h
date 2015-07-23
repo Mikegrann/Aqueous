@@ -1,11 +1,8 @@
 #ifndef SHARK_BONE_3D_D
 #define SHARK_BONE_3D_D
 
-#include <cstdio>
-#include <cstdlib>
-#include <vector>
-#include <string>
-#include <map>
+#include <ionEngine.h>
+
 #include "Quad.h"
 #include "glQuaternion.h"
 #include "SharkVertex.h"
@@ -21,7 +18,7 @@ class SharkBone
 		SharkBone(SharkMesh *nmesh, int bon){ sMesh = nmesh; boneNo = bon;}
 		~SharkBone(){}
 		//void buildBone(Mesh *mesh, float start, float end, MyMat matrixMultiplier); //takes in mesh input and records them in 
-		void buildBoneAOBJ(string boneName, Vector3f headpt, Vector3f tailpt);			//general case bone builder. Needs a mesh with bone info in it
+		void buildBoneAOBJ(string boneName, glm::vec3 headpt, glm::vec3 tailpt);			//general case bone builder. Needs a mesh with bone info in it
 		void transformBone(MyMat* stackmatri, bool isARigidBodyTransform);
 		//Quad and SharkVertex form
 		void changeAngle(int newAngle, bool isAheadRoot); //cal shark. changes the quaternion and associted angle
@@ -34,15 +31,15 @@ class SharkBone
 		void sQuad(Quad* q){return quads.push_back(q);}
 		void sLength(double len){boneLength = len;}
 		double gLength(){return boneLength;}
-		//void buildTranslation(Vector3f root, Vector3f prevhead, Vector3f prevtail);
+		//void buildTranslation(glm::vec3 root, glm::vec3 prevhead, glm::vec3 prevtail);
 		void buildTranslation();
 		void boneLengthToTranslation(bool downStream); //for the non-general building (Cal Shark) method only  	
 		void addTranslation(MyMat trans){transMatHeir.multRight(trans);}
 		void sJointTranslation(MyMat trans){jointTrans.multRight(trans);}
 		string gName(){return boneName;}
 		void sName(string newname){boneName = newname;}
-		Vector3f gHead(){return headPoint;}
-		Vector3f gTail(){return tailPoint;}
+		glm::vec3 gHead(){return headPoint;}
+		glm::vec3 gTail(){return tailPoint;}
 
 		void addChild(SharkBone* ch){childBones.push_back(ch);}
 
@@ -73,8 +70,8 @@ class SharkBone
 		MyMat transMatLocal;      //only apply this translation to this bone.  translates from startB and endB
 		MyMat jointTrans;     //any custom trans add here. Possibly hacky.
 
-		Vector3f headPoint;
-		Vector3f tailPoint;
+		glm::vec3 headPoint;
+		glm::vec3 tailPoint;
 
 
 		//child bones. Recursive transform downwards

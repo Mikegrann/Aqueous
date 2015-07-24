@@ -169,6 +169,8 @@ void CSplinePath::gatherEXPoints()
 		}
 		q = p;
 	}
+	normalizeCoords();
+
 	calcRadius();
 
 	initTangents();
@@ -240,6 +242,39 @@ void CSplinePath::calcRadius()
 {
 	midPt = maxPt - minPt;
     radius = glm::length(maxPt - midPt);
+}
+
+void CSplinePath::normalizeCoords() {
+	glm::vec3 min(std::numeric_limits<float>::max());
+	glm::vec3 max(std::numeric_limits<float>::min());
+	for (int i = 0; i < points.size(); i++)
+	{
+		glm::vec3 p = points[i];
+		if (p.x < min.x) {
+			min.x = p.x;
+		}
+		if (p.y < min.y) {
+			min.y = p.y;
+		}
+		if (p.z < min.z) {
+			min.z = p.z;
+		}
+
+		if (p.x > max.x) {
+			max.x = p.x;
+		}
+		if (p.y > max.y) {
+			max.y = p.y;
+		}
+		if (p.z > max.z) {
+			max.z = p.z;
+		}
+	}
+
+	for (int i = 0; i < points.size(); i++)
+	{
+		points[i] = ((points[i] - min) / (max - min)) - glm::vec3(0.5);
+	}
 }
 
 void CSplinePath::initTangents()
@@ -720,7 +755,7 @@ void CSplinePath::drawPointLine(int i)//, Frustum* frustum)
             for (double ind = 0.1; ind < 1.0; ind += 0.1) {
                 glm::vec3 p = splineLocation(ind, i - 1);
 
-                p = glm::normalize(p);
+                //p = glm::normalize(p);
 
                 posBuf.push_back(p.x);
                 posBuf.push_back(p.y);

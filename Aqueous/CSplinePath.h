@@ -30,6 +30,7 @@ public:
     void gatherEXPoints();
     void gatherZOEPoints();
     void parameterizeSpline();
+	void normalizeCoords();
     void initTangents();
     void calcRadius();
     void deleteHeap();

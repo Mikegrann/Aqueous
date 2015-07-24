@@ -11,6 +11,7 @@ Shark::Shark()
 	this->totalLength = 4;
 	this->lengthLeft = 4;
 
+    this->sequencesParsed = 0;
 	this->tempSegments = 10;
 	this->segNum = 1;
 	this->tempSegPercent = 0;
@@ -152,57 +153,6 @@ void Shark::drawSkin(int frame)
 	glPopMatrix();
 }
 
-//DEPRECATED since the shark was updated to skeleton
-//void Shark::drawSegment(int index, float rotate, GLUquadricObj *quadratic)
-//{
-//	GLfloat Matrix[16];
-//
-//	glQuat.CreateFromAxisAngle(0,1,0,rotate);	//convert rotation to quaternion
-//	glQuat.CreateMatrix(Matrix);
-//	glMultMatrixf(Matrix);
-
-//	gluCylinder(quadratic, .1, .1, segLength[index], 5, 5);
-//	glTranslatef(0, 0, segLength[index]);	
-//}
-
-//DEPRECATED since shark was updated to skeleton
-//void Shark::drawSpine(int frame, GLUquadricObj *quadratic)
-
-/*
-   float rotate;
-   materials(Grey);
-   glPushMatrix();
-   glTranslatef(.4, 0, 0);		//draw on top of skin
-   glRotatef(-90, 0, 1, 0);
-   if(showSpine)
-   {
-   gluSphere(quadratic, .1, 5, 5);
-   for ( int i = 0; i < segments; i++)
-   {
-   if(i % 2)
-   materials(White);
-   else
-   materials(RedFlat);
-
-   if(ismoving || play)			//if the shark is moving
-   rotate = segmentRot[kfSys.gCurrentSequence()][i][frame];	//get rotation of current segment
-   else
-   rotate = 0;						
-
-   glPushMatrix();
-   drawSegment(i, rotate, quadratic);	
-   }
-   materials(PurpleFlat);
-   gluSphere(quadratic, .1, 5, 5);
-
-   for(int i = 0; i < segments; i++)
-   glPopMatrix();				//pop for every push done in the loop above
-   }							//recursive calling of this function would be prettier code
-
-   materials(White);
-   glPopMatrix();
- */
-
 void Shark::drawShark(int frame, GLUquadricObj *quadratic) 
 {
 	drawSkin(frame);
@@ -255,10 +205,20 @@ void Shark::readMovementData(const char* file, bool dynaMode)
 		printf("can't open file %s\n", file);
 		exit(-1);
 	}
+
+    for (int ind = 0; ind < sequences; ++ind) {
+        for (int j = 0; j < segments; ++j) {
+            for (int k = 0; k < segments; ++k) {
+                segmentRot[ind][j][k] = 0.0f;
+            }
+        }
+    }
+
 	for(int i = 0; i < segments; i++)
 	{
 		for(int j = 0; j < segments; j++)
 		{
+            printf("trying to force stuff into [%d][%d][%d]\n", gParsedSoFar(), i, segments - 1 - j);
 			float segr;
 			//read in file. Note that CALShark writes segment data (j value) backwards
 			if(!dynaMode)
@@ -288,66 +248,3 @@ void Shark::defSequence()
 	incrementSequences();
 
 }
-
-
-
-/* Used to update the segments of the shark spine when using the glui interface
- * Does appropriate checking to keep the segments within desired bounds.
- * DEPRECATED since now the shark is a rigged model
- */
-/*void Shark::segUpdate()
-  {
-  double checkLength = 0;
-  double tempPercent = tempSegPercent;					//convert tempSegPercent to double for accurate division
-  double percentSpecified = 0;					  	//tracker for printing
-
-  for(int i = 0; i < tempSegments; i++)				//check to make sure specific lengths don't exceed maximum length
-  {
-  if(i == segNum - 1)						//if check is equal to current segment being updated
-  {
-  checkLength += totalLength * (tempPercent/100);	//update checkLength with new percent converted to actual length
-  percentSpecified += totalLength * (tempPercent/100);	//add to printed value of percent specified
-  }
-  else 
-  {
-  if(segLengthInput[i] == 0)				//if segment has no user specified length
-  checkLength += totalLength * .01;		//each segment must be atleast 1% long
-  else
-  {
-  checkLength += segLengthInput[i];		//add specified length to checkLength
-  percentSpecified += segLengthInput[i];
-  }
-  }
-  }
-
-//printf("Total percent specified: %3.2lf\n", (percentSpecified/totalLength)*100);
-
-if(checkLength <= totalLength)						//user inputed lengths check to be OK
-{
-//Shark.segments = tempSegments;				//update amount of segments in spine
-segPercent = tempSegPercent;					//udate segment percent
-segLengthInput[segNum-1] = totalLength * (segPercent/100);	//update segment length array with new value (actual length)
-
-lengthLeft = totalLength;					//reset lengthLeft
-for(int j = 0; j < segments; j++)				//update lengthLeft
-{
-if(segLengthInput[j] != 0)				//If user inputed data exists
-lengthLeft -= segLengthInput[j];		//add the length specified
-}
-
-for(int k = 0; k < segments; k++)				//update drawing array segments without a specific length
-{
-if(segLengthInput[k]== 0)				//if segment has no user specified length
-segLength[k] = lengthLeft / segments;		//divide the length left by the amount of segments used 
-else
-segLength[k] = segLengthInput[k];		//set the specified length
-}
-}
-else
-printf("User generated lengths plus minimum segment lengths exceed maximum length\n");
-
-glutPostRedisplay();
-}
- */
-
-

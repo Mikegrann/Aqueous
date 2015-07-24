@@ -25,5 +25,9 @@ protected:
 	CMesh * Mesh;
 
     Shark shark;
+    SharkMesh * mesh;
 
+private:
+
+    string artistDrivenAnimations[5];
 };

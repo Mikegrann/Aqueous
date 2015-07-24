@@ -1,55 +1,5 @@
 #include "SharkBone.h"
 
-/* Builds a mesh from CalShark
- * Puts verticeis in the SharkMesh and puts the quads into the Bone 
- *The vertices created live in the heap space. The Quads and the Sharkmesh both point to them */
-/*void SharkBone::buildBone(Mesh *mesh, float start, float end, MyMat multiplier)
-{
-	startB = start;
-	endB = end;
-	boneLength = end-start;
-	for(int in = 0; in < mesh->vertCounter; in+=4)
-	{
-		//find center of face
-		float center = (mesh->vertList[in].x + mesh->vertList[in+1].x + mesh->vertList[in+2].x
-				+ mesh->vertList[in+3].x ) / 4;
-		//draw if face is between start and end
-		if(center >= start && center <= end )
-		{
-			Quad *curQuad = new Quad();
-			curQuad->sNormal(glm::vec3(0,0,0));
-			for(int corn = 0; corn < 4; corn++) //corner iteration
-			{
-				SharkVertex *curVert = new SharkVertex();
-				curVert->local = mesh->vertList[in+corn];
-				curVert->transformed = glm::vec3(0,0,0); // not transformed yet here
-				curVert->normal = glm::vec3(0,0,0); //normal is initially set to zero until it can be compared later. 
-				map<glm::vec3, SharkVertex*, compareVect3>::iterator findTest
-					= sMesh->vertices.find(mesh->vertList[in+corn]);
-				if(findTest == sMesh->vertices.end())  //this vertex isn't in the smart Mesh yet.
-				{
-					//uVertices.insert(pair<glm::vec3, SharkVertex*>(mesh->vertList[in+corn]
-					sMesh->vertices.insert(pair<glm::vec3, SharkVertex*>(mesh->vertList[in+corn]
-								, curVert));
-					curQuad->sVert(corn, curVert);
-				}
-				else //vertex is in the smart mesh already, it just needs to be added to this quad.
-				{
-					delete curVert;
-					curQuad->sVert(corn, (*findTest).second);
-				}
-				curQuad->sNormal(curQuad->gNormal() + multiplier.multVec(mesh->normals[in+corn], false));
-
-			}//end corners
-			curQuad->sNormal(curQuad->gNormal() / 4.0);
-			curQuad->sBoneNo(boneNo); //curSegment;
-			//faces.push_back(curQuad);
-			quads.push_back(curQuad); //push to Bone
-			sMesh->pushFace(curQuad); //push to Smart Mesh
-		}//end if
-	}//end quads
-}*/
-
 /*builds a bone from an aobj file. Copies over the vertices. Does not set child bones; That has to be done separate 
  * The shark mesh should be loaded already*/
 void SharkBone::buildBoneAOBJ(string bName, glm::vec3 headpt, glm::vec3 tailpt )

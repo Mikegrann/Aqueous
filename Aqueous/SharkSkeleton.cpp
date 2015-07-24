@@ -65,84 +65,128 @@ string SharkSkeleton::nextToken(char delimit, FILE* readFile)
 /*Builds an entire mesh and skeleton straight out of a .aobj file */
 void SharkSkeleton::buildSkeletonAOBJ(string filename)
 {
-	FILE* readFile;
-	readFile = fopen(filename.c_str(), "r");
-     	if(readFile == NULL)
-    	{
-	   	printf(".aobj file not found\n");
-	  	exit(-1);
- 	} 
+    ifstream readFile (filename, ifstream::in);
+    //readFile.open(filename);
+    if (!readFile.is_open()) 
+        {
+            printf(".aobj file not found\n");
+            exit(-1);
+        }
+    else {
 
-	nmesh->buildAOBJ(readFile);   
-	//readFile has just read the first 'b' in the aobj file. The mesh is filled now
+        string line = nmesh->buildAOBJ(readFile);
+        //readFile has just read the first 'b' in the aobj file. The mesh is filled now
 
-	
+        //go though the rest of the parsing, pulling out each bone	
+        char identifier = ' ';
+        istringstream iss(line);
+        int index = 0;
+        vector<vector<string> > boneRelationships = vector<vector<string> >();
 
-	//go though the rest of the parsing, pulling out each bone	
-	char identifier = 'b';
-	int index = 0;
-	vector<vector<string> > boneRelationships = vector<vector<string> >();
-	while(!feof(readFile))
-	{
-		//b name headRestArmature tailRestArmature ... child names ...
-		if(identifier == 'b')
-		{
-			identifier = 0;
-			char cur = fgetc(readFile);  //space
-			vector<string> childNames = vector<string>();
-			while(cur != '\n')  //per line
-			{
-				string bName = nextToken(' ', readFile);	
-				glm::vec3 headr;
-				headr.x = atof(nextToken(' ', readFile).c_str());
-				headr.y = atof(nextToken(' ', readFile).c_str());
-				headr.z = atof(nextToken(' ', readFile).c_str());
+        iss >> identifier;
 
-				glm::vec3 tailr;
-				tailr.x = atof(nextToken(' ', readFile).c_str());
-				tailr.y = atof(nextToken(' ', readFile).c_str());
-				tailr.z = atof(nextToken(' ', readFile).c_str());
-			
-				SharkBone* nBone = new SharkBone(nmesh, index);
-				nBone->buildBoneAOBJ(bName, headr, tailr);
-				sBone(nBone);
+        while (identifier == 'b') {
+            // read in bone data
+            vector<string> childNames = vector<string>();
+            childNames.clear();
+            string bName = " ";
+            float head_x = 0.0f;
+            float head_y = 0.0f;
+            float head_z = 0.0f;
+            float tail_x = 0.0f;
+            float tail_y = 0.0f;
+            float tail_z = 0.0f;
+            string children_string = " ";
 
-				//child names need to be read.
-				childNames.push_back(bName); //first name is the name of this bone
-				fseek(readFile, -1, SEEK_CUR);
-				cur = fgetc(readFile);
-				while(cur != '\n')
-				{
-					childNames.push_back(nextToken(' ', readFile));
-					fseek(readFile, -1, SEEK_CUR);
-					cur = fgetc(readFile);
-				}
-				boneRelationships.push_back(childNames);
-				index++;
-			}
-		}
-		else
-		{
-			printf("problem reading aobj bones\n");
-			exit(-1);
-		}
+            iss >> bName >> head_x >> head_y >> head_z >> tail_x >> tail_y >> tail_z;
 
-		identifier = fgetc(readFile);
-	}
+            SharkBone* nBone = new SharkBone(nmesh, index);
+            nBone->buildBoneAOBJ(bName, glm::vec3(head_x, head_y, head_z), glm::vec3(tail_x, tail_y, tail_z));
+            sBone(nBone);
 
-	//Now, build the relationship tree among the bones
-	for(int i = 0; i < boneRelationships.size(); i++)
-	{
-		for(int j = 1; j < boneRelationships[i].size(); j++)
-		{
-			gBone(boneRelationships[i][0])->addChild(gBone(boneRelationships[i][j]));	
-		}	
-	}
-	bones[rootNode]->buildTranslation();
-	nmesh->countWeights();
-	fclose(readFile);
+            while (iss >> children_string) {
+                if (childNames.size() > 2) {
+                    childNames.push_back(children_string);
+                }
+            }
+
+            boneRelationships.push_back(childNames);
+            index++;
+
+            if (!getline(readFile, line)) {
+                break;
+            }
+            else {
+                iss = istringstream(line);
+                iss >> identifier;
+            }
+        }
+
+        //string line = " ";
+        //while (getline(readFile, line))
+        /*while(!feof(readFile))
+        {
+        //b name headRestArmature tailRestArmature ... child names ...
+        if(identifier == 'b')
+        {
+        identifier = 0;
+        char cur = fgetc(readFile);  //space
+        vector<string> childNames = vector<string>();
+        while(cur != '\n')  //per line
+        {
+        string bName = nextToken(' ', readFile);
+        glm::vec3 headr;
+        headr.x = atof(nextToken(' ', readFile).c_str());
+        headr.y = atof(nextToken(' ', readFile).c_str());
+        headr.z = atof(nextToken(' ', readFile).c_str());
+
+        glm::vec3 tailr;
+        tailr.x = atof(nextToken(' ', readFile).c_str());
+        tailr.y = atof(nextToken(' ', readFile).c_str());
+        tailr.z = atof(nextToken(' ', readFile).c_str());
+
+        SharkBone* nBone = new SharkBone(nmesh, index);
+        nBone->buildBoneAOBJ(bName, headr, tailr);
+        sBone(nBone);
+
+        //child names need to be read.
+        childNames.push_back(bName); //first name is the name of this bone
+        fseek(readFile, -1, SEEK_CUR);
+        cur = fgetc(readFile);
+        while(cur != '\n')
+        {
+        childNames.push_back(nextToken(' ', readFile));
+        fseek(readFile, -1, SEEK_CUR);
+        cur = fgetc(readFile);
+        }
+        boneRelationships.push_back(childNames);
+        index++;
+        }
+        }
+        else
+        {
+        printf("problem reading aobj bones\n");
+        exit(-1);
+        }
+
+        identifier = fgetc(readFile);
+        }*/
+
+        //Now, build the relationship tree among the bones
+        for (int i = 0; i < boneRelationships.size(); i++)
+        {
+            for (int j = 1; j < boneRelationships[i].size(); j++)
+            {
+                gBone(boneRelationships[i][0])->addChild(gBone(boneRelationships[i][j]));
+            }
+        }
+        bones[rootNode]->buildTranslation();
+        nmesh->countWeights();
+        //fclose(readFile);
+        readFile.close(); 
 
 
+    }
 }
 
 

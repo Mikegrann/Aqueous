@@ -10,6 +10,29 @@ void CSharkNodeManager::Init()
 	SingletonPointer<CSceneManager> SceneManager;
 	
 	Node = SceneManager->GetFactory()->AddSceneNode("Shark");
+    
+    shark.defSequence();
+
+    string artistDrivenAnimations[5] = { "ani/ani_slowstraight_4.csv",
+        "ani/ani_faststraight_1.csv",
+        "ani/ani_leftturn_2.csv",
+        "ani/ani_rightturn_2.csv",
+        "ani/ani_right_uturn_1.csv" };
+
+    for (int i = 0; i < 5; i++) {
+        shark.readMovementData(artistDrivenAnimations[i].c_str(), true);
+    }
+
+    mesh = new SharkMesh();
+
+    shark.sMesh(mesh);
+    int tSegments = shark.segments;
+
+    shark.buildSkeleton("Model/LeopardShark.aobj");
+
+    shark.genKeyframes(true, mesh);
+    shark.sFrameSpeed(10);
+
 	LoadSceneElements();
 }
 

@@ -15,28 +15,77 @@ string SharkMesh::nextToken(char delimit, FILE* readFile)
 }
 
 //FILE* SharkMesh::buildAOBJ(string filename)
-void SharkMesh::buildAOBJ(FILE* readFile)
+string SharkMesh::buildAOBJ(ifstream& readFile)
 {
 	vector<glm::vec3> localVerts = vector<glm::vec3>();   //in order to use OBJs as keys, need to remember their order.
-	while(!feof(readFile))
+	//while(!feof(readFile))
+    string line = " ";
+    while (getline(readFile, line))
+    //while (readFile.good())
 	{
+        //readFile >> 
 		//tokenize the line identifier. It's only one character and 
 		//it should be on the first on the line
-		char identifier = fgetc(readFile);
-		if(ferror(readFile)){ printf("888888888Error reading FILE\n"); exit(-1);}
+		//char identifier = fgetc(readFile);
+        //char identifier = line.c_str()[0];
+        istringstream iss(line);
+        char identifier = ' ';
+        iss >> identifier;
+
+		///if(ferror(readFile)){ printf("888888888Error reading FILE\n"); exit(-1);}
 
 
 		//load in the vertices
 		//v x y z nx ny nz boneName/weight boneName/weight ...
 		if(identifier == 'v')
 		{
-			char cur = fgetc(readFile);  //space
-			if(ferror(readFile)){ printf("0Error reading FILE\n"); exit(-1);}
-			while(cur != '\n')  //per line
-			{
-				SharkVertex* sv = new SharkVertex();
+			//char cur = fgetc(readFile);  //space
+			//if(ferror(readFile)){ printf("0Error reading FILE\n"); exit(-1);}
+			//whsile(cur != '\n')  //per line
+			//{
+			SharkVertex* sv = new SharkVertex();
+            float pos_x = 0.0f;
+            float pos_y = 0.0f;
+            float pos_z = 0.0f;
+            float nor_x = 0.0f;
+            float nor_y = 0.0f;
+            float nor_z = 0.0f;
+            string bone_pair = " ";
+            //char 
+            //float bone_weight = 0.0f;
 
-				//location of vertex    
+            iss >> pos_x >> pos_y >> pos_z >> nor_x >> nor_y >> nor_z;
+            
+            while (iss >> bone_pair) {
+                
+                string bone_name = " ";
+                string weight_string = " ";
+                float bone_weight = 0.0f;
+
+                bone_name = strtok((char*)bone_pair.c_str(), " /\n");
+                weight_string = strtok(NULL, " /\n");
+                bone_weight = atof(weight_string.c_str());
+
+                if (bone_name != "" && weight_string != "") {
+                    sv->sBonePair(bone_name, bone_weight);
+                }
+            }
+                
+               // sscanf(line.c_str(), "v %f %f %f %f %f %f %s/%f\n", &pos_x, &pos_y, &pos_z, &nor_x, &nor_y, &nor_z, &bone_name, &bone_weight);
+                
+            glm::vec3 vert = glm::vec3(pos_x, pos_y, pos_z);
+            sv->sLocal(vert);
+             
+            glm::vec3 nor = glm::vec3(nor_x, nor_y, nor_z);
+            sv->sNormal(nor * -1.0f);
+
+            sv->sTransformed(glm::vec3(0, 0, 0));
+
+            localVerts.push_back(vert);
+            insertVec(pair<glm::vec3, SharkVertex*>(vert, sv));
+
+
+				/*//location of vertex    
 				glm::vec3 vert;
 				vert.x = atof(nextToken(' ', readFile).c_str());
 				vert.y = atof(nextToken(' ', readFile).c_str());
@@ -63,13 +112,32 @@ void SharkMesh::buildAOBJ(FILE* readFile)
 				}
 				localVerts.push_back(vert);
 				insertVec(pair<glm::vec3, SharkVertex*>(vert, sv));
-			}
+			}*/
 		}
 		//faces
 		//f ... vertices in mesh .....
 		else if(identifier == 'f')
-		{
-			char cur = fgetc(readFile); //space
+        {
+            int vertex1 = 0;
+            int vertex2 = 0;
+            int vertex3 = 0;
+            int vertex4 = 0;
+
+            iss >> vertex1 >> vertex2 >> vertex3 >> vertex4;
+
+            Quad *curQuad = new Quad();
+            curQuad->sNormal(glm::vec3(0, 0, 0));
+
+            curQuad->sVert(0, gVertex(localVerts[vertex1 - 1]));
+            curQuad->sVert(1, gVertex(localVerts[vertex2 - 1]));
+            curQuad->sVert(2, gVertex(localVerts[vertex3 - 1]));
+            curQuad->sVert(3, gVertex(localVerts[vertex4 - 1]));
+            curQuad->calcNormal();
+
+            pushFace(curQuad);
+            //neighboring quads are to be found later, after parsing is done.
+
+			/*char cur = fgetc(readFile); //space
 			if(ferror(readFile)){ printf("4Error reading FILE\n"); exit(-1);}
 			Quad *curQuad = new Quad();
 			curQuad->sNormal(glm::vec3(0,0,0));
@@ -95,14 +163,14 @@ void SharkMesh::buildAOBJ(FILE* readFile)
 			{
 				cur = fgetc(readFile);
 				if(ferror(readFile)){ printf("5Error reading FILE\n"); exit(-1);}
-			}
+			}*/
 		}		
 		//bones
 		//b name headRestArmature tailRestArmature ... child names ...
 		//read outside of this function	
 		else if(identifier == 'b')
 		{
-			return;
+			return line;
 		}
 	}
 }

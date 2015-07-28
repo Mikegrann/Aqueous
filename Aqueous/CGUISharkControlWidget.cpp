@@ -4,6 +4,7 @@
 #include "CMainState.h"
 #include "CTerrainNodeManager.h"
 #include "CSharkNodeManager.h"
+#include "CSplineNodeManager.h"
 
 #include <Gwen/Controls.h>
 #include <Gwen/Controls/ComboBox.h>
@@ -18,21 +19,31 @@ CGUISharkControlWidget::CGUISharkControlWidget()
 	Window->SetTitle("Scene Controls");
 	Window->SetHidden(true);
 
-	EnableButton = new Gwen::Controls::Button(Window);
-	EnableButton->SetBounds(15, 10, 290, 25);
-	EnableButton->SetText("Shark Visiblity Button");
-	EnableButton->onPress.Add(this, &CGUISharkControlWidget::OnToggleShark);
-	SetButtonTitle();
+	SharkEnableButton = new Gwen::Controls::Button(Window);
+	SharkEnableButton->SetBounds(15, 10, 290, 25);
+	SharkEnableButton->SetText("Shark Visiblity Button");
+	SharkEnableButton->onPress.Add(this, &CGUISharkControlWidget::OnToggleShark);
+
+	SplineEnableButton = new Gwen::Controls::Button(Window);
+	SplineEnableButton->SetBounds(15, 45, 290, 25);
+	SplineEnableButton->SetText("Spline Visiblity Button");
+	SplineEnableButton->onPress.Add(this, &CGUISharkControlWidget::OnToggleSpline);
+	SetButtonTitles();
 }
 
-void CGUISharkControlWidget::SetButtonTitle()
+void CGUISharkControlWidget::SetButtonTitles()
 {
 	CProgramContext * Context = & CProgramContext::Get();
 	
 	if (Context->Scene.Shark->GetNode()->IsVisible())
-		EnableButton->SetText("Disable Shark Visual");
+		SharkEnableButton->SetText("Disable Shark Visual");
 	else
-		EnableButton->SetText("Enable Shark Visual");
+		SharkEnableButton->SetText("Enable Shark Visual");
+
+	if (Context->Scene.Spline->GetNode()->IsVisible())
+		SplineEnableButton->SetText("Disable Spline Visual");
+	else
+		SplineEnableButton->SetText("Enable Spline Visual");
 }
 
 void CGUISharkControlWidget::OnToggleShark(Gwen::Controls::Base * Control)
@@ -43,13 +54,31 @@ void CGUISharkControlWidget::OnToggleShark(Gwen::Controls::Base * Control)
 	{
 		Context->Scene.Shark->GetNode()->SetVisible(true);
 		GUIContext->GetConsole()->AddMessage("Shark View Enabled");
-		SetButtonTitle();
+		SetButtonTitles();
 	}
 	else
 	{
 		Context->Scene.Shark->GetNode()->SetVisible(false);
 		GUIContext->GetConsole()->AddMessage("Shark View Disabled");
-		SetButtonTitle();
+		SetButtonTitles();
+	}
+}
+
+void CGUISharkControlWidget::OnToggleSpline(Gwen::Controls::Base * Control)
+{
+	CProgramContext * Context = &CProgramContext::Get();
+
+	if (!Context->Scene.Spline->GetNode()->IsVisible())
+	{
+		Context->Scene.Spline->GetNode()->SetVisible(true);
+		GUIContext->GetConsole()->AddMessage("Spline View Enabled");
+		SetButtonTitles();
+	}
+	else
+	{
+		Context->Scene.Spline->GetNode()->SetVisible(false);
+		GUIContext->GetConsole()->AddMessage("Spline View Disabled");
+		SetButtonTitles();
 	}
 }
 

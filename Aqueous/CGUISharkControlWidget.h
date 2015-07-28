@@ -10,15 +10,17 @@ class CGUISharkControlWidget : public CGUIContextWidget
 {
 
 	Gwen::Controls::WindowControl * Window;
-	Gwen::Controls::Button * EnableButton;
+	Gwen::Controls::Button * SharkEnableButton;
+	Gwen::Controls::Button * SplineEnableButton;
 
-	void SetButtonTitle();
+	void SetButtonTitles();
 
 public:
 
 	CGUISharkControlWidget();
 
 	void OnToggleShark(Gwen::Controls::Base * Control);
+	void OnToggleSpline(Gwen::Controls::Base * Control);
 
 	void toggle();
 

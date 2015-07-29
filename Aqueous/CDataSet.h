@@ -53,6 +53,7 @@ public:
 	std::string SourceFile;
 
 	string VolumeColorMapper = "Spectrum", GlyphColorMapper = "Spectrum", ColorField = "o2";
+	vector<string> dataFields;
 
 	bool ManuallySetDataLongLat = false;
 	longlatd DataLonLatCenter;

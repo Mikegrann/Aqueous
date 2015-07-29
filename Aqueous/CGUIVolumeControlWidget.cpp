@@ -86,6 +86,12 @@ CGUIVolumeControlWidget::CGUIVolumeControlWidget()
 	
 	// Other Controls Panel
 	{
+		Gwen::Controls::Label * FieldLabel = new Gwen::Controls::Label(Window);
+		FieldLabel->SetFont(GUIManager->GetRegularFont());
+		FieldLabel->SetText(L"Data:");
+		FieldLabel->SetBounds(37, 285 + 10 + 6, 90, 40);
+		FieldLabel->SetTextColor(Gwen::Color(50, 50, 20, 215));
+
 		Gwen::Controls::Label * InterpLabel = new Gwen::Controls::Label(Window);
 		InterpLabel->SetFont(GUIManager->GetRegularFont());
 		InterpLabel->SetText(L"Interp:");
@@ -98,7 +104,7 @@ CGUIVolumeControlWidget::CGUIVolumeControlWidget()
 			FuncLabel = new Gwen::Controls::Label(Window);
 			FuncLabel->SetFont(GUIManager->GetRegularFont());
 			FuncLabel->SetText(L"Func:");
-			FuncLabel->SetBounds(33, 320 + 10 + 35 + 6, 90, 40);
+			FuncLabel->SetBounds(37, 320 + 10 + 35 + 6, 90, 40);
 			FuncLabel->SetTextColor(Gwen::Color(50, 50, 20, 215));
 
 			FuncMode = new Gwen::Controls::ComboBox(Window);
@@ -150,9 +156,11 @@ CGUIVolumeControlWidget::CGUIVolumeControlWidget()
 		ShadingLabel->SetBounds(10, 320 + 35 + 45 + 70 + 35 + 6, 90, 40);
 		ShadingLabel->SetTextColor(Gwen::Color(50, 50, 20, 215));
 
-		Gwen::Controls::Button * pButton2 = new Gwen::Controls::Button(Window);
-		pButton2->SetBounds(80, 120 + 120 + 15 + 35, 200, 25);
-		pButton2->SetText("Reset Volume Opacity");
+		Gwen::Controls::ComboBox * DrawField = new Gwen::Controls::ComboBox(Window);
+		DrawField->SetBounds(80, 120 + 120 + 10 + 45, 200, 25);
+		for (auto field : Context->CurrentSite->GetCurrentDataSet()->dataFields) {
+			Gwen::Controls::MenuItem *newItem = DrawField->AddItem(Gwen::UnicodeString(field.begin(), field.end()));
+		}
 		
 		Gwen::Controls::ComboBox * InterpMode = new Gwen::Controls::ComboBox(Window);
 		InterpMode->SetBounds(80, 120 + 120 + 45 + 45, 200, 25);
@@ -224,12 +232,12 @@ CGUIVolumeControlWidget::CGUIVolumeControlWidget()
 		StepSizeSlider->SetFloatValue(VolumeControl.StepSize);
 
 		// Wire Up Events
-		pButton2->onPress.Add(this,					& CGUIVolumeControlWidget::OnResetAlpha);
 		pButtonX->onPress.Add(this,					& CGUIVolumeControlWidget::OnSetXAxis);
 		pButtonY->onPress.Add(this,					& CGUIVolumeControlWidget::OnSetYAxis);
 		pButtonZ->onPress.Add(this,					& CGUIVolumeControlWidget::OnSetZAxis);
 		VolumeMode->onSelection.Add(this,			& CGUIVolumeControlWidget::OnVolumeMode);
 		InterpMode->onSelection.Add(this,			& CGUIVolumeControlWidget::OnInterpMode);
+		DrawField->onSelection.Add(this,			& CGUIVolumeControlWidget::OnDrawField);
 
 		FuncMode->onSelection.Add(this,				& CGUIVolumeControlWidget::OnFuncMode);
 		InvExponent->onValueChanged.Add(this,		& CGUIVolumeControlWidget::OnExponentSlider);
@@ -326,6 +334,15 @@ void CGUIVolumeControlWidget::OnSetYAxis(Gwen::Controls::Base * Control)
 void CGUIVolumeControlWidget::OnSetZAxis(Gwen::Controls::Base * Control)
 {
 	VolumeControl.SliceAxis = SVector3f(0.f, 0.f, 1.f);
+}
+
+void CGUIVolumeControlWidget::OnDrawField(Gwen::Controls::Base * Control)
+{
+	CProgramContext * Context = &CProgramContext::Get();
+	Gwen::Controls::ComboBox * Box = (Gwen::Controls::ComboBox *) Control;
+
+	Context->CurrentSite->GetCurrentDataSet()->ColorField = Box->GetSelectedItem()->GetText().m_String;
+	Context->CurrentSite->GetCurrentDataSet()->GenerateVolume(Context->WorldTime->GetTime(), Context->Scene.Volume->GetInterp());
 }
 
 void CGUIVolumeControlWidget::OnInterpMode(Gwen::Controls::Base * Control)

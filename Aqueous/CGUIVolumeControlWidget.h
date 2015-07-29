@@ -48,6 +48,7 @@ public:
 
 	void OnVolumeMode(Gwen::Controls::Base * Control);
 	void OnInterpMode(Gwen::Controls::Base * Control);
+	void OnDrawField(Gwen::Controls::Base * Control);
 
 	void OnFuncMode(Gwen::Controls::Base * Control);
 	void OnExponentSlider(Gwen::Controls::Base * Control);

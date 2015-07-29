@@ -1,4 +1,3 @@
-
 #include "CSite.h"
 #include "CWorldTime.h"
 
@@ -46,8 +45,19 @@ void CSite::ReadConfiguration()
 				if (dDataSet.HasMember("VolumeColorMapper") && dDataSet["VolumeColorMapper"].IsString())
 					DataSet->VolumeColorMapper = dDataSet["VolumeColorMapper"].GetString();
 				
-				if (dDataSet.HasMember("ColorField") && dDataSet["ColorField"].IsString())
-					DataSet->ColorField = dDataSet["ColorField"].GetString();
+				if (dDataSet.HasMember("ColorField") && dDataSet["ColorField"].IsArray()) {
+					auto & fields = dDataSet["ColorField"];
+					for (uint j = 0; j < fields.Size(); ++j)
+					{
+						auto & field = fields[j];
+						if (field.HasMember("FieldName") && field["FieldName"].IsString()) {
+							DataSet->dataFields.push_back(field["FieldName"].GetString());
+						}
+					}
+					if (DataSet->dataFields.size()) {
+						DataSet->ColorField = DataSet->dataFields[0];
+					}
+				}
 
 				if (dDataSet.HasMember("TField") && dDataSet["TField"].IsString())
 					DataSet->Traits.TField = dDataSet["TField"].GetString();
@@ -228,6 +238,14 @@ CLocation * CSite::GetCurrentLocation()
 {
 	if (Locations.size())
 		return Locations[SelectedLocation];
+	else
+		return nullptr;
+}
+
+CSplinePath * CSite::GetCurrentSplinePath()
+{
+	if (Tracks.size())
+		return Tracks[SelectedSplinePath];
 	else
 		return nullptr;
 }

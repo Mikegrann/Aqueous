@@ -65,6 +65,11 @@ public:
     vector<f32> getColorBuffer() { return colorBuf; };
     vector<u32> getIndexBuffer() { return indBuf; };
 
+	// Extents
+	SRange<f32> GetXRange() { return XRange; }
+	SRange<f32> GetYRange() { return YRange; }
+	SRange<f32> GetZRange() { return ZRange; }
+
 private:	
     GLuint lineShader;
     //data
@@ -81,6 +86,11 @@ private:
     glm::vec3 maxPt; //records the maximum point the shark traveled
     glm::vec3 minPt; //minimum point
     glm::vec3 midPt;
+
+	// Extents
+	SRange<f32> XRange;
+	SRange<f32> YRange;
+	SRange<f32> ZRange;
 
     // VBO stuff
     vector<f32> posBuf;

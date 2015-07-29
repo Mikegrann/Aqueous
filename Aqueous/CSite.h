@@ -22,6 +22,7 @@ public:
 	void AddDataSet(CDataSet * DataSet);
 	CDataSet * GetCurrentDataSet();
 	CLocation * GetCurrentLocation();
+	CSplinePath * GetCurrentSplinePath();
 
 	string const & GetName() const;
 	string const & GetPath() const;
@@ -41,6 +42,7 @@ protected:
 
 	int SelectedLocation = 0;
 	int SelectedDataSet = 0;
+	int SelectedSplinePath = 0;
 
 	string Name;
 	string Path;

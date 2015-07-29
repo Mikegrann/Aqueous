@@ -271,6 +271,13 @@ void CSplinePath::normalizeCoords() {
 		}
 	}
 
+	XRange.Minimum = min.x;
+	XRange.Maximum = max.x;
+	YRange.Minimum = min.y;
+	YRange.Maximum = max.y;
+	ZRange.Minimum = min.z;
+	ZRange.Maximum = max.z;
+
 	for (int i = 0; i < points.size(); i++)
 	{
 		points[i] = ((points[i] - min) / (max - min)) - glm::vec3(0.5);

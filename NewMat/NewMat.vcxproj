@@ -1,0 +1,114 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{EF03A96C-4757-45A7-B0FB-25FBF9F3FD48}</ProjectGuid>
+    <RootNamespace>NewMat</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IntDir>$(Platform)\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_MBCS;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <NoEntryPoint>true</NoEntryPoint>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\Aqueous\newmat\bandmat.cpp" />
+    <ClCompile Include="..\Aqueous\newmat\cholesky.cpp" />
+    <ClCompile Include="..\Aqueous\newmat\evalue.cpp" />
+    <ClCompile Include="..\Aqueous\newmat\fft.cpp" />
+    <ClCompile Include="..\Aqueous\newmat\hholder.cpp" />
+    <ClCompile Include="..\Aqueous\newmat\jacobi.cpp" />
+    <ClCompile Include="..\Aqueous\newmat\myexcept.cpp" />
+    <ClCompile Include="..\Aqueous\newmat\newfft.cpp" />
+    <ClCompile Include="..\Aqueous\newmat\newmat1.cpp" />
+    <ClCompile Include="..\Aqueous\newmat\newmat2.cpp" />
+    <ClCompile Include="..\Aqueous\newmat\newmat3.cpp" />
+    <ClCompile Include="..\Aqueous\newmat\newmat4.cpp" />
+    <ClCompile Include="..\Aqueous\newmat\newmat5.cpp" />
+    <ClCompile Include="..\Aqueous\newmat\newmat6.cpp" />
+    <ClCompile Include="..\Aqueous\newmat\newmat7.cpp" />
+    <ClCompile Include="..\Aqueous\newmat\newmat8.cpp" />
+    <ClCompile Include="..\Aqueous\newmat\newmat9.cpp" />
+    <ClCompile Include="..\Aqueous\newmat\newmatex.cpp" />
+    <ClCompile Include="..\Aqueous\newmat\newmatnl.cpp" />
+    <ClCompile Include="..\Aqueous\newmat\newmatrm.cpp" />
+    <ClCompile Include="..\Aqueous\newmat\solution.cpp" />
+    <ClCompile Include="..\Aqueous\newmat\sort.cpp" />
+    <ClCompile Include="..\Aqueous\newmat\submat.cpp" />
+    <ClCompile Include="..\Aqueous\newmat\svd.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\Aqueous\newmat\boolean.h" />
+    <ClInclude Include="..\Aqueous\newmat\controlw.h" />
+    <ClInclude Include="..\Aqueous\newmat\include.h" />
+    <ClInclude Include="..\Aqueous\newmat\myexcept.h" />
+    <ClInclude Include="..\Aqueous\newmat\newmat.h" />
+    <ClInclude Include="..\Aqueous\newmat\newmatap.h" />
+    <ClInclude Include="..\Aqueous\newmat\newmatio.h" />
+    <ClInclude Include="..\Aqueous\newmat\newmatnl.h" />
+    <ClInclude Include="..\Aqueous\newmat\newmatrc.h" />
+    <ClInclude Include="..\Aqueous\newmat\newmatrm.h" />
+    <ClInclude Include="..\Aqueous\newmat\precisio.h" />
+    <ClInclude Include="..\Aqueous\newmat\solution.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

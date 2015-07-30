@@ -110,78 +110,6 @@
     <ClCompile Include="InvDistWeight.cpp">
       <Filter>MainState\Util</Filter>
     </ClCompile>
-    <ClCompile Include="newmat\bandmat.cpp">
-      <Filter>External\NewMat</Filter>
-    </ClCompile>
-    <ClCompile Include="newmat\cholesky.cpp">
-      <Filter>External\NewMat</Filter>
-    </ClCompile>
-    <ClCompile Include="newmat\evalue.cpp">
-      <Filter>External\NewMat</Filter>
-    </ClCompile>
-    <ClCompile Include="newmat\fft.cpp">
-      <Filter>External\NewMat</Filter>
-    </ClCompile>
-    <ClCompile Include="newmat\hholder.cpp">
-      <Filter>External\NewMat</Filter>
-    </ClCompile>
-    <ClCompile Include="newmat\jacobi.cpp">
-      <Filter>External\NewMat</Filter>
-    </ClCompile>
-    <ClCompile Include="newmat\myexcept.cpp">
-      <Filter>External\NewMat</Filter>
-    </ClCompile>
-    <ClCompile Include="newmat\newfft.cpp">
-      <Filter>External\NewMat</Filter>
-    </ClCompile>
-    <ClCompile Include="newmat\newmat1.cpp">
-      <Filter>External\NewMat</Filter>
-    </ClCompile>
-    <ClCompile Include="newmat\newmat2.cpp">
-      <Filter>External\NewMat</Filter>
-    </ClCompile>
-    <ClCompile Include="newmat\newmat3.cpp">
-      <Filter>External\NewMat</Filter>
-    </ClCompile>
-    <ClCompile Include="newmat\newmat4.cpp">
-      <Filter>External\NewMat</Filter>
-    </ClCompile>
-    <ClCompile Include="newmat\newmat5.cpp">
-      <Filter>External\NewMat</Filter>
-    </ClCompile>
-    <ClCompile Include="newmat\newmat6.cpp">
-      <Filter>External\NewMat</Filter>
-    </ClCompile>
-    <ClCompile Include="newmat\newmat7.cpp">
-      <Filter>External\NewMat</Filter>
-    </ClCompile>
-    <ClCompile Include="newmat\newmat8.cpp">
-      <Filter>External\NewMat</Filter>
-    </ClCompile>
-    <ClCompile Include="newmat\newmat9.cpp">
-      <Filter>External\NewMat</Filter>
-    </ClCompile>
-    <ClCompile Include="newmat\newmatex.cpp">
-      <Filter>External\NewMat</Filter>
-    </ClCompile>
-    <ClCompile Include="newmat\newmatnl.cpp">
-      <Filter>External\NewMat</Filter>
-    </ClCompile>
-    <ClCompile Include="newmat\newmatrm.cpp">
-      <Filter>External\NewMat</Filter>
-    </ClCompile>
-    <ClCompile Include="newmat\solution.cpp">
-      <Filter>External\NewMat</Filter>
-    </ClCompile>
-    <ClCompile Include="newmat\sort.cpp">
-      <Filter>External\NewMat</Filter>
-    </ClCompile>
-    <ClCompile Include="newmat\submat.cpp">
-      <Filter>External\NewMat</Filter>
-    </ClCompile>
-    <ClCompile Include="newmat\svd.cpp">
-      <Filter>External\NewMat</Filter>
-    </ClCompile>
     <ClCompile Include="CGUISharkControlWidget.cpp">
       <Filter>MainState\Shark</Filter>
     </ClCompile>
@@ -354,42 +282,6 @@
     </ClInclude>
     <ClInclude Include="InvDistWeight.h">
       <Filter>MainState\Util</Filter>
-    </ClInclude>
-    <ClInclude Include="newmat\boolean.h">
-      <Filter>External\NewMat</Filter>
-    </ClInclude>
-    <ClInclude Include="newmat\controlw.h">
-      <Filter>External\NewMat</Filter>
-    </ClInclude>
-    <ClInclude Include="newmat\include.h">
-      <Filter>External\NewMat</Filter>
-    </ClInclude>
-    <ClInclude Include="newmat\myexcept.h">
-      <Filter>External\NewMat</Filter>
-    </ClInclude>
-    <ClInclude Include="newmat\newmat.h">
-      <Filter>External\NewMat</Filter>
-    </ClInclude>
-    <ClInclude Include="newmat\newmatap.h">
-      <Filter>External\NewMat</Filter>
-    </ClInclude>
-    <ClInclude Include="newmat\newmatio.h">
-      <Filter>External\NewMat</Filter>
-    </ClInclude>
-    <ClInclude Include="newmat\newmatnl.h">
-      <Filter>External\NewMat</Filter>
-    </ClInclude>
-    <ClInclude Include="newmat\newmatrc.h">
-      <Filter>External\NewMat</Filter>
-    </ClInclude>
-    <ClInclude Include="newmat\newmatrm.h">
-      <Filter>External\NewMat</Filter>
-    </ClInclude>
-    <ClInclude Include="newmat\precisio.h">
-      <Filter>External\NewMat</Filter>
-    </ClInclude>
-    <ClInclude Include="newmat\solution.h">
-      <Filter>External\NewMat</Filter>
     </ClInclude>
     <ClInclude Include="rapidjson\allocators.h">
       <Filter>External\RapidJSON</Filter>
@@ -608,9 +500,6 @@
     </Filter>
     <Filter Include="External">
       <UniqueIdentifier>{7f5f07fc-1f7a-4b56-9562-b0f5c0d673f5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="External\NewMat">
-      <UniqueIdentifier>{201abec7-792d-45e6-9122-4107b43f110c}</UniqueIdentifier>
     </Filter>
     <Filter Include="External\RapidJSON">
       <UniqueIdentifier>{ab127b17-5ac6-4c68-8b2e-8a0586866245}</UniqueIdentifier>

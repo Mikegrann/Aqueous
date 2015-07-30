@@ -38,7 +38,8 @@
   </PropertyGroup>
   <ItemDefinitionGroup>
     <Link>
-      <AdditionalDependencies>giflib.lib;libmat.lib;libmx.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>NewMat.lib;giflib.lib;libmat.lib;libmx.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Program Files (x86)\Visual Leak Detector\lib\Win64;$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
       <Command>
@@ -96,30 +97,6 @@
     <ClCompile Include=".\SciDataParserGrid1.cpp" />
     <ClCompile Include=".\SciDataParserCTD.cpp" />
     <ClCompile Include="MyMat.cpp" />
-    <ClCompile Include="newmat\bandmat.cpp" />
-    <ClCompile Include="newmat\cholesky.cpp" />
-    <ClCompile Include="newmat\evalue.cpp" />
-    <ClCompile Include="newmat\fft.cpp" />
-    <ClCompile Include="newmat\hholder.cpp" />
-    <ClCompile Include="newmat\jacobi.cpp" />
-    <ClCompile Include="newmat\myexcept.cpp" />
-    <ClCompile Include="newmat\newfft.cpp" />
-    <ClCompile Include="newmat\newmat1.cpp" />
-    <ClCompile Include="newmat\newmat2.cpp" />
-    <ClCompile Include="newmat\newmat3.cpp" />
-    <ClCompile Include="newmat\newmat4.cpp" />
-    <ClCompile Include="newmat\newmat5.cpp" />
-    <ClCompile Include="newmat\newmat6.cpp" />
-    <ClCompile Include="newmat\newmat7.cpp" />
-    <ClCompile Include="newmat\newmat8.cpp" />
-    <ClCompile Include="newmat\newmat9.cpp" />
-    <ClCompile Include="newmat\newmatex.cpp" />
-    <ClCompile Include="newmat\newmatnl.cpp" />
-    <ClCompile Include="newmat\newmatrm.cpp" />
-    <ClCompile Include="newmat\solution.cpp" />
-    <ClCompile Include="newmat\sort.cpp" />
-    <ClCompile Include="newmat\submat.cpp" />
-    <ClCompile Include="newmat\svd.cpp" />
     <ClCompile Include="ParamFunctions.cpp" />
     <ClCompile Include="PolyRegress.cpp" />
     <ClCompile Include="Quad.cpp" />
@@ -185,18 +162,6 @@
     <ClInclude Include="Keyframe.h" />
     <ClInclude Include="KeyframeSystem.h" />
     <ClInclude Include="MyMat.h" />
-    <ClInclude Include="newmat\boolean.h" />
-    <ClInclude Include="newmat\controlw.h" />
-    <ClInclude Include="newmat\include.h" />
-    <ClInclude Include="newmat\myexcept.h" />
-    <ClInclude Include="newmat\newmat.h" />
-    <ClInclude Include="newmat\newmatap.h" />
-    <ClInclude Include="newmat\newmatio.h" />
-    <ClInclude Include="newmat\newmatnl.h" />
-    <ClInclude Include="newmat\newmatrc.h" />
-    <ClInclude Include="newmat\newmatrm.h" />
-    <ClInclude Include="newmat\precisio.h" />
-    <ClInclude Include="newmat\solution.h" />
     <ClInclude Include="ParamFunctions.h" />
     <ClInclude Include="ParamStructures.h" />
     <ClInclude Include="PolyRegress.h" />
@@ -241,6 +206,11 @@
     <ClInclude Include="SharkMesh.h" />
     <ClInclude Include="SharkSkeleton.h" />
     <ClInclude Include="SharkVertex.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NewMat\NewMat.vcxproj">
+      <Project>{ef03a96c-4757-45a7-b0fb-25fbf9f3fd48}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
 </Project>

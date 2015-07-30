@@ -42,7 +42,7 @@ void SciDataParserCTD::Load()
 			size_t const * dims = mxGetDimensions(pa);
 			for (int i = 0; i < num_of_dim; ++ i)
 			{
-				printf("Dimension %d has length %d.\n", i + 1, dims[i]);
+				cout << "Dimension " << i + 1 << " has length " << dims[i] << "." << endl;
 			}
 
 			for (int i = 0; i < num_of_field; ++ i)
@@ -104,7 +104,7 @@ void SciDataParserCTD::Load()
 		size_t const * Dimensions = mxGetDimensions(DataField);
 
 		for (int i = 0; i < NumberOfDimensions; ++ i)
-			printf("Dimension[%d] is %d\n", i, Dimensions[i]);
+			cout << "Dimension[" << i << "] is " << Dimensions[i] << endl;
 
 		printf("Data Field class type is %s\n", mxGetClassName(DataField));
 		//waitForUser();

@@ -18,6 +18,8 @@ public:
 	CSceneNode * GetNode();
 	CSceneNode const * GetNode() const;
 
+	~CSharkNodeManager();
+
 protected:
 
 	void LoadSceneElements();

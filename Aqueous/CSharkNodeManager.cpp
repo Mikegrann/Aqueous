@@ -5,6 +5,10 @@
 #include "CProgramContext.h"
 #include "CDataSet.h"
 
+CSharkNodeManager::~CSharkNodeManager() {
+	delete mesh;
+}
+
 void CSharkNodeManager::Init()
 {
 	SingletonPointer<CSceneManager> SceneManager;

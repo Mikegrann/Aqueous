@@ -45,23 +45,21 @@ void CSplinePath::deleteHeap()
 }
 
 void CSplinePath::initSpline(){    //reads .txt, .mat or .csv data sheets
-   printf("in init Spline\n");
-	char end[3] = { filename.at(filename.size()-4),
-		filename.at(filename.size()-3),
-		filename.at(filename.size()-2) };
-	if(end[1] == 't' || end[1] == 'T' ) {
+	cout << "in init Spline" << endl;
+	string end = filename.substr(filename.find_last_of('.') + 1);
+	if (end == "txt") {
 		//initSplineZOE(filename);
 	}
-	else if(end[1] == 'm' || end[1] == 'M' ) {
+	else if (end == "mat") {
 		//initSplineMAT(filename);
 	}
-	else if (end[1] == 'c' || end[1] == 'C'){
-	   printf("going into initSplineEXE\n");
+	else if (end == "csv") {
+		printf("going into initSplineEXE\n");
 		initSplineEXE();
 		printf("success\n");
 	}
 	else {
-		printf("Spline file does not correspond to a supported file type: %c%c%c \n", end[1], end[2], end[3]);
+		cout << "Spline file does not correspond to a supported file type: " << end << " not recognized" << endl;
 	}
 }
 

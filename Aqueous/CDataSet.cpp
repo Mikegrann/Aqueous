@@ -47,11 +47,16 @@ void CDataSet::Load(IProgressBar::CTask * Task)
 
 			Parser = CSV;
 		}
+		else {
+			cout << "Invalid Parser Specified: " << Asset.Parser << " (File: " << Asset.File << ")" << endl;
+		}
 
-		Parser->DataSet = this;
-		Parser->FileName = Site->GetPath() + Asset.File;
-		Parser->Load();
-		Task->Update(++Done / Total);
+		if (Parser) {
+			Parser->DataSet = this;
+			Parser->FileName = Site->GetPath() + Asset.File;
+			Parser->Load();
+			Task->Update(++Done / Total);
+		}
 	}
 }
 

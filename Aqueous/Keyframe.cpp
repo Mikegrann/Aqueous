@@ -139,7 +139,7 @@ glm::vec3 Keyframe::interpolateVertices(glm::vec3 first, glm::vec3 second, int s
 void Keyframe::drawInBetween(Keyframe end, int step, int max)
 {
 	// create buffers with updated vertex positions
-	/*vector<glm::vec3> lerpPositions, lerpNormals;
+	vector<glm::vec3> lerpPositions, lerpNormals;
 	lerpPositions.clear();
 	lerpNormals.clear();
 
@@ -150,11 +150,13 @@ void Keyframe::drawInBetween(Keyframe end, int step, int max)
 		}
 	}
 
+    //printf("pos[15]: (%f, %f, %f)\n", lerpPositions[15].x, lerpPositions[15].y, lerpPositions[15].z);
+
 	// pass buffers to draw object...
 	sharkObject->update(lerpPositions, lerpNormals);
 
 	// fetch shader variable IDs
-	GLuint h_MV = GLSL::getUniformLocation(shaderProg, "MV");
+	/*GLuint h_MV = GLSL::getUniformLocation(shaderProg, "MV");
 	GLuint h_P = GLSL::getUniformLocation(shaderProg, "P");
 	GLuint h_lightPos = GLSL::getUniformLocation(shaderProg, "lightPos");
 	GLuint h_ka = GLSL::getUniformLocation(shaderProg, "ka");

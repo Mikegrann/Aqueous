@@ -4,8 +4,13 @@
 #include <ionScene.h>
 
 #include "CProgramContext.h"
+#include "CSite.h"
 #include "Shark.h"
 #include "SharkMesh.h"
+#include "SharkWorld.h"
+#include "CSplinePath.h"
+
+#define SHARK_SCALE 0.05f
 
 class CSharkNodeManager : public Singleton<CSharkNodeManager>, public IEventListener
 {
@@ -19,17 +24,29 @@ public:
 	CSceneNode const * GetNode() const;
 
 	~CSharkNodeManager();
+    void setCurrentSite(CSite * site);
 
 protected:
 
 	void LoadSceneElements();
 	CSceneNode * Node;
 	CMesh * Mesh;
+    CSite * currSite;
+    CSplinePath * path;
+    SharkWorld * world;
+
+    glm::vec3 prevPosition;
 
     Shark shark;
     SharkMesh * mesh;
+    SMeshBuffer * meshBuffer;
+
+    ion::GL::VertexBuffer * PositionBuffer = nullptr;
+    ion::GL::VertexBuffer * ColorBuffer = nullptr;
+    ion::GL::IndexBuffer * IndBuffer = nullptr;
 
 private:
 
+    ion::GL::VertexBuffer * createVertexBuffer();
     string artistDrivenAnimations[5];
 };

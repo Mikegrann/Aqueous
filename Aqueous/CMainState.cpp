@@ -117,6 +117,7 @@ void CMainState::Update(f32 const Elapsed)
 	glEnable(GL_DEPTH_TEST);
 
     Scene.Spline->setCurrentSite(Context->CurrentSite);
+    Scene.Shark->setCurrentSite(Context->CurrentSite);
 
 	// Time Management
 	if (Context->WorldTime->HasTimeChanged())  {
@@ -313,12 +314,16 @@ void CMainState::CalculateDataAlignment()
 
 	static f64 const YExaggeration = DataSet->YExaggeration;
 	static vec3d const Multiplier = vec3d(1, YExaggeration, 1);
+
+    printf("Main State Transforms\n");
 	
 	Scene.Glyphs->GetNode()->SetScale(DataScale * Multiplier);
-	Scene.Spline->GetNode()->SetScale(DataScale * Multiplier);
+    Scene.Spline->GetNode()->SetScale(DataScale * Multiplier);
+   // Scene.Shark->GetNode()->SetScale(DataScale * Multiplier);
 	Scene.Volume->GetNode()->SetScale(DataScale * Multiplier);
 	Scene.Glyphs->GetNode()->SetTranslation(vec3f(0, -DataScale.Y * YExaggeration / 2, 0));
-	Scene.Spline->GetNode()->SetTranslation(vec3f(0, -DataScale.Y * YExaggeration / 2, 0));
+    Scene.Spline->GetNode()->SetTranslation(vec3f(0, -DataScale.Y * YExaggeration / 2, 0));
+   // Scene.Shark->GetNode()->SetTranslation(vec3f(0, -DataScale.Y * YExaggeration / 2, 0));
 	Scene.Volume->GetNode()->SetTranslation(vec3f(0, -DataScale.Y * YExaggeration / 2, 0));
 	
 	Scene.Terrain->GetNode()->SetScale(MapScale * Multiplier / CTerrainNodeManager::Size);
@@ -330,6 +335,7 @@ void CMainState::CalculateDataAlignment()
 	//// Flip for RHC->LHC
 	Scene.Glyphs->GetNode()->SetScale(Scene.Glyphs->GetNode()->GetScale() * vec3f(1, 1, -1));
     Scene.Spline->GetNode()->SetScale(Scene.Spline->GetNode()->GetScale() * vec3f(1, 1, -1));
+    //Scene.Shark->GetNode()->SetScale(Scene.Shark->GetNode()->GetScale() * vec3f(1, 1, -1));
 	Scene.Volume->GetNode()->SetScale(Scene.Volume->GetNode()->GetScale() * vec3f(1, 1, -1));
 	Scene.Terrain->GetNode()->SetScale(Scene.Terrain->GetNode()->GetScale() * vec3f(1, 1, -1));
 	//Scene.Water->SetScale(Scene.Water->GetScale() * vec3f(1, 1, -1));
@@ -338,6 +344,7 @@ void CMainState::CalculateDataAlignment()
 	Scene.Volume->GetNode()->SetScale(Scene.Volume->GetNode()->GetScale() * vec3f(1, -1, 1));
     Scene.Glyphs->GetNode()->SetScale(Scene.Glyphs->GetNode()->GetScale() * vec3f(1, -1, 1));
     Scene.Spline->GetNode()->SetScale(Scene.Spline->GetNode()->GetScale() * vec3f(1, -1, 1));
+    //Scene.Shark->GetNode()->SetScale(Scene.Shark->GetNode()->GetScale() * vec3f(1, -1, 1));
 }
 
 void CMainState::SetSite(int site)

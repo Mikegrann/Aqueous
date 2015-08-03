@@ -14,6 +14,11 @@ public:
    void setTexCoords(vector<glm::vec3> texCoords);
    void draw(GLint h_pos, GLint h_nor) const;
 
+   inline vector<SVertex> getVertBuf() {  return vertBuf; };
+   inline vector<float> getPosBuf() { return posBuf; };
+   inline vector<float> getNorBuf() { return norBuf; };
+   inline vector<float> getTexBuf() { return texBuf; };
+   inline vector<unsigned int> getIndBuf() { return indBuf; };
 
 private:
    GLuint shadeProg;
@@ -22,6 +27,8 @@ private:
    unsigned norBufID;
    unsigned texBufID;
    unsigned indBufID;
+
+   vector<SVertex> vertBuf;
 
    vector<float> posBuf;
    vector<float> norBuf;

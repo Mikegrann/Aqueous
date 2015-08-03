@@ -176,6 +176,12 @@
     <ClCompile Include="SharkQuadObject.cpp">
       <Filter>Utilities\Shark Animation</Filter>
     </ClCompile>
+    <ClCompile Include="SharkWorld.cpp">
+      <Filter>MainState\Shark</Filter>
+    </ClCompile>
+    <ClCompile Include="SplineTraveler.cpp">
+      <Filter>MainState\Shark</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CMainState.h">
@@ -447,6 +453,12 @@
     </ClInclude>
     <ClInclude Include="SharkQuadObject.h">
       <Filter>Utilities\Shark Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="SharkWorld.h">
+      <Filter>MainState\Shark</Filter>
+    </ClInclude>
+    <ClInclude Include="SplineTraveler.h">
+      <Filter>MainState\Shark</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

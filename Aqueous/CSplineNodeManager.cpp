@@ -16,8 +16,8 @@ void CSplineNodeManager::Init()
     //parser->parseFile(SPLINE_FILE);
     //path = CSplinePath();
     //path.initSpline(SPLINE_FILE);
-
-	Node = SceneManager->GetFactory()->AddSceneNode("Glyph");
+    Node = SceneManager->GetFactory()->AddSceneNode("Glyph");
+	//Node = SceneManager->GetFactory()->AddSceneNode("Line");
 	//LoadSceneElements();
 
     currSite = nullptr;

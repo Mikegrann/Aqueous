@@ -119,7 +119,6 @@ void SharkBone::transformBone(MyMat *stackMatrix, bool rigidBody)
 		for(iq = quads.begin(); iq < quads.end(); iq++)
 		{
 			(*iq)->matrixTransform(Matrix);
-			
 		}
 	}
 	else {
@@ -131,12 +130,10 @@ void SharkBone::transformBone(MyMat *stackMatrix, bool rigidBody)
 	//recursive transform downwards to child bones. 
 	//The matrix is copied so that child changes don't propagate upstream  
 	vector<SharkBone*>::iterator ib; 
-	for(ib = childBones.begin(); ib != childBones.end(); ib++ )
-	{
+	for(ib = childBones.begin(); ib != childBones.end(); ib++ ) {
 		MyMat tmp = MyMat(*stackMatrix);	
 		(*ib)->transformBone(&tmp, rigidBody);
 	}
-
 }
 
 void SharkBone::drawTri(MyMat matrix)
@@ -152,9 +149,9 @@ void SharkBone::drawTri(MyMat matrix)
 	glColor3f(0,1.0,0);
 	glBegin(GL_TRIANGLES);
 	{
-		glVertex3f(tailV.x, tailV.y, tailV.z);	
-		glVertex3f(headVa.x, headVa.y, headVa.z);	
-		glVertex3f(headVb.x, headVb.y, headVb.z);	
+		glVertex3f(tailV.x, tailV.y, tailV.z);
+		glVertex3f(headVa.x, headVa.y, headVa.z);
+		glVertex3f(headVb.x, headVb.y, headVb.z);
 	} glEnd();
 	glColor3f(1,1,1);
 

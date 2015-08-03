@@ -86,7 +86,7 @@ KeyframeSystem Shark::genKeyframes(bool dynamicMode, SharkMesh *shm)
 	if(dynamicMode)
 	{
       printf("in nondynamic mode\n");
-      SharkQuadObject* sharkObject = new SharkQuadObject(shaderProg, shm);
+      sharkObject = new SharkQuadObject(shaderProg, shm);
       sharkObject->init();   
 
 		kfSys = KeyframeSystem(shaderProg, sharkObject, true);
@@ -137,7 +137,6 @@ void Shark::drawSkin(int frame)
 {
 	//float startSeg = mesh.lengthMax, endSeg = mesh.lengthMax, length = 0;
 	GLfloat rotate;
-	glPushMatrix();
 
 	if(showSkin)
 	{
@@ -149,11 +148,10 @@ void Shark::drawSkin(int frame)
 		materials(White);
 		skeleton.draw();
 	}
-
-	glPopMatrix();
+    
 }
 
-void Shark::drawShark(int frame, GLUquadricObj *quadratic) 
+void Shark::drawShark(int frame) 
 {
 	drawSkin(frame);
 }
@@ -218,7 +216,7 @@ void Shark::readMovementData(const char* file, bool dynaMode)
 	{
 		for(int j = 0; j < segments; j++)
 		{
-            printf("trying to force stuff into [%d][%d][%d]\n", gParsedSoFar(), i, segments - 1 - j);
+            //printf("trying to force stuff into [%d][%d][%d]\n", gParsedSoFar(), i, segments - 1 - j);
 			float segr;
 			//read in file. Note that CALShark writes segment data (j value) backwards
 			if(!dynaMode)

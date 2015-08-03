@@ -11,6 +11,7 @@ SharkQuadObject::SharkQuadObject(GLuint _shadeProg, SharkMesh* sMesh) {
    indBufID = 0;
 
    // initialize buffer objects
+   vertBuf.clear();
    posBuf.clear();
    norBuf.clear();
    texBuf.clear();
@@ -18,15 +19,20 @@ SharkQuadObject::SharkQuadObject(GLuint _shadeProg, SharkMesh* sMesh) {
    // load in buffer objects
    int cursor = 0;
    for (int i = 0; i < (int)sMesh->faces.size(); ++i) {
-      for (int j = 0; j < 4; ++j) {
+       for (int j = 0; j < 4; ++j) {
+         SVertex vert = SVertex();
          // push positions
+         vert.Position = glm::vec3(sMesh->faces[i]->gLocalVert(j).x, sMesh->faces[i]->gLocalVert(j).y, sMesh->faces[i]->gLocalVert(j).z);
          posBuf.push_back(sMesh->faces[i]->gLocalVert(j).x);
          posBuf.push_back(sMesh->faces[i]->gLocalVert(j).y);
          posBuf.push_back(sMesh->faces[i]->gLocalVert(j).z);
          // push normals
+         vert.Normal = glm::vec3(sMesh->faces[i]->gNormalVert(j).x, sMesh->faces[i]->gNormalVert(j).y, sMesh->faces[i]->gNormalVert(j).z);
          norBuf.push_back(sMesh->faces[i]->gNormalVert(j).x);
          norBuf.push_back(sMesh->faces[i]->gNormalVert(j).y);
          norBuf.push_back(sMesh->faces[i]->gNormalVert(j).z);
+
+         vertBuf.push_back(vert);
       }
 
       // triangulate quad
@@ -119,9 +125,15 @@ void SharkQuadObject::init() {
 }
 
 void SharkQuadObject::update(vector<glm::vec3> newPositions, vector<glm::vec3> newNormals) {
+    vertBuf.clear();
    posBuf.clear();
    norBuf.clear();
    for (int i = 0; i < (int)newPositions.size(); ++i) {
+       SVertex vert = SVertex();
+       vert.Position = glm::vec3(newPositions[i].x, newPositions[i].y, newPositions[i].z);
+       vert.Normal = glm::vec3(newNormals[i].x, newNormals[i].y, newNormals[i].z);
+       vertBuf.push_back(vert);
+
       // push positions
       posBuf.push_back(newPositions[i].x);
       posBuf.push_back(newPositions[i].y);
@@ -133,11 +145,11 @@ void SharkQuadObject::update(vector<glm::vec3> newPositions, vector<glm::vec3> n
    }
 
    // send VBOs to the GPU
-   glBindBuffer(GL_ARRAY_BUFFER, posBufID);
+  /* glBindBuffer(GL_ARRAY_BUFFER, posBufID);
    glBufferData(GL_ARRAY_BUFFER, posBuf.size()*sizeof(float), &posBuf[0], GL_DYNAMIC_DRAW);
 
    glBindBuffer(GL_ARRAY_BUFFER, norBufID);
-   glBufferData(GL_ARRAY_BUFFER, norBuf.size()*sizeof(float), &norBuf[0], GL_DYNAMIC_DRAW);
+   glBufferData(GL_ARRAY_BUFFER, norBuf.size()*sizeof(float), &norBuf[0], GL_DYNAMIC_DRAW);*/
 }
 
 void SharkQuadObject::draw(GLint h_pos, GLint h_nor) const

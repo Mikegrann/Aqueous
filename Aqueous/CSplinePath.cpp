@@ -13,6 +13,8 @@ CSplinePath::CSplinePath() {
     isGhostPointMode = false; 
     limitedDrawing = false; 
 
+    points.clear();
+
     posBuf.clear();
     colorBuf.clear();
     indBuf.clear();
@@ -570,9 +572,6 @@ glm::vec3 CSplinePath::catmullMatrix(f32 curLocation, int curKnot)
 	return res;
 }
 
-
-
-
 //Reparameterizes the spline so that the u value used for matrix interpolation represents distance over the xyz coordinate units.
 //Both the original u, the reparameterized u (u prime), and the coordinate distance is stored in a table.
 //The way RParent talks about length is confusing. In adaptive gaussian integration, the u prime value is referred to as length. It is not the coordinate distance length. 
@@ -598,16 +597,18 @@ void CSplinePath::parameterizeSpline()
 			curTab->addTableEntry(kk, -1);
 		}
 
-		f64 size;
-		glm::vec3 lastPoint = points[i]; //= splineLocation(curTab->getU(0), i);	
+		f64 size = 0.0;
+        glm::vec3 lastPoint = glm::vec3(0.0f, 0.0f, 0.0f);
+		lastPoint = points[i]; //= splineLocation(curTab->getU(0), i);	
 		f64 totalDistance = 0; //the total coord distance to do linear interpolation over, to get u'
 		//Setting distances in unit coordinates, in addition to saving the u values -li-ke-- ab-o-ve- like below.
 		for(int r =0; r < totalSlices; r++){
 			if(!r){
-				size = 0;
+				size = 0.0;
 			}
 			else{
-				glm::vec3 thisPoint = splineLocation(curTab->getU(r-1), i);
+                glm::vec3 thisPoint = glm::vec3(0.0f, 0.0f, 0.0f);
+                thisPoint = splineLocation(curTab->getU(r - 1), i);
 				size = glm::length(thisPoint - lastPoint); 
 				totalDistance += size;
 				lastPoint = thisPoint;
@@ -644,7 +645,8 @@ glm::vec3 CSplinePath::getNearbyPoint(f64 distanceAhead, int startPoint, f64 sta
 	f64 curU = startU;
 	f64 result = -1;
 	int curPoint = startPoint;
-	glm::vec3 nearbyPoint = points[startPoint];
+
+    glm::vec3 nearbyPoint = points[startPoint];
 
 
 	if(distanceAhead > 0) { //looking forward
@@ -707,7 +709,7 @@ f64 CSplinePath::StoU(f64 sDist, int curPoint)
 	f64 aDist = 0;
 	while((i<totalSlices-1) && (aDist <= sDist + .000001))	
 	{
-		i++;
+		i++; //TODO exit when curPoint breaches buffer
 		aDist = paramTable[curPoint]->getLength(i);
 		//printf("comparing %lf >= %lf && %lf <= %lf\n", aDist, sDist-.0000001, aDist, sDist+.0000001);
 		if(aDist >= sDist-.0000001 && aDist <= sDist+.0000001)

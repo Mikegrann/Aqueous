@@ -26,7 +26,7 @@ class Shark
 		void drawSkin(int frame);
 		//void drawSegment(int index, float rot, GLUquadricObj *quadratic);
 		//void drawSpine(int frame, GLUquadricObj *quadratic);
-		void drawShark(int frame, GLUquadricObj *quadratic);
+		void drawShark(int frame);
 		void timedUpdate(int dt, int railAngle, glm::vec3 velociity);  
 		void materials(materialStruct materials);
 		//void segUpdate();
@@ -70,6 +70,8 @@ class Shark
 		void nextLoopSequence(){kfSys.incrementNextSequence();}
 		void prepareNextSeq(string seqName){kfSys.prepareNextSeq(seqName);}
 
+        SharkQuadObject * getSharkObject() { return sharkObject; };
+
 		//used to draw spine	
 		#ifdef VAR_NOSEG
 		static const int segments = 10;	//hardcode number of segments for how many segments we have data for
@@ -97,6 +99,7 @@ class Shark
 		double	lengthLeft;			//amount of shark not with specified length (used in segUpdate)
 		int sequencesParsed;		//notes how many sequences has been parsed so far
 
+        SharkQuadObject * sharkObject;
 				
 		//used in GLUI
 		int tempSegments;		//used in segUpdate and GLUI interface

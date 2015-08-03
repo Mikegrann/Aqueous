@@ -114,6 +114,8 @@
     <ClCompile Include="SharkMesh.cpp" />
     <ClCompile Include="SharkSkeleton.cpp" />
     <ClCompile Include="SharkVertex.cpp" />
+    <ClCompile Include="SharkWorld.cpp" />
+    <ClCompile Include="SplineTraveler.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BathymetyGenerator.h" />
@@ -206,6 +208,8 @@
     <ClInclude Include="SharkMesh.h" />
     <ClInclude Include="SharkSkeleton.h" />
     <ClInclude Include="SharkVertex.h" />
+    <ClInclude Include="SharkWorld.h" />
+    <ClInclude Include="SplineTraveler.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NewMat\NewMat.vcxproj">

@@ -104,10 +104,12 @@ void SharkSkeleton::buildSkeletonAOBJ(string filename)
             nBone->buildBoneAOBJ(bName, glm::vec3(head_x, head_y, head_z), glm::vec3(tail_x, tail_y, tail_z));
             sBone(nBone);
 
+            childNames.push_back(bName);
+
             while (iss >> children_string) {
-                if (childNames.size() > 2) {
+                //if (childNames.size() > 2) {
                     childNames.push_back(children_string);
-                }
+                //}
             }
 
             boneRelationships.push_back(childNames);
@@ -126,50 +128,50 @@ void SharkSkeleton::buildSkeletonAOBJ(string filename)
         //while (getline(readFile, line))
         /*while(!feof(readFile))
         {
-        //b name headRestArmature tailRestArmature ... child names ...
-        if(identifier == 'b')
-        {
-        identifier = 0;
-        char cur = fgetc(readFile);  //space
-        vector<string> childNames = vector<string>();
-        while(cur != '\n')  //per line
-        {
-        string bName = nextToken(' ', readFile);
-        glm::vec3 headr;
-        headr.x = atof(nextToken(' ', readFile).c_str());
-        headr.y = atof(nextToken(' ', readFile).c_str());
-        headr.z = atof(nextToken(' ', readFile).c_str());
+            //b name headRestArmature tailRestArmature ... child names ...
+            if(identifier == 'b')
+            {
+                identifier = 0;
+                char cur = fgetc(readFile);  //space
+                vector<string> childNames = vector<string>();
+                while(cur != '\n')  //per line
+                {
+                    string bName = nextToken(' ', readFile);
+                    glm::vec3 headr;
+                    headr.x = atof(nextToken(' ', readFile).c_str());
+                    headr.y = atof(nextToken(' ', readFile).c_str());
+                    headr.z = atof(nextToken(' ', readFile).c_str());
 
-        glm::vec3 tailr;
-        tailr.x = atof(nextToken(' ', readFile).c_str());
-        tailr.y = atof(nextToken(' ', readFile).c_str());
-        tailr.z = atof(nextToken(' ', readFile).c_str());
+                    glm::vec3 tailr;
+                    tailr.x = atof(nextToken(' ', readFile).c_str());
+                    tailr.y = atof(nextToken(' ', readFile).c_str());
+                    tailr.z = atof(nextToken(' ', readFile).c_str());
 
-        SharkBone* nBone = new SharkBone(nmesh, index);
-        nBone->buildBoneAOBJ(bName, headr, tailr);
-        sBone(nBone);
+                    SharkBone* nBone = new SharkBone(nmesh, index);
+                    nBone->buildBoneAOBJ(bName, headr, tailr);
+                    sBone(nBone);
 
-        //child names need to be read.
-        childNames.push_back(bName); //first name is the name of this bone
-        fseek(readFile, -1, SEEK_CUR);
-        cur = fgetc(readFile);
-        while(cur != '\n')
-        {
-        childNames.push_back(nextToken(' ', readFile));
-        fseek(readFile, -1, SEEK_CUR);
-        cur = fgetc(readFile);
-        }
-        boneRelationships.push_back(childNames);
-        index++;
-        }
-        }
-        else
-        {
-        printf("problem reading aobj bones\n");
-        exit(-1);
-        }
+                    //child names need to be read.
+                    childNames.push_back(bName); //first name is the name of this bone
+                    fseek(readFile, -1, SEEK_CUR);
+                    cur = fgetc(readFile);
+                    while(cur != '\n')
+                    {
+                        childNames.push_back(nextToken(' ', readFile));
+                        fseek(readFile, -1, SEEK_CUR);
+                        cur = fgetc(readFile);
+                    }
+                    boneRelationships.push_back(childNames);
+                    index++;
+                }
+            }
+            else
+            {
+                printf("problem reading aobj bones\n");
+                exit(-1);
+            }
 
-        identifier = fgetc(readFile);
+            identifier = fgetc(readFile);
         }*/
 
         //Now, build the relationship tree among the bones

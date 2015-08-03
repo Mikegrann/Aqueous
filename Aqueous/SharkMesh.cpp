@@ -220,13 +220,13 @@ void SharkMesh::linearBlendTransform()
 			float weight = (*im).second->checkBone((*ib).first);
 			//if(weight > 0.0001)
 			//{
-				MyMat matrix = gSkinMatrix(ib->first); 
-				MyMat scale = MyMat(); //weight mess ups
-				//float sk = 1.0/matrix.diagonalMagnitude();
-				//scale.makeScale(glm::vec3(sk,sk,sk));
-				//matrix.multRight(scale);
-				(*im).second->transformed += 
-					matrix.multScalar(weight).multVec((*im).second->local, true);
+		    MyMat matrix = gSkinMatrix(ib->first); 
+			MyMat scale = MyMat(); //weight mess ups
+			//float sk = 1.0/matrix.diagonalMagnitude();
+			//scale.makeScale(glm::vec3(sk,sk,sk));
+			//matrix.multRight(scale);
+			(*im).second->transformed += 
+			    matrix.multScalar(weight).multVec((*im).second->local, true);
 				//bbr += weight;
 			//}
 		}

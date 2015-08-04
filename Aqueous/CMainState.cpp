@@ -120,15 +120,15 @@ void CMainState::Update(f32 const Elapsed)
     Scene.Shark->setCurrentSite(Context->CurrentSite);
 
 	// Time Management
-	if (Context->WorldTime->HasTimeChanged())  {
+	/*if (Context->WorldTime->HasTimeChanged())  {
 		Scene.Glyphs->UpdateTime(Context->WorldTime->GetTime());
 		Scene.Volume->UpdateTime(Context->WorldTime->GetTime());
 	}
-	Context->WorldTime->Update();
+	Context->WorldTime->Update();*/
 
-	Scene.Volume->Update();
-	Scene.Shark->Update(Elapsed);
-    Scene.Spline->Update(Elapsed);
+	//Scene.Volume->Update();
+	//Scene.Shark->Update(Elapsed);
+    //Scene.Spline->Update(Elapsed);
 
 	SceneManager->DrawAll();
 

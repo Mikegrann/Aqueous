@@ -154,8 +154,8 @@ void CSplinePath::gatherEXPoints()
 	{
 		glm::vec3 p = ereader.gCoordinate(id);
 		//p = p * scale;
-		//p = p * 6.0f;
-        f64 deltaTime = ereader.gDTS(id);// *6.0;
+		p = p * 6.0f;
+        f64 deltaTime = ereader.gDTS(id) *6.0;
 
 		if(!(p.x == q.x && p.y == q.y && p.z == q.z))
 		{

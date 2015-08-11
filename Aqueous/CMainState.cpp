@@ -127,7 +127,9 @@ void CMainState::Update(f32 const Elapsed)
 	Context->WorldTime->Update();
 
 	Scene.Volume->Update();
-	Scene.Shark->Update(Elapsed);
+	if (Scene.Shark->GetNode()->IsVisible()) {
+		Scene.Shark->Update(Elapsed);
+	}
     Scene.Spline->Update(Elapsed);
 
 	SceneManager->DrawAll();

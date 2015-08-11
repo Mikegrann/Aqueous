@@ -20,7 +20,7 @@ CGUIVolumeControlWidget::CGUIVolumeControlWidget()
 
 	Window = new Gwen::Controls::WindowControl(GUIManager->GetCanvas());
 	Window->SetDeleteOnClose(false);
-	Window->SetBounds(1200, 10, 330, 655);
+	Window->SetBounds(1200, 10, 330, 800);
 	Window->SetTitle("Volume Controls");
 	Window->SetHidden(true);
 
@@ -231,6 +231,55 @@ CGUIVolumeControlWidget::CGUIVolumeControlWidget()
 		StepSizeSlider->SetRange(10.f, 300.f);
 		StepSizeSlider->SetFloatValue(VolumeControl.StepSize);
 
+		// Resolution Panel
+		Gwen::Controls::HorizontalSliderTooltip *ResolutionSliderX, *ResolutionSliderY, *ResolutionSliderZ;
+		{
+			Gwen::Controls::Label * ResolutionLabel = new Gwen::Controls::Label(Window);
+			ResolutionLabel->SetFont(GUIManager->GetRegularFont());
+			ResolutionLabel->SetText(L"Volume Resolution:");
+			ResolutionLabel->SetBounds(10, 35 + 580 + 5, 300, 40);
+			ResolutionLabel->SetTextColor(Gwen::Color(50, 20, 20, 215));
+
+			Gwen::Controls::Label * ResolutionLabelX = new Gwen::Controls::Label(Window);
+			ResolutionLabelX->SetFont(GUIManager->GetRegularFont());
+			ResolutionLabelX->SetText(L"X:");
+			ResolutionLabelX->SetBounds(15, 35 + 585 + 10 + 15, 300, 40);
+			ResolutionLabelX->SetTextColor(Gwen::Color(50, 20, 20, 215));
+
+			ResolutionSliderX = new Gwen::Controls::HorizontalSliderTooltip(Window);
+			ResolutionSliderX->SetBounds(30, 35 + 585 + 10, 280, 40);
+			ResolutionSliderX->SetRange(1.f, 30.f);
+			ResolutionSliderX->SetFloatValue(CProgramContext::Get().Scene.Volume->Resolution.X);
+			ResolutionSliderX->SetNotchCount(29);
+			ResolutionSliderX->SetClampToNotches(true);
+
+			Gwen::Controls::Label * ResolutionLabelY = new Gwen::Controls::Label(Window);
+			ResolutionLabelY->SetFont(GUIManager->GetRegularFont());
+			ResolutionLabelY->SetText(L"Y:");
+			ResolutionLabelY->SetBounds(15, 35 + 620 + 10 + 15, 300, 40);
+			ResolutionLabelY->SetTextColor(Gwen::Color(50, 20, 20, 215));
+
+			ResolutionSliderY = new Gwen::Controls::HorizontalSliderTooltip(Window);
+			ResolutionSliderY->SetBounds(30, 35 + 620 + 10, 280, 40);
+			ResolutionSliderY->SetRange(1.f, 30.f);
+			ResolutionSliderY->SetFloatValue(CProgramContext::Get().Scene.Volume->Resolution.Y);
+			ResolutionSliderY->SetNotchCount(29);
+			ResolutionSliderY->SetClampToNotches(true);
+
+			Gwen::Controls::Label * ResolutionLabelZ = new Gwen::Controls::Label(Window);
+			ResolutionLabelZ->SetFont(GUIManager->GetRegularFont());
+			ResolutionLabelZ->SetText(L"Z:");
+			ResolutionLabelZ->SetBounds(15, 35 + 655 + 10 + 15, 300, 40);
+			ResolutionLabelZ->SetTextColor(Gwen::Color(50, 20, 20, 215));
+
+			ResolutionSliderZ = new Gwen::Controls::HorizontalSliderTooltip(Window);
+			ResolutionSliderZ->SetBounds(30, 35 + 655 + 10, 280, 40);
+			ResolutionSliderZ->SetRange(1.f, 30.f);
+			ResolutionSliderZ->SetFloatValue(CProgramContext::Get().Scene.Volume->Resolution.Z);
+			ResolutionSliderZ->SetNotchCount(29);
+			ResolutionSliderZ->SetClampToNotches(true);
+		}
+
 		// Wire Up Events
 		pButtonX->onPress.Add(this,					& CGUIVolumeControlWidget::OnSetXAxis);
 		pButtonY->onPress.Add(this,					& CGUIVolumeControlWidget::OnSetYAxis);
@@ -247,6 +296,10 @@ CGUIVolumeControlWidget::CGUIVolumeControlWidget()
 		ShadingMode->onSelection.Add(this,			& CGUIVolumeControlWidget::OnShadingMode);
 		StepSizeSlider->onValueChanged.Add(this,	& CGUIVolumeControlWidget::OnStepSizeSlider);
 		DepthMode->onCheckChanged.Add(this,			& CGUIVolumeControlWidget::OnDepthMode);
+
+		ResolutionSliderX->onValueChanged.Add(this, &CGUIVolumeControlWidget::OnSetXRes);
+		ResolutionSliderY->onValueChanged.Add(this, &CGUIVolumeControlWidget::OnSetYRes);
+		ResolutionSliderZ->onValueChanged.Add(this, &CGUIVolumeControlWidget::OnSetZRes);
 	}
 }
 
@@ -334,6 +387,33 @@ void CGUIVolumeControlWidget::OnSetYAxis(Gwen::Controls::Base * Control)
 void CGUIVolumeControlWidget::OnSetZAxis(Gwen::Controls::Base * Control)
 {
 	VolumeControl.SliceAxis = SVector3f(0.f, 0.f, 1.f);
+}
+
+void CGUIVolumeControlWidget::OnSetXRes(Gwen::Controls::Base * Control)
+{
+	CProgramContext * Context = &CProgramContext::Get();
+	Gwen::Controls::HorizontalSlider * Slider = (Gwen::Controls::HorizontalSlider *) Control;
+
+	Context->Scene.Volume->Resolution.X = Slider->GetFloatValue();
+	Context->CurrentSite->GetCurrentDataSet()->GenerateVolume(Context->WorldTime->GetTime(), Context->Scene.Volume->GetInterp());
+}
+
+void CGUIVolumeControlWidget::OnSetYRes(Gwen::Controls::Base * Control)
+{
+	CProgramContext * Context = &CProgramContext::Get();
+	Gwen::Controls::HorizontalSlider * Slider = (Gwen::Controls::HorizontalSlider *) Control;
+
+	Context->Scene.Volume->Resolution.Y = Slider->GetFloatValue();
+	Context->CurrentSite->GetCurrentDataSet()->GenerateVolume(Context->WorldTime->GetTime(), Context->Scene.Volume->GetInterp());
+}
+
+void CGUIVolumeControlWidget::OnSetZRes(Gwen::Controls::Base * Control)
+{
+	CProgramContext * Context = &CProgramContext::Get();
+	Gwen::Controls::HorizontalSlider * Slider = (Gwen::Controls::HorizontalSlider *) Control;
+
+	Context->Scene.Volume->Resolution.Z = Slider->GetFloatValue();
+	Context->CurrentSite->GetCurrentDataSet()->GenerateVolume(Context->WorldTime->GetTime(), Context->Scene.Volume->GetInterp());
 }
 
 void CGUIVolumeControlWidget::OnDrawField(Gwen::Controls::Base * Control)
@@ -484,6 +564,16 @@ void CGUIVolumeControlWidget::ShowParameters(Interp::Mode mode) {
 		InvLabel->SetHidden(false);
 		LogCheckBox->SetHidden(false);
 		LogLabel->SetHidden(false);
+		break;
+
+	case Interp::Mode::Density:
+		FuncMode->SetHidden(true);
+		FuncLabel->SetHidden(true);
+
+		InvExponent->SetHidden(true);
+		InvLabel->SetHidden(true);
+		LogCheckBox->SetHidden(true);
+		LogLabel->SetHidden(true);
 		break;
 	}
 }

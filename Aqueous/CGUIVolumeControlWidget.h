@@ -46,6 +46,10 @@ public:
 	void OnSetYAxis(Gwen::Controls::Base * Control);
 	void OnSetZAxis(Gwen::Controls::Base * Control);
 
+	void OnSetXRes(Gwen::Controls::Base * Control);
+	void OnSetYRes(Gwen::Controls::Base * Control);
+	void OnSetZRes(Gwen::Controls::Base * Control);
+
 	void OnVolumeMode(Gwen::Controls::Base * Control);
 	void OnInterpMode(Gwen::Controls::Base * Control);
 	void OnDrawField(Gwen::Controls::Base * Control);

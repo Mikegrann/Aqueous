@@ -14,7 +14,7 @@ CVolumeNodeManager::SControl::SControl()
 	StepSize(100.f), DebugLevel(0), UseShading(0)
 {}
 
-CVolumeNodeManager::CVolumeNodeManager() : interp((Interp::Mode)0, (Interp::RadialFunc)0, 2, true)
+CVolumeNodeManager::CVolumeNodeManager() : interp((Interp::Mode)0, (Interp::RadialFunc)0, 2, true), Resolution(28)
 {}
 
 bool CVolumeNodeManager::Load()

@@ -5,3 +5,4 @@
 #include "CSingleFieldColorMapper.h"
 #include "COxygenColorMapper.h"
 #include "CSpectrumColorMapper.h"
+#include "CDensityMapper.h"

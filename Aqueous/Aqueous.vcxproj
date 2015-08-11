@@ -122,6 +122,7 @@
     <ClInclude Include="CContextState.h" />
     <ClInclude Include="CDataLoadingThread.h" />
     <ClInclude Include="CDataSet.h" />
+    <ClInclude Include="CDensityMapper.h" />
     <ClInclude Include="CGlyphNodeManager.h" />
     <ClInclude Include="CGUIContext.h" />
     <ClInclude Include="CGUIContextWidget.h" />

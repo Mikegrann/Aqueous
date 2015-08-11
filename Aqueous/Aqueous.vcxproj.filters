@@ -460,6 +460,9 @@
     <ClInclude Include="SplineTraveler.h">
       <Filter>MainState\Shark</Filter>
     </ClInclude>
+    <ClInclude Include="CDensityMapper.h">
+      <Filter>MainState\Data Management\Color Mapping</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="MainState">

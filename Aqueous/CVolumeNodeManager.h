@@ -39,6 +39,8 @@ public:
 
 	void UpdateTime(std::time_t t);
 
+	vec3i Resolution;
+
 	// Interpolations
 	void SetInterpMode(Interp::Mode mode) {
 		interp.mode = mode;

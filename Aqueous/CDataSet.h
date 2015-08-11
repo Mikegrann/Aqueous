@@ -14,9 +14,13 @@ public:
 	void Load(IProgressBar::CTask * Task);
 	void GenerateVolumeFromPointData(std::time_t targetTime, Interp interp);
 	void GenerateVolume(std::time_t targetTime, Interp interp);
+	void InterpData(std::time_t targetTime, Interp interp);
+	void CountData();
+
 	void ConcurrentLoad();
 	void InitSceneElements(CProgramContext::SScene & Scene);
 	void InitTextures();
+	vec3f SetupVolume();
 
 	f64 GetMinColorValue() const;
 	f64 GetMaxColorValue() const;

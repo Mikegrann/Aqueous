@@ -7,6 +7,7 @@ struct Interp {
 	enum Mode {
 		Radial,
 		Connor,
+		Density,
 		NumModes
 	};
 
@@ -18,6 +19,10 @@ struct Interp {
 
 		case Connor:
 			return "Depth & Inverse Dist";
+			break;
+
+		case Density:
+			return "Density";
 			break;
 
 		default:

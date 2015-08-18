@@ -4,8 +4,6 @@
 #include "CMainState.h"
 #include "CTerrainNodeManager.h"
 
-#include "CGUIGraphWidget.h"
-
 #include <Gwen/Controls.h>
 #include <Gwen/Controls/ComboBox.h>
 
@@ -53,35 +51,35 @@ CGUIControlPanelWidget::CGUIControlPanelWidget()
 void CGUIControlPanelWidget::OnToggleTerrain(Gwen::Controls::Base * Control)
 {
 	CProgramContext * Context = & CProgramContext::Get();
-	Context->GUIContext->GetTerrainControl()->toggle();
+	Context->GUIContext->Toggle((CGUIContextWidget *)Context->GUIContext->GetTerrainControl());
 }
 
 void CGUIControlPanelWidget::OnToggleVolume(Gwen::Controls::Base * Control)
 {
 	CProgramContext * Context = & CProgramContext::Get();
-	Context->GUIContext->GetVolumeControl()->toggle();
+	Context->GUIContext->Toggle((CGUIContextWidget *)Context->GUIContext->GetVolumeControl());
 }
 
 void CGUIControlPanelWidget::OnToggleGlyph(Gwen::Controls::Base * Control)
 {
 	CProgramContext * Context = & CProgramContext::Get();
-	Context->GUIContext->GetGlyphControl()->toggle();
+	Context->GUIContext->Toggle((CGUIContextWidget *)Context->GUIContext->GetGlyphControl());
 }
 
 void CGUIControlPanelWidget::OnToggleScene(Gwen::Controls::Base * Control)
 {
 	CProgramContext * Context = & CProgramContext::Get();
-	Context->GUIContext->GetSceneControl()->toggle();
+	Context->GUIContext->Toggle((CGUIContextWidget *)Context->GUIContext->GetSceneControl());
 }
 
 void CGUIControlPanelWidget::OnToggleShark(Gwen::Controls::Base * Control)
 {
 	CProgramContext * Context = &CProgramContext::Get();
-	Context->GUIContext->GetSharkControl()->toggle();
+	Context->GUIContext->Toggle((CGUIContextWidget *)Context->GUIContext->GetSharkControl());
 }
 
 void CGUIControlPanelWidget::OnToggleGraph(Gwen::Controls::Base * Control)
 {
 	CProgramContext * Context = &CProgramContext::Get();
-	Context->GUIContext->GetGraphDisplay()->toggle();
+	Context->GUIContext->Toggle((CGUIContextWidget *)Context->GUIContext->GetGraphDisplay());
 }

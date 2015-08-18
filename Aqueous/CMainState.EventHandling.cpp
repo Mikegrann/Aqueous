@@ -71,20 +71,20 @@ void CMainState::OnEvent(SKeyboardEvent & Event)
 
 	case EKey::T:
 		
-		if (! Event.Pressed)
-			Context->GUIContext->GetTerrainControl()->toggle();
+		if (!Event.Pressed)
+			Context->GUIContext->Toggle((CGUIContextWidget *)Context->GUIContext->GetTerrainControl());
 		break;
 
 	case EKey::V:
 
 		if (! Event.Pressed)
-			Context->GUIContext->GetVolumeControl()->toggle();
+			Context->GUIContext->Toggle((CGUIContextWidget *)Context->GUIContext->GetVolumeControl());
 		break;
 
 	case EKey::G:
 
 		if (! Event.Pressed)
-			Context->GUIContext->GetGlyphControl()->toggle();
+			Context->GUIContext->Toggle((CGUIContextWidget *)Context->GUIContext->GetGlyphControl());
 		break;
 
 		

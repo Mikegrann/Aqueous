@@ -2,6 +2,7 @@
 #pragma once
 
 #include "CProgramContext.h"
+#include "Interp.h"
 
 
 class CDataSet

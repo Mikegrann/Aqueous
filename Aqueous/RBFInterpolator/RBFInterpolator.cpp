@@ -18,7 +18,7 @@ RBFInterpolator::RBFInterpolator()
 	successfullyInitialized = false;
 }
 
-RBFInterpolator::RBFInterpolator(vector<real> x, vector<real> y, vector<real> z, vector<real> f, RBFunc basis)
+RBFInterpolator::RBFInterpolator(vector<float> x, vector<float> y, vector<float> z, vector<float> f, RBFunc basis)
 {
 
 
@@ -58,11 +58,11 @@ RBFInterpolator::RBFInterpolator(vector<real> x, vector<real> y, vector<real> z,
 	for (unsigned int j = 1; j <= M; j++)
 	{
 		p.SetProgress(i / (f64) M);
-		real dx = x[i-1] - x[j-1];
-		real dy = y[i-1] - y[j-1];
-		real dz = z[i-1] - z[j-1];
+		float dx = x[i-1] - x[j-1];
+		float dy = y[i-1] - y[j-1];
+		float dz = z[i-1] - z[j-1];
 
-		real distance_squared = dx*dx + dy*dy + dz*dz;
+		float distance_squared = dx*dx + dy*dy + dz*dz;
 
 		G(i,j) = basis_func(distance_squared);
 	}
@@ -112,46 +112,46 @@ RBFInterpolator::~RBFInterpolator()
 
 }
 
-real RBFInterpolator::interpolate(real x, real y, real z)
+float RBFInterpolator::interpolate(float x, float y, float z)
 {
 	if (!successfullyInitialized)
 		return 0.0f;
 
-	real sum = 0.0f;
+	float sum = 0.0f;
 
 	// RBF part
 	for (unsigned int i = 1; i <= M; i++)
 	{
-		real dx = x - (real) P(i,1);
-		real dy = y - (real) P(i,2);
-		real dz = z - (real) P(i,3);
+		float dx = x - (float) P(i,1);
+		float dy = y - (float) P(i,2);
+		float dz = z - (float) P(i,3);
 
-		real distance_squared = dx*dx + dy*dy + dz*dz;
+		float distance_squared = dx*dx + dy*dy + dz*dz;
 
-		sum += (real)(A(i) * basis_func(distance_squared));
+		sum += (float)(A(i) * basis_func(distance_squared));
 	}
 	
 	//affine part
-	sum += (real) (A(M+1) + A(M+2)*x + A(M+3)*y + A(M+4)*z);
+	sum += (float) (A(M+1) + A(M+2)*x + A(M+3)*y + A(M+4)*z);
 
 	return sum;
 }
 
 //note: assuming the input is t squared
 //sqrt(log10(r^2 + B^2))
-real RBFInterpolator::log_shift(real t_squared)
+float RBFInterpolator::log_shift(float t_squared)
 {	
 	return sqrt(log10(t_squared + 1.0f));
 }
 
 //r^2 * ln(r)
-real RBFInterpolator::thin_spline(real t_squared)
+float RBFInterpolator::thin_spline(float t_squared)
 {
-	real t = sqrt(t_squared);
+	float t = sqrt(t_squared);
 	return t ? t_squared * log(t) : 0;
 }
 
-void RBFInterpolator::UpdateFunctionValues(vector<real> f)
+void RBFInterpolator::UpdateFunctionValues(vector<float> f)
 {
 	successfullyInitialized = false;
 

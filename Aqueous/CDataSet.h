@@ -21,6 +21,7 @@ public:
 	void InitSceneElements(CProgramContext::SScene & Scene);
 	void InitTextures();
 	vec3f SetupVolume();
+	vector<double> GetGraphData();
 
 	f64 GetMinColorValue() const;
 	f64 GetMaxColorValue() const;

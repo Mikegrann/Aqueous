@@ -4,6 +4,8 @@
 #include "CMainState.h"
 #include "CTerrainNodeManager.h"
 
+#include "CGUIGraphWidget.h"
+
 #include <Gwen/Controls.h>
 #include <Gwen/Controls/ComboBox.h>
 
@@ -12,7 +14,7 @@ CGUIControlPanelWidget::CGUIControlPanelWidget()
 {
 	Window = new Gwen::Controls::WindowControl(GUIManager->GetCanvas());
 	Window->SetDeleteOnClose(false);
-	Window->SetBounds(30, 600, 660 + 30 + 165, 85);
+	Window->SetBounds(30, 600, 660 + 30 + 165 + 165, 85);
 	Window->SetTitle("Control Panel");
 	Window->SetClosable(false);
 
@@ -40,6 +42,12 @@ CGUIControlPanelWidget::CGUIControlPanelWidget()
 	EnableButton->SetBounds(675, 10, 150, 35);
 	EnableButton->SetText("Shark Controls");
 	EnableButton->onPress.Add(this, &CGUIControlPanelWidget::OnToggleShark);
+
+	EnableButton = new Gwen::Controls::Button(Window);
+	EnableButton->SetBounds(840, 10, 150, 35);
+	EnableButton->SetText("Graph Display");
+	EnableButton->onPress.Add(this, &CGUIControlPanelWidget::OnToggleGraph);
+
 }
 
 void CGUIControlPanelWidget::OnToggleTerrain(Gwen::Controls::Base * Control)
@@ -70,4 +78,10 @@ void CGUIControlPanelWidget::OnToggleShark(Gwen::Controls::Base * Control)
 {
 	CProgramContext * Context = &CProgramContext::Get();
 	Context->GUIContext->GetSharkControl()->toggle();
+}
+
+void CGUIControlPanelWidget::OnToggleGraph(Gwen::Controls::Base * Control)
+{
+	CProgramContext * Context = &CProgramContext::Get();
+	Context->GUIContext->GetGraphDisplay()->toggle();
 }

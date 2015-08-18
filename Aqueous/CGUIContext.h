@@ -4,6 +4,7 @@
 #include <ionGUI.h>
 
 // Main State
+#include "CGUIContextWidget.h"
 #include "CGUITitleLabelsWidget.h"
 #include "CGUIVolumeControlWidget.h"
 #include "CGUITerrainControlWidget.h"
@@ -15,6 +16,7 @@
 // Menu State
 #include "CGUIMainMenuWidget.h"
 
+class CGUIGraphWidget;
 
 class CMainState;
 
@@ -35,6 +37,7 @@ public:
 	CGUITerrainControlWidget * GetTerrainControl();
 	CGUIGlyphControlWidget * GetGlyphControl();
 	CGUISharkControlWidget * GetSharkControl();
+	CGUIGraphWidget * GetGraphDisplay();
 	CGUISceneControlWidget * GetSceneControl();
 	CGUIControlPanelWidget * GetControlPanel();
 
@@ -53,6 +56,7 @@ protected:
 	CGUIGlyphControlWidget * GlyphControl = 0;
 	CGUISharkControlWidget * SharkControl = 0;
 	CGUISceneControlWidget * SceneControl = 0;
+	CGUIGraphWidget * GraphDisplay = 0;
 	CGUIControlPanelWidget * ControlPanel = 0;
 
 private:

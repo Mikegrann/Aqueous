@@ -4,6 +4,7 @@
 #include "SciDataManager.h"
 #include "CMainState.h"
 
+#include "CGUIGraphWidget.h"
 
 void CGUIContext::Init()
 {
@@ -22,6 +23,7 @@ void CGUIContext::SetupMainState()
 	GlyphControl = new CGUIGlyphControlWidget();
 	SharkControl = new CGUISharkControlWidget();
 	SceneControl = new CGUISceneControlWidget();
+	GraphDisplay = new CGUIGraphWidget();
 	ControlPanel = new CGUIControlPanelWidget();
 	
 	Console->AddMessage("GUI Initialized.");
@@ -76,6 +78,11 @@ CGUIGlyphControlWidget * CGUIContext::GetGlyphControl()
 CGUISharkControlWidget * CGUIContext::GetSharkControl()
 {
 	return SharkControl;
+}
+
+CGUIGraphWidget * CGUIContext::GetGraphDisplay()
+{
+	return GraphDisplay;
 }
 
 CGUISceneControlWidget * CGUIContext::GetSceneControl()

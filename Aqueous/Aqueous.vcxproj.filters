@@ -182,6 +182,15 @@
     <ClCompile Include="SplineTraveler.cpp">
       <Filter>MainState\Shark</Filter>
     </ClCompile>
+    <ClCompile Include="CGUIGraphWidget.cpp">
+      <Filter>MainState\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="GraphPanel.cpp">
+      <Filter>MainState\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="CPlot.cpp">
+      <Filter>MainState\Util</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CMainState.h">
@@ -462,6 +471,15 @@
     </ClInclude>
     <ClInclude Include="CDensityMapper.h">
       <Filter>MainState\Data Management\Color Mapping</Filter>
+    </ClInclude>
+    <ClInclude Include="CGUIGraphWidget.h">
+      <Filter>MainState\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="CPlot.h">
+      <Filter>MainState\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphPanel.h">
+      <Filter>MainState\GUI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

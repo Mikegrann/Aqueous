@@ -18,7 +18,11 @@ syntax: glob
 Thumbs.db
 *.psd
 *.csv
+*.cache
+*out
 */Screenshots/*
 Aqueous/Aqueous.vcxproj.user
+NewMat/NewMat.vcxproj.user
+Aqueous/x64/*
 
 !Aqueous/Meshes/*

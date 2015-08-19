@@ -49,12 +49,12 @@ void CSplineNodeManager::LoadSceneElements()
 
     PositionBuffer->SubData(Positions);
     ColorBuffer->SubData(Colors);
-    //IndBuffer->SubData(Indices);
+   // IndBuffer->SubData(Indices);
     //TimeBuffer->SubData(Times);
 
     if (Node)
     {
-        Node->SetElementCount((uint)Indices.size());
+        Node->SetElementCount((uint)Indices.size()-1);
         Node->SetVisible(true);
     }
 }
@@ -73,6 +73,11 @@ void CSplineNodeManager::Update(f32 const Elapsed)
     if (currSite != nullptr && needsUpdate) {
         Positions = splines[0]->getPositionBuffer();
         Colors = splines[0]->getColorBuffer();
+        /*for (int i = 2; i < Colors.size(); i += 3) {
+            Colors[i - 2] = 1.0f;
+            Colors[i - 1] = 0.0f;
+            Colors[i] = 0.0f;
+        }*/
         Indices = splines[0]->getIndexBuffer();
 
         printf("In spline update\n");
@@ -98,6 +103,9 @@ void CSplineNodeManager::setCurrentSite(CSite * site) {
         splines = currSite->GetTracks();
         splines[0]->drawPoints(0, false);
         needsUpdate = true;
+        //debug ish stuff... move camera?
+        //CProgramContext * Context = &CProgramContext::Get();
+        //Context->Scene.Camera->SetPosition(glm::vec3(splines[0]->gPoint(0)));
     }
     else if (currSite != nullptr && site != nullptr) {
         if (site->GetName() != currSite->GetName()) {
@@ -105,6 +113,9 @@ void CSplineNodeManager::setCurrentSite(CSite * site) {
             splines = currSite->GetTracks();
             splines[0]->drawPoints(0, false);
             needsUpdate = true;
+            //debug ish stuff... move camera?
+           // CProgramContext * Context = &CProgramContext::Get();
+           // Context->Scene.Camera->SetPosition(glm::vec3(splines[0]->gPoint(0)));
         }
     }
 }

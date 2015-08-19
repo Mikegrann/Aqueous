@@ -16,6 +16,8 @@ class KeyframeSystem
 		KeyframeSystem();
 		KeyframeSystem(GLuint _shaderProg, SharkQuadObject* _sharkObject, bool DynamicSystem);
 		~KeyframeSystem(){}
+
+        void reset();
 		void setFrameSpeed(int newFrameRate);
 		void deleteFrameHeaps(); //free this memory before exiting.
 		void initFrames();

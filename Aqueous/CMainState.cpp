@@ -127,9 +127,7 @@ void CMainState::Update(f32 const Elapsed)
 	Context->WorldTime->Update();
 
 	Scene.Volume->Update();
-	if (Scene.Shark->GetNode()->IsVisible()) {
-		Scene.Shark->Update(Elapsed);
-	}
+	Scene.Shark->Update(Elapsed);
     Scene.Spline->Update(Elapsed);
 
 	SceneManager->DrawAll();
@@ -320,11 +318,11 @@ void CMainState::CalculateDataAlignment()
     printf("Main State Transforms\n");
 	
 	Scene.Glyphs->GetNode()->SetScale(DataScale * Multiplier);
-    Scene.Spline->GetNode()->SetScale(DataScale * Multiplier);
+    //Scene.Spline->GetNode()->SetScale(DataScale * Multiplier);
    // Scene.Shark->GetNode()->SetScale(DataScale * Multiplier);
 	Scene.Volume->GetNode()->SetScale(DataScale * Multiplier);
 	Scene.Glyphs->GetNode()->SetTranslation(vec3f(0, -DataScale.Y * YExaggeration / 2, 0));
-    Scene.Spline->GetNode()->SetTranslation(vec3f(0, -DataScale.Y * YExaggeration / 2, 0));
+    //Scene.Spline->GetNode()->SetTranslation(vec3f(0, -DataScale.Y * YExaggeration / 2, 0));
    // Scene.Shark->GetNode()->SetTranslation(vec3f(0, -DataScale.Y * YExaggeration / 2, 0));
 	Scene.Volume->GetNode()->SetTranslation(vec3f(0, -DataScale.Y * YExaggeration / 2, 0));
 	
@@ -336,7 +334,7 @@ void CMainState::CalculateDataAlignment()
 
 	//// Flip for RHC->LHC
 	Scene.Glyphs->GetNode()->SetScale(Scene.Glyphs->GetNode()->GetScale() * vec3f(1, 1, -1));
-    Scene.Spline->GetNode()->SetScale(Scene.Spline->GetNode()->GetScale() * vec3f(1, 1, -1));
+    //Scene.Spline->GetNode()->SetScale(Scene.Spline->GetNode()->GetScale() * vec3f(1, 1, -1));
     //Scene.Shark->GetNode()->SetScale(Scene.Shark->GetNode()->GetScale() * vec3f(1, 1, -1));
 	Scene.Volume->GetNode()->SetScale(Scene.Volume->GetNode()->GetScale() * vec3f(1, 1, -1));
 	Scene.Terrain->GetNode()->SetScale(Scene.Terrain->GetNode()->GetScale() * vec3f(1, 1, -1));
@@ -345,7 +343,7 @@ void CMainState::CalculateDataAlignment()
 	//// Flip Height -> Depth
 	Scene.Volume->GetNode()->SetScale(Scene.Volume->GetNode()->GetScale() * vec3f(1, -1, 1));
     Scene.Glyphs->GetNode()->SetScale(Scene.Glyphs->GetNode()->GetScale() * vec3f(1, -1, 1));
-    Scene.Spline->GetNode()->SetScale(Scene.Spline->GetNode()->GetScale() * vec3f(1, -1, 1));
+    //Scene.Spline->GetNode()->SetScale(Scene.Spline->GetNode()->GetScale() * vec3f(1, -1, 1));
     //Scene.Shark->GetNode()->SetScale(Scene.Shark->GetNode()->GetScale() * vec3f(1, -1, 1));
 }
 

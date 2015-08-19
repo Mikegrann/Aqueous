@@ -81,6 +81,10 @@ materialStruct Grey = {
   glPopMatrix();
   }*/
 
+void Shark::reset() {
+    kfSys.reset();
+}
+
 KeyframeSystem Shark::genKeyframes(bool dynamicMode, SharkMesh *shm)
 {
 	if(dynamicMode)

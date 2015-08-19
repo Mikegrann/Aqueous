@@ -11,10 +11,14 @@ void CSharkNodeManager::Init()
 {
     currSite = nullptr;
     world = nullptr;
+    isMoving = true;
+    toStep = true;
 
 	SingletonPointer<CSceneManager> SceneManager;
 	
 	Node = SceneManager->GetFactory()->AddSceneNode("Shark");
+    
+    TestMesh = SceneManager->GetMeshLibrary()->Get("Sphere");
     
     shark.defSequence();
 
@@ -38,24 +42,33 @@ void CSharkNodeManager::Init()
     shark.genKeyframes(true, mesh);
     shark.sFrameSpeed(10);
 
-	LoadSceneElements();
-
     //shark init
     shark.toggleMoving(true);
-
+    
     prevPosition = glm::vec3(0.0f, 0.0f, 0.0f);
+    LoadSceneElements();
 }
 
 void CSharkNodeManager::LoadSceneElements()
 {
     if (Node) {
         meshBuffer = new SMeshBuffer(shark.getSharkObject()->getIndBuf(), shark.getSharkObject()->getPosBuf(), shark.getSharkObject()->getNorBuf());
+        Mesh = new CMesh(meshBuffer);
+  
+        Mesh->LoadDataIntoBuffers();
+        TestMesh->LoadDataIntoBuffers();
 
-		Mesh = new CMesh(meshBuffer);
-		Node->SetMesh(Mesh);
+        Node->SetMesh(Mesh);
+		Node->SetMesh(TestMesh);
+
+        for (SVertex &vert : Mesh->Buffers[0]->Vertices) {
+            //vert.Position = shark.getSharkObject()->getPosBuf()[i];
+            //vert.Normal = shark.getSharkObject()->getNorBuf()[i];
+            vert.Color = color4f(1.0, 1.0, 0.0);
+            //i++;
+        }
 
         Node->SetScale(vec3d(SHARK_SCALE, SHARK_SCALE, SHARK_SCALE));
-
 
 	}
 
@@ -95,13 +108,55 @@ void CSharkNodeManager::Update(f32 const Elapsed)
 { 
     //printf("Elapsed: %f\n", (float)Elapsed);
     //update calls 
-    if (world != nullptr) {
+    glm::vec3 currPosition;
+    if (world != nullptr && toStep == true) {
         world->setSplinePath(currSite->GetTracks()[0]);
-        shark.timedUpdate((int)(Elapsed * 1000.0f), world->deriveRailAngle(), world->gVelocity());  //TODO factor in dt in Shark update  
+        currPosition = world->updateWorld((int)(Elapsed * 1000.0f));
         if (shark.isMoving()) {					//increment movement frame
             //if (showWorld)
             //{
-            glm::vec3 currPosition = world->updateWorld((int)(Elapsed * 1000.0f));
+
+            //printf("comparing %d with %d\n", world->gCurPoint(), currSite->GetTracks()[0]->gPointCount());
+            if (world->gCurPoint() >= currSite->GetTracks()[0]->gPointCount() - 2) {
+                // end of all things!
+                printf("looping around to the start\n");
+                world->reset();
+                world->resetTime();
+                shark.reset();
+
+                Update(Elapsed);
+                return;
+            }
+            glm::vec3 transVec = currPosition;// -prevPosition;
+
+            printf("translating to (%f, %f, %f)\n", transVec.x, transVec.y, transVec.z);
+
+            Node->SetTranslation(vec3f(transVec.x, transVec.y, transVec.z));
+            toStep = false;
+        }
+    //}
+        TestMesh->Update();
+
+    //if (world != nullptr) {
+        //world->setSplinePath(currSite->GetTracks()[0]);
+
+        //shark.timedUpdate((int)(Elapsed * 1000.0f), world->deriveRailAngle(), world->gVelocity());  //TODO factor in dt in Shark update  
+        if (shark.isMoving()) {					//increment movement frame
+            //if (showWorld)
+            //{
+            //glm::vec3 currPosition = world->updateWorld((int)(Elapsed * 1000.0f));
+
+            //printf("comparing %d with %d\n", world->gCurPoint(), currSite->GetTracks()[0]->gPointCount());
+            /*if (world->gCurPoint() >= currSite->GetTracks()[0]->gPointCount() - 2) {
+                // end of all things!
+                printf("looping around to the start\n");
+                world->reset();
+                world->resetTime();
+                shark.reset();
+                
+                Update(Elapsed);
+            }*/
+
             shark.updateVelocity(world->gCurrentPoint(), world->gNextPoint(),  //TODO ???????? put Shark update in one call w/ dt
                 world->gCurrentDTS());
             shark.prepareNextSeq(world->gAnimationLoop());
@@ -122,7 +177,7 @@ void CSharkNodeManager::Update(f32 const Elapsed)
             Node->SetRotation(multMatrix);
 
             glm::vec3 transVec = currPosition;// -prevPosition;
-            Node->SetTranslation(vec3f(transVec.x, 0.0f, transVec.z));
+            Node->SetTranslation(vec3f(transVec.x, transVec.y, transVec.z));
 
         }
         shark.drawShark(0);
@@ -184,6 +239,11 @@ void CSharkNodeManager::setCurrentSite(CSite * site) { // TODO : implement suppo
             //needsUpdate = true;
         }
     }
+}
+
+void CSharkNodeManager::toggleAnimation(bool moving) {
+    isMoving = moving;
+    shark.toggleMoving(isMoving);
 }
 
 //ion::GL::VertexBuffer * createVertexBuffer() {

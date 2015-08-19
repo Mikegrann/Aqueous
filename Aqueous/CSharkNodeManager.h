@@ -26,11 +26,15 @@ public:
 	~CSharkNodeManager();
     void setCurrentSite(CSite * site);
 
+    void toggleAnimation(bool moving);
+    void step() { toStep = true; }
+
 protected:
 
 	void LoadSceneElements();
 	CSceneNode * Node;
 	CMesh * Mesh;
+    CMesh * TestMesh;
     CSite * currSite;
     CSplinePath * path;
     SharkWorld * world;
@@ -46,7 +50,8 @@ protected:
     ion::GL::IndexBuffer * IndBuffer = nullptr;
 
 private:
-
+    bool toStep;
+    bool isMoving;
     ion::GL::VertexBuffer * createVertexBuffer();
     string artistDrivenAnimations[5];
 };

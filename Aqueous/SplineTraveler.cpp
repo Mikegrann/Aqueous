@@ -56,7 +56,8 @@ glm::vec3 SplineTraveler::update(float dt)
 	location = upCurrentLocation(dt);
 	if(timer - prevTime > 0){
 		velocity = (location-prevLocation) / (timer - prevTime); 
-	}
+    }
+   // printf("%d <%f, %f, %f> timer: %f, dt: %f\n", curPoint, location.x, location.y, location.z, timer, dt); 
     return location;
 	//printf("%d <%f, %f, %f>\n", curPoint, location.x, location.y, location.z ); 
 	//printf("%d ", curPoint); 

@@ -68,6 +68,14 @@ void KeyframeSystem::deleteFrameHeaps()
 	}
 }
 
+void KeyframeSystem::reset() {
+    curFrame = 0;
+    curSequence = isDynamicMode ? 0 : 1;
+    nextSequence = curSequence;
+    frameInd = 0;
+    nextFrameInd = 1;
+}
+
 /*blank update frame called */
 void KeyframeSystem::update()
 {

@@ -22,6 +22,7 @@ class Shark
 {
 	public:
 		Shark();
+        void reset();
 		//void drawSharkSeg(float rotate, float start, float end, int index, float length);
 		void drawSkin(int frame);
 		//void drawSegment(int index, float rot, GLUquadricObj *quadratic);

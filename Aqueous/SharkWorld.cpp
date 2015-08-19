@@ -18,6 +18,15 @@ glm::vec3 SharkWorld::updateWorld(int dt)
 	return traveler.update(dt);
 	//traveler.gLocation().Print();
 }
+
+void SharkWorld::reset() {
+    traveler = SplineTraveler(path);
+    updateAnimationFlag = true;
+    lookAhead = 0.0f;
+    frontby = 0.6f;
+    behindby = 0.3f;
+}
+
 void SharkWorld::displayWorld()
 {
 	//glPushMatrix();

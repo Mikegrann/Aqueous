@@ -39,6 +39,7 @@ class SplineTraveler
 			else {
 				return path->gPoint(curPoint-1);}
 		}
+        int gCurPoint(){ return curPoint; }
 		double gRotationDegrees(){return rotationAngle * 180/3.14159265 ;}
 		double gRotationRadians(){return rotationAngle;}
 		glm::vec3 gRotationAxis(){return rotateAxis;}

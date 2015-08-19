@@ -6,6 +6,10 @@ const f32 CSplinePath::Mcat[] = {-.5, 1.5, -1.5, .5, 1, -2.5, 2, -.5, -.5, 0, .5
 const f32 CSplinePath::Mher[] = {2, -2, 1, 1, -3, 3, -2, -1, 0, 0, 1, 0, 1, 0, 0, 0};
 
 CSplinePath::CSplinePath() {
+    ranOnce = false;
+    saveTime = true;
+    offsetTime = -1.0f;
+    savedTime = 0.0f;
     lineShader = 0; 
     filename = ""; 
     Tolerance = .2; 
@@ -21,6 +25,10 @@ CSplinePath::CSplinePath() {
 }
 
 CSplinePath::CSplinePath (bool ghostPoints) { 
+    ranOnce = false;
+    saveTime = true;
+    offsetTime = -1.0f;
+    savedTime = 0.0f;
     lineShader = 0; 
     filename = ""; 
     Tolerance = .2; 
@@ -150,12 +158,18 @@ void CSplinePath::gatherEXPoints()
 	}
 	f64 scale = GPSconverter().findScaleDifference(sc1, sc2);
 	
-	for(int id = 0; id < ereader.size(); id++)
+    // every 4 data points are being skipped TODO : this time scaling should not be hard coded in case datasets have different delta times.
+	for(int id = 0; id < ereader.size(); id += 4)
 	{
 		glm::vec3 p = ereader.gCoordinate(id);
 		//p = p * scale;
-		p = p * 6.0f;
-        f64 deltaTime = ereader.gDTS(id) *6.0;
+        p = p;// *6.0f;
+        f64 deltaTime = 0;
+        if (id > 0) {
+            // add up delta times since every 4 data points are being skipped.
+            deltaTime = ereader.gDTS(id - 3) + ereader.gDTS(id - 2) + ereader.gDTS(id - 1) + ereader.gDTS(id);
+            //deltaTime = ereader.gDTS(id);// *6.0;
+        }
 
 		if(!(p.x == q.x && p.y == q.y && p.z == q.z))
 		{
@@ -171,12 +185,116 @@ void CSplinePath::gatherEXPoints()
 	}
 	normalizeCoords();
 
-	calcRadius();
+    transformCoords();
 
+	calcRadius();
 	initTangents();
 	
 	//printPs();
 	//printdTPs();
+}
+
+void CSplinePath::transformCoords() {
+    CProgramContext::SScene & Scene = Context->Scene;
+
+    CSite * CurrentSite = Context->CurrentSite;
+    //CDataSet const * const DataSet = CurrentSite->GetCurrentDataSet();
+    STable & Points = DataSet->Points;
+
+    longlatd MapLonLatMin;
+    longlatd MapLonLatMax;
+
+    if (Location)
+    {
+        MapLonLatMin = (Location->LowerBound);
+        MapLonLatMax = (Location->UpperBound);
+    }
+
+    SRange<f64> XRange = Points.GetFieldRange(DataSet->Traits.PositionXField, 15.0);
+    SRange<f64> YRange = Points.GetFieldRange(DataSet->Traits.PositionYField, 15.0);
+    SRange<f64> ZRange = Points.GetFieldRange(DataSet->Traits.PositionZField, 15.0);
+
+    if (XRange.IsEmpty())
+        XRange = SRange<f64>(MapLonLatMin.Longitude, MapLonLatMax.Longitude);
+    if (YRange.IsEmpty())
+        YRange = SRange<f64>(-1, 1);
+    if (ZRange.IsEmpty())
+        ZRange = SRange<f64>(MapLonLatMin.Latitude, MapLonLatMax.Latitude);
+
+    printf("Longlat range is %g %g to %g %g\n", XRange.Minimum, ZRange.Minimum, XRange.Maximum, ZRange.Maximum);
+    longlatd const DataLonLatMin(XRange.Minimum, ZRange.Minimum), DataLonLatMax(XRange.Maximum, ZRange.Maximum);
+    longlatd const DataLonLatCenter = (DataSet->ManuallySetDataLongLat ? DataSet->DataLonLatCenter : (DataLonLatMin + DataLonLatMax) / 2.f);
+    longlatd const SplineLonLatMin(GetXRange().Minimum, GetZRange().Minimum);
+    longlatd const SplineLonLatMax(GetXRange().Maximum, GetZRange().Maximum);
+
+    vec2d DataRangeMin, DataRangeMax, MapRangeMin, MapRangeMax, SplineRangeMin, SplineRangeMax;
+    sharedPtr<longlatd::IProjectionSystem> Projection;
+    int ProjectionMode = 0; //TODO this probably shouldn't be hardcoded!!!
+    if (ProjectionMode == 0)
+        Projection = sharedNew(new longlatd::CHaversineProjection());
+    else if (ProjectionMode == 1)
+        Projection = sharedNew(new longlatd::CVincentyProjection());
+    else if (ProjectionMode == 2)
+        Projection = sharedNew(new longlatd::CEquirectangularProjection(DataLonLatCenter.Latitude));
+
+    DataRangeMin = DataLonLatCenter.OffsetTo(DataLonLatMin, Projection);
+    DataRangeMax = DataLonLatCenter.OffsetTo(DataLonLatMax, Projection);
+
+    SplineRangeMin = DataLonLatCenter.OffsetTo(SplineLonLatMin, Projection);
+    SplineRangeMax = DataLonLatCenter.OffsetTo(SplineLonLatMax, Projection);
+    if (Location)
+    {
+        MapRangeMin = DataLonLatCenter.OffsetTo(MapLonLatMin, Projection);
+        MapRangeMax = DataLonLatCenter.OffsetTo(MapLonLatMax, Projection);
+    }
+    else
+    {
+        MapRangeMin = DataLonLatCenter.OffsetTo(DataLonLatMin, Projection);
+        MapRangeMax = DataLonLatCenter.OffsetTo(DataLonLatMax, Projection);
+    }
+
+    vec2d const DataRangeSize = (DataSet->ManuallySetDataLongLat ? DataLonLatMax - DataLonLatMin : DataRangeMax - DataRangeMin);
+    vec2d const DataRangeCenter = (DataSet->ManuallySetDataLongLat ? DataRangeSize / 2 : (DataRangeMin + DataRangeMax) / 2.f);
+    f64 const DataDepth = YRange.Size();
+
+    vec2d const SplineRangeSize = SplineRangeMax - SplineRangeMin;
+    vec2d const SplineRangeCenter = (SplineRangeMin + SplineRangeMax) / 2.f;
+
+    vec2d const MapRangeSize = MapRangeMax - MapRangeMin;
+    vec2d const MapRangeCenter = (MapRangeMin + MapRangeMax) / 2.f;
+    f64 const MapDepth = DataSet->MapDepth;
+
+    printf("Data range is %f by %f meters,\n", DataRangeSize.X, DataRangeSize.Y);
+    printf("Terrain range is %f by %f meters,\n", MapRangeSize.X, MapRangeSize.Y);
+
+    vec2d const ActualOffset = MapRangeCenter - DataRangeCenter;
+    vec2d const MapOffset = ActualOffset * 3.f / Maximum(DataRangeSize.X, DataRangeSize.Y);
+    vec3d const DataScale = 3.0 * vec3d(DataRangeSize.X, DataDepth, DataRangeSize.Y) / Maximum(DataRangeSize.X, DataRangeSize.Y);
+    vec3d const MapScale = DataScale * vec3d(MapRangeSize.X, MapDepth, MapRangeSize.Y) / vec3d(DataRangeSize.X, 1, DataRangeSize.Y);
+    vec3d const SplineScale = 3.0 * vec3d(SplineRangeSize.X, DataDepth, SplineRangeSize.Y) / Maximum(SplineRangeSize.X, SplineRangeSize.Y);
+
+    static f64 const YExaggeration = DataSet->YExaggeration;
+    static vec3d const Multiplier = vec3d(1, YExaggeration, 1);
+
+    glm::mat4 transformMat = glm::mat4(1.0f);
+    vec3d scalar = DataScale * Multiplier;
+    glm::mat4 scaleMat = glm::scale(glm::mat4(1.0f), glm::vec3(scalar.X, scalar.Y, scalar.Z));
+    glm::mat4 transMat = glm::translate(glm::mat4(1.0f), glm::vec3(0, -DataScale.Y * YExaggeration / 2, 0));
+    scaleMat = glm::scale(scaleMat, glm::vec3(1.0f, 1.0f, -1.0f));
+    scaleMat = glm::scale(scaleMat, glm::vec3(1.0f, -1.0f, 1.0f));
+
+    transformMat = scaleMat * transMat;
+    
+
+   /* Scene.Spline->GetNode()->SetScale(DataScale * Multiplier);
+    Scene.Spline->GetNode()->SetTranslation(vec3f(0, -DataScale.Y * YExaggeration / 2, 0));
+    Scene.Spline->GetNode()->SetScale(Scene.Spline->GetNode()->GetScale() * vec3f(1, 1, -1));
+    Scene.Spline->GetNode()->SetScale(Scene.Spline->GetNode()->GetScale() * vec3f(1, -1, 1));*/
+
+    for (int i = 0; i < points.size(); ++i) {
+        glm::vec4 tempPoint = glm::vec4(points[i], 1.0f) * transformMat;
+        points[i] = glm::vec3(tempPoint.x, tempPoint.y, tempPoint.z);
+    }
 }
 
 /*void CSplinePath::gatherZOEPoints()
@@ -452,6 +570,17 @@ f64 CSplinePath::HmInt(f32 U[4], const f32 M[16], f32 B[4])
  * * The arc length u is converted into the spline's true u while interpolating*/
 glm::vec3 CSplinePath::splineLocation(f32 curLocation, int startPoint)
 {
+    if (!ranOnce) {
+        for (int i = 0; i < paramTable.size(); ++i) {
+            CSplineTable* table = paramTable[i];
+            for (int j = 0; j < table->getSize(); ++j) {
+                CSplineTableEntry entry = table->get(j);
+                printf("table: %d, index: %d, u: %lf, dist: %lf, length: %lf\n", i, j, entry.u, entry.dist, entry.length);
+                //printf("")
+            }
+            ranOnce = true;
+        }
+    }
 	if(tabSet) {  //the very first runs of this function creates the table. So the u should not be converted
 		curLocation = StoU(curLocation, startPoint); //convert arcLength based u into the spline's true u.
 	}
@@ -470,9 +599,76 @@ glm::vec3 CSplinePath::splineLocation(f32 curLocation, int startPoint)
 // interpolation for the time of movement (time-space curve, rather than the space curve of the other function)
 // Returns a f64 value representing the new U value to input into the space curve
 // takes in the amount of time (seconds) since program start, and the current Knot.
-f64 CSplinePath::convertTimestampToU(f32 timer, int curKnot )
+f64 CSplinePath::convertTimestampToU(f32 timer, int curKnot ) // TODO should never return negative with big timer values... problem created from breakpoint usage
 {
-	int endMark = totts.size();
+    int endMark = totts.size();
+    int endLocNum; //index to the end point;
+    glm::vec3 startTan;
+    glm::vec3 startTime;
+    glm::vec3 endTime;
+    glm::vec3 endTan;
+
+    /*while (timer > totts[endLocNum]) {
+    curKnot++;
+    endLocNum++;
+    }*/
+
+    startTime = glm::vec3(totts[curKnot], 0, curKnot);
+    startTan = tTangents[curKnot];
+
+    if (curKnot + 1 >= endMark) {
+        endLocNum = 0;
+    }
+    else {
+        endLocNum = curKnot + 1;
+    }
+
+    endTime = glm::vec3(totts[endLocNum], 0, endLocNum); //provided it's not at the end of the spline, endLocation is start+1
+    endTan = tTangents[endLocNum];
+
+    if (timer > totts[endLocNum + 1]) {
+        if (offsetTime < 0.0f) {
+            offsetTime = 0.0f;
+            timer = savedTime;
+            saveTime = false;
+        }
+        else {
+            timer = savedTime + (timer - offsetTime);
+            if (timer > totts[endLocNum + 1]) {
+                float tempTime = offsetTime;
+                offsetTime += timer - offsetTime;
+                timer = tempTime;
+            }
+        }
+    }
+
+    /*float timeU = 0.0f;
+    for (int i = 0; 1; ++i) {
+    //if (timer > i && timer < (i + 1)) {
+    if (timer >= totts[endLocNum]) {
+    printf("i = %d\n", i);
+    printf("timer: %f, totts[curKnot]: %f, totts[endLocNum]: %f\n", timer, totts[curKnot], totts[endLocNum]);
+    timeU = doubleLerp(timer, totts[curKnot], totts[endLocNum], 0.0, 1.0);//(double)i, (double)(i + 1));
+    printf("timeU: %f\n", timeU);
+    float interpolated =  hermiteMatrix(timeU, startTime, endTime, startTan, endTan).z;
+    printf("success\n");
+    return doubleLerp(interpolated, curKnot, endLocNum, 0.0, 1.0);
+    }
+    }*/
+
+    //printf("timer: %f, totts[curKnot]: %f, totts[endLocNum]: %f\n", timer, totts[curKnot], totts[endLocNum]);
+    float timeU = f64Lerp(timer, totts[curKnot], totts[endLocNum], 0.0, 1.0);
+    float interpolated = hermiteMatrix(timeU, startTime, endTime, startTan, endTan).z;
+
+    if (saveTime) {
+        savedTime = timer;
+    }
+    else {
+        offsetTime = timer;
+    }
+
+    return f64Lerp(interpolated, curKnot, endLocNum, 0.0, 1.0);
+	/*int endMark = totts.size();
 	int endLocNum; //index to the end point;
 	glm::vec3 startTan;
 	glm::vec3 startTime;
@@ -491,11 +687,10 @@ f64 CSplinePath::convertTimestampToU(f32 timer, int curKnot )
 	endTime = glm::vec3(totts[endLocNum], 0, endLocNum); //provided it's not at the end of the spline, endLocation is start+1
 	endTan = tTangents[endLocNum];
 
-	
-	f32 timeU = f64Lerp(timer, totts[curKnot], totts[endLocNum], 0.0, 1.0);
+    float timeU = f64Lerp(timer, totts[curKnot], totts[endLocNum], 0.0, 1.0);
 	f32 interpolated =  hermiteMatrix(timeU, startTime, endTime, startTan, endTan).z;
 	return f64Lerp(interpolated, curKnot, endLocNum, 0.0, 1.0);  //convert interpolated between zero and one.
-	//return f64Lerp(res, startTime, endTime, 0.0, 1.0);
+	//return f64Lerp(res, startTime, endTime, 0.0, 1.0);*/
 
 }
 
@@ -596,7 +791,7 @@ void CSplinePath::parameterizeSpline()
 			//oldk = kk;
 			curTab->addTableEntry(kk, -1);
 		}
-
+       
 		f64 size = 0.0;
         glm::vec3 lastPoint = glm::vec3(0.0f, 0.0f, 0.0f);
 		lastPoint = points[i]; //= splineLocation(curTab->getU(0), i);	
@@ -631,7 +826,6 @@ void CSplinePath::parameterizeSpline()
 			//printf("%f %f \n", curTab->getU(r), curTab->getDist(r), result);
 			lastPoint = thisPoint;
 		}
-
 		paramTable.push_back(curTab);
 
 	}
@@ -764,15 +958,40 @@ void CSplinePath::drawPointLine(int i)//, Frustum* frustum)
 
                 //p = glm::normalize(p);
 
-                posBuf.push_back(p.x);
-                posBuf.push_back(p.y);
-                posBuf.push_back(p.z);
 
-                colorBuf.push_back(0.0f);
-                colorBuf.push_back(0.0f);
-                colorBuf.push_back(0.0f);
+               // if (currIndex == 0) {
+                    posBuf.push_back(p.x);
+                    posBuf.push_back(p.y);
+                    posBuf.push_back(p.z);
 
-                indBuf.push_back(currIndex++);
+                    colorBuf.push_back(1.0f);
+                    colorBuf.push_back(0.0f);
+                    colorBuf.push_back(0.0f);
+
+                    indBuf.push_back(currIndex++);
+                /*}
+                else {
+                    posBuf.push_back(prev_p.x);
+                    posBuf.push_back(prev_p.y);
+                    posBuf.push_back(prev_p.z);
+
+                    colorBuf.push_back(1.0f);
+                    colorBuf.push_back(0.0f);
+                    colorBuf.push_back(0.0f);
+
+                    indBuf.push_back(currIndex++);
+                    
+                    posBuf.push_back(p.x);
+                    posBuf.push_back(p.y);
+                    posBuf.push_back(p.z);
+
+                    colorBuf.push_back(1.0f);
+                    colorBuf.push_back(0.0f);
+                    colorBuf.push_back(0.0f);
+
+                    indBuf.push_back(currIndex++);
+                }
+                prev_p = p;*/
             }
 
             

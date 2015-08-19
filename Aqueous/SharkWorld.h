@@ -12,7 +12,8 @@ class SharkWorld
 {
 	public:
 		SharkWorld(){}
-		SharkWorld(CSplinePath* path){ traveler = SplineTraveler(path);  
+		SharkWorld(CSplinePath* _path){ traveler = SplineTraveler(_path);  
+                        path = _path;
 					    updateAnimationFlag = true; 
 		                lookAhead = 0.0f;
 		                frontby = 0.6f;
@@ -24,11 +25,14 @@ class SharkWorld
 		//void initialize(string splineFilename);
 		int deriveRailAngle();
 
+        void reset();
+
 		void setPathLineShader(GLuint lineShader) { traveler.setPathLineShader(lineShader); }
         void setSplinePath(CSplinePath * path) { traveler.setSplinePath(path); }
 
 		//lowerclass management
 		void deleteHeap(){traveler.deleteHeap();} //delete's SplinePath heap
+        int gCurPoint(){ return traveler.gCurPoint(); }
 		glm::vec3 gPathPoint(int index){return traveler.gPathPoint(index);}
 		glm::vec3 gCurrentPoint(){return traveler.gCurrentPoint();} 
 		glm::vec3 gNextPoint(){ return traveler.gNextPoint();} 
@@ -51,7 +55,7 @@ class SharkWorld
 		void resetTime(){traveler.resetTime();}
 
 	private:
-
+        CSplinePath* path;
 		//world data info
 		SplineTraveler traveler;
 		

@@ -7,6 +7,8 @@
 #include "GPSconverter.h"
 #include "CSplineFunctions.h"
 #include "CProgramContext.h"
+#include "CDataSet.h"
+#include "CLocation.h"
 
 
 /*Holds data for a catmull-rom path. This class can take in points read in from a file, and also reparamaterize teh curve by arc-length   */
@@ -25,12 +27,15 @@ public:
     //void initSplineZOE(string zoefilename);     //opens txt files
 
     void setFileName(string _filename) { filename = _filename; };
-
+    void setDataSet(CDataSet* ds) { DataSet = ds; }
+    void setLocation(CLocation* l) { Location = l; }
+    void setContext(CProgramContext* c) { Context = c; }
     void gatherDTPoints();
     void gatherEXPoints();
     void gatherZOEPoints();
     void parameterizeSpline();
 	void normalizeCoords();
+    void transformCoords();
     void initTangents();
     void calcRadius();
     void deleteHeap();
@@ -51,6 +56,7 @@ public:
     //void drawPoints(f32** frustum);
 
     //points
+    int gPointCount(){ return points.size(); }
     glm::vec3 gPoint(int index){return points[index];}
     //void parseDataFileMAT(const char* filename){mreader.parseFile(filename);}	
     void parseDataFileEXE(const char* filename){ereader.parseFile(filename);}	
@@ -71,6 +77,12 @@ public:
 	SRange<f32> GetZRange() { return ZRange; }
 
 private:	
+    CDataSet* DataSet;
+    CLocation* Location;
+    CProgramContext* Context;
+
+    bool ranOnce;
+
     GLuint lineShader;
     //data
     vector<CSplineTable*> paramTable;
@@ -98,7 +110,11 @@ private:
     vector<u32> indBuf;
 
     u32 currIndex;
+    glm::vec3 prev_p;
     glm::vec3 currColor;
+
+    bool saveTime;
+    float savedTime, offsetTime;
 
     //running totals of timestamp for catmull interpolation
     //f64 timePast;

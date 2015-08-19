@@ -2,6 +2,7 @@
 
 #include "SciDataManager.h"
 #include "CTerrainNodeManager.h"
+#include "CSharkNodeManager.h"
 #include "CGUIContext.h"
 
 void CMainState::OnEvent(IEvent & Event)
@@ -16,7 +17,7 @@ void CMainState::OnEvent(SKeyboardEvent & Event)
 
     switch (Event.Key)
     {
-
+        
 	case EKey::Escape:
 
 		//if (! Event.Pressed)
@@ -119,14 +120,19 @@ void CMainState::OnEvent(SKeyboardEvent & Event)
 		//	printf("%d\n", -- Context->Scene.Terrain->DebugMode);
 		break;
 
-	//case EKey::Y:
+	case EKey::Y:
+        printf("Y pressed - continuing animation\n");
+        Context->Scene.Shark->toggleAnimation(true);
+        break;
 
-		//if (! Event.Pressed)
-		//	Context->DataManager->produceVolumeMaps();
-		//break;
+    case EKey::Q:
+        printf("Q pressed - stepping\n");
+        Context->Scene.Shark->step();
+        break;
 
 	case EKey::B:
-
+        printf("B pressed - pausing animation\n");
+        Context->Scene.Shark->toggleAnimation(false);
 		//if (! Event.Pressed)
 		//	SceneManager->getEffectManager()->setEffectEnabled(ESE_BLOOM, ! SceneManager->getEffectManager()->isEffectEnabled(ESE_BLOOM));
 		break;

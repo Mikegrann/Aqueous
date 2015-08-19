@@ -195,6 +195,11 @@ void CSite::Load(IProgressBar * Progress)
         DataSet->Load(Progress->NewTask(1 / Total));
     }
     for (CSplinePath* Track : Tracks) {
+        Track->setDataSet(DataSets[0]);
+        Track->setLocation(Locations[0]);
+        CProgramContext & Context = CProgramContext::Get();
+        Track->setContext(&Context);
+        this->GetCurrentLocation();
         Track->initSpline();
     }
 	Progress->EndProgress();

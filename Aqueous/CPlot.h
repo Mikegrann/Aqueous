@@ -13,6 +13,7 @@ public:
 	enum Mode {
 		Histogram,
 		Line,
+		Points,
 		NumModes
 	};
 
@@ -24,14 +25,22 @@ public:
 		case Line:
 			return "Line Graph";
 			break;
+		case Points:
+			return "Point Graph";
+			break;
+		default:
+			return "Invalid Mode";
+			break;
 		}
 	}
 
 	void graph(Mode m);
 	void graphHist();
 	void graphLine();
+	void graphPoints();
 
 	void setData(std::vector<mreal> data);
+	void setTimes(std::vector<mreal> times);
 
 	void setDivisions(const int divs) { _divisions = divs; Invalidate(); }
 	const int getDivisions() { return _divisions; }
@@ -49,6 +58,7 @@ public:
 private:
 	mglGraph _graph;
 	mglData _data;
+	mglData _times;
 	mglData _counts;
 
 	int _divisions = 10;
@@ -62,10 +72,12 @@ private:
 public:
 	static mglData graphHist(std::vector<mreal> &data, const int divisions, bool colors);
 	static void graphLine(std::vector<mreal> &data, bool colors);
+	static void graphPoints(std::vector<mreal> &data, std::vector<mreal> &times, bool colors);
 
 private:
 	static mglData graphHist(mglGraph *gr, mglData &data, const int divisions, bool colors);
 	static void graphLine(mglGraph *gr, mglData &data, bool colors);
+	static void graphPoints(mglGraph *gr, mglData &data, mglData &times, bool colors);
 
 	static void printData(mglData &dat);
 

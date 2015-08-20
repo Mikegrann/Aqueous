@@ -16,6 +16,9 @@ void CPlot::graph(Mode m) {
 		break;
 	case CPlot::Line:
 		graphLine();
+		break; 
+	case CPlot::Points:
+		graphPoints();
 		break;
 	}
 }
@@ -37,8 +40,21 @@ void CPlot::graphLine() {
 	lastUsed = Mode::Line;
 }
 
+void CPlot::graphPoints() {
+	_graph.Clf("{xFFFFFF00}");
+	_graph.SubPlot(1, 1, 0, "");
+	graphPoints(&_graph, _data, _times, _colors);
+	_invalid = false;
+	lastUsed = Mode::Points;
+}
+
 void CPlot::setData(std::vector<mreal> data) {
 	_data = mglData(data.size(), &data[0]);
+	Invalidate();
+}
+
+void CPlot::setTimes(std::vector<mreal> times) {
+	_times = mglData(times.size(), &times[0]);
 	Invalidate();
 }
 
@@ -62,6 +78,10 @@ double CPlot::getValAt(double x) {
 		return _data.Spline(x);
 		break;
 
+	case Mode::Points:
+		return 0;
+		break;
+
 	default:
 		return 0;
 		break;
@@ -81,6 +101,13 @@ void CPlot::graphLine(std::vector<mreal> &data, bool colors) {
 	graph.SubPlot(1, 1, 0, "");
 
 	CPlot::graphLine(&graph, mglData(data.size(), &data[0]), colors);
+}
+
+void CPlot::graphPoints(std::vector<mreal> &data, std::vector<mreal> &times, bool colors) {
+	mglGraph graph;
+	graph.SubPlot(1, 1, 0, "");
+
+	CPlot::graphPoints(&graph, mglData(data.size(), &data[0]), mglData(times.size(), &times[0]), colors);
 }
 
 mglData CPlot::graphHist(mglGraph *gr, mglData &data, const int divisions, bool colors) {
@@ -130,8 +157,10 @@ void CPlot::graphLine(mglGraph *gr, mglData &data, bool colors) {
 	int vertIncrement = ceil(data.Maximal() / 10);
 
 #ifdef DEBUG
-	std::cout << "Raw Data" << std:endl;
+	std::cout << "Raw Data" << std::endl;
 	printData(data);
+	std::cout << "Times" << std::endl;
+	printData(times);
 #endif
 
 	gr->SetRange('x', 0, data.GetNx());
@@ -152,6 +181,41 @@ void CPlot::graphLine(mglGraph *gr, mglData &data, bool colors) {
 	}
 
 	gr->Plot(data, pen.c_str());
+	gr->WriteFrame("Media/graph.png");
+}
+
+void CPlot::graphPoints(mglGraph *gr, mglData &data, mglData &times, bool colors) {
+	const int min = floor(data.Minimal());
+	const int max = ceil(data.Maximal());
+
+	int vertIncrement = ceil(data.Maximal() / 10);
+
+#ifdef DEBUG
+	std::cout << "Raw Data" << std::endl;
+	printData(data);
+	std::cout << "Times" << std::endl;
+	printData(times);
+#endif
+
+	gr->InPlot(0, 1, 0.1, 1);
+	gr->SetRange('x', times.Minimal(), times.Maximal());
+	gr->SetTicksTime('x', 0.0, "%I:%M");
+	gr->SetTickRotate(true);
+	gr->SetRange('y', vertIncrement * floor(min / vertIncrement), vertIncrement * ceil(max / vertIncrement));
+	gr->Axis();
+
+	string pen = " #s";
+	if (colors) {
+		std::stringstream str;
+		str << "! #s";
+		for (int i = 0; i < data.GetNx(); i++) {
+			SColorAf col = CSpectrumColorMapper::MapColor((data.a[i] - data.Minimal()) / (data.Maximal() - data.Minimal()));
+			str << colorRGBA(col);
+		}
+		pen = str.str();
+	}
+
+	gr->Plot(times, data, pen.c_str());
 	gr->WriteFrame("Media/graph.png");
 }
 

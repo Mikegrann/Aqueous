@@ -18,6 +18,7 @@ CGUIGraphWidget::CGUIGraphWidget()
 	Graph->SetBounds(10, 45, 300, 300);
 	Graph->onPress.Add(this, &CGUIGraphWidget::OnClickGraph);
 	plot.setData(CProgramContext::Get().CurrentSite->GetCurrentDataSet()->GetGraphData());
+	plot.setTimes(CProgramContext::Get().CurrentSite->GetCurrentDataSet()->GetGraphTimes());
 
 	Gwen::Controls::Label *ModeLabel = new Gwen::Controls::Label(Window);
 	ModeLabel->SetBounds(10, 10, 40, 25);

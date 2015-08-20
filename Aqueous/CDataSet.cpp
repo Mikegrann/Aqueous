@@ -171,6 +171,14 @@ vector<double> CDataSet::GetGraphData() {
 	return CData;
 }
 
+vector<double> CDataSet::GetGraphTimes() {
+	std::vector<double> CData;
+	for (auto Point : Points) {
+		CData.push_back(Point.GetField(Traits.TField));
+	}
+	return CData;
+}
+
 void CDataSet::GenerateVolumeFromPointData(std::time_t targetTime, Interp interp)
 {
 	if (interp.mode == Interp::Mode::Density) {

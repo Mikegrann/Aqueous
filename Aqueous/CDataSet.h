@@ -23,6 +23,7 @@ public:
 	void InitTextures();
 	vec3f SetupVolume();
 	vector<double> GetGraphData();
+	vector<double> GetGraphTimes();
 
 	f64 GetMinColorValue() const;
 	f64 GetMaxColorValue() const;

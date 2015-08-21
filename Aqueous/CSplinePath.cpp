@@ -237,11 +237,21 @@ void CSplinePath::transformCoords() {
     else if (ProjectionMode == 2)
         Projection = sharedNew(new longlatd::CEquirectangularProjection(DataLonLatCenter.Latitude));
 
+	//longlatd const SplineLonLatMin(GetXRange().Minimum, GetZRange().Minimum);
+	//longlatd const SplineLonLatMax(GetXRange().Maximum, GetZRange().Maximum);
+
+	SVector2d SplineMinOffset(GetXRange().Minimum, GetZRange().Minimum);
+	SVector2d SplineMaxOffset(GetXRange().Maximum, GetZRange().Maximum);
+
+	longlatd const SplineLonLatMin = Projection->OffsetFromStart(OffsetPos, SplineMinOffset);
+	longlatd const SplineLonLatMax = Projection->OffsetFromStart(OffsetPos, SplineMaxOffset);
+
     DataRangeMin = DataLonLatCenter.OffsetTo(DataLonLatMin, Projection);
     DataRangeMax = DataLonLatCenter.OffsetTo(DataLonLatMax, Projection);
 
     SplineRangeMin = DataLonLatCenter.OffsetTo(SplineLonLatMin, Projection);
     SplineRangeMax = DataLonLatCenter.OffsetTo(SplineLonLatMax, Projection);
+
     if (Location)
     {
         MapRangeMin = DataLonLatCenter.OffsetTo(MapLonLatMin, Projection);
@@ -1010,6 +1020,39 @@ void CSplinePath::drawPointLine(int i)//, Frustum* frustum)
                     colorBuf.push_back(0.0f);
                     colorBuf.push_back(0.0f);
 
+=======
+
+               // if (currIndex == 0) {
+                    posBuf.push_back(p.x);
+                    posBuf.push_back(p.y);
+                    posBuf.push_back(p.z);
+
+                    colorBuf.push_back(1.0f);
+                    colorBuf.push_back(0.0f);
+                    colorBuf.push_back(0.0f);
+
+                    indBuf.push_back(currIndex++);
+                /*}
+                else {
+                    posBuf.push_back(prev_p.x);
+                    posBuf.push_back(prev_p.y);
+                    posBuf.push_back(prev_p.z);
+
+                    colorBuf.push_back(1.0f);
+                    colorBuf.push_back(0.0f);
+                    colorBuf.push_back(0.0f);
+
+                    indBuf.push_back(currIndex++);
+                    
+                    posBuf.push_back(p.x);
+                    posBuf.push_back(p.y);
+                    posBuf.push_back(p.z);
+
+                    colorBuf.push_back(1.0f);
+                    colorBuf.push_back(0.0f);
+                    colorBuf.push_back(0.0f);
+
+>>>>>>> 852a659ad002d545611c18ea217ec30aa38fdf2c
                     indBuf.push_back(currIndex++);
                 }
                 prev_p = p;*/

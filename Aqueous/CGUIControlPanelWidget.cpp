@@ -12,7 +12,7 @@ CGUIControlPanelWidget::CGUIControlPanelWidget()
 {
 	Window = new Gwen::Controls::WindowControl(GUIManager->GetCanvas());
 	Window->SetDeleteOnClose(false);
-	Window->SetBounds(30, 600, 660 + 30 + 165, 85);
+	Window->SetBounds(30, 600, 660 + 30 + 165 + 165, 85);
 	Window->SetTitle("Control Panel");
 	Window->SetClosable(false);
 
@@ -40,34 +40,46 @@ CGUIControlPanelWidget::CGUIControlPanelWidget()
 	EnableButton->SetBounds(675, 10, 150, 35);
 	EnableButton->SetText("Shark Controls");
 	EnableButton->onPress.Add(this, &CGUIControlPanelWidget::OnToggleShark);
+
+	EnableButton = new Gwen::Controls::Button(Window);
+	EnableButton->SetBounds(840, 10, 150, 35);
+	EnableButton->SetText("Graph Display");
+	EnableButton->onPress.Add(this, &CGUIControlPanelWidget::OnToggleGraph);
+
 }
 
 void CGUIControlPanelWidget::OnToggleTerrain(Gwen::Controls::Base * Control)
 {
 	CProgramContext * Context = & CProgramContext::Get();
-	Context->GUIContext->GetTerrainControl()->toggle();
+	Context->GUIContext->Toggle((CGUIContextWidget *)Context->GUIContext->GetTerrainControl());
 }
 
 void CGUIControlPanelWidget::OnToggleVolume(Gwen::Controls::Base * Control)
 {
 	CProgramContext * Context = & CProgramContext::Get();
-	Context->GUIContext->GetVolumeControl()->toggle();
+	Context->GUIContext->Toggle((CGUIContextWidget *)Context->GUIContext->GetVolumeControl());
 }
 
 void CGUIControlPanelWidget::OnToggleGlyph(Gwen::Controls::Base * Control)
 {
 	CProgramContext * Context = & CProgramContext::Get();
-	Context->GUIContext->GetGlyphControl()->toggle();
+	Context->GUIContext->Toggle((CGUIContextWidget *)Context->GUIContext->GetGlyphControl());
 }
 
 void CGUIControlPanelWidget::OnToggleScene(Gwen::Controls::Base * Control)
 {
 	CProgramContext * Context = & CProgramContext::Get();
-	Context->GUIContext->GetSceneControl()->toggle();
+	Context->GUIContext->Toggle((CGUIContextWidget *)Context->GUIContext->GetSceneControl());
 }
 
 void CGUIControlPanelWidget::OnToggleShark(Gwen::Controls::Base * Control)
 {
 	CProgramContext * Context = &CProgramContext::Get();
-	Context->GUIContext->GetSharkControl()->toggle();
+	Context->GUIContext->Toggle((CGUIContextWidget *)Context->GUIContext->GetSharkControl());
+}
+
+void CGUIControlPanelWidget::OnToggleGraph(Gwen::Controls::Base * Control)
+{
+	CProgramContext * Context = &CProgramContext::Get();
+	Context->GUIContext->Toggle((CGUIContextWidget *)Context->GUIContext->GetGraphDisplay());
 }

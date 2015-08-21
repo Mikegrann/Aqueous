@@ -12,6 +12,7 @@ class CGUIContextWidget : public CGUIWidget
 public:
 
 	CGUIContextWidget();
+	virtual void toggle() {}
 
 protected:
 

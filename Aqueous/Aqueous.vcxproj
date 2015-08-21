@@ -38,7 +38,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup>
     <Link>
-      <AdditionalDependencies>NewMat.lib;giflib.lib;libmat.lib;libmx.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>mgl.lib;NewMat.lib;giflib.lib;libmat.lib;libmx.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Program Files (x86)\Visual Leak Detector\lib\Win64;$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
@@ -62,6 +62,7 @@
     <ClCompile Include="CGUIContextWidget.cpp" />
     <ClCompile Include="CGUIControlPanelWidget.cpp" />
     <ClCompile Include="CGUIGlyphControlWidget.cpp" />
+    <ClCompile Include="CGUIGraphWidget.cpp" />
     <ClCompile Include="CGUIMainMenuWidget.cpp" />
     <ClCompile Include="CGUISceneControlWidget.cpp" />
     <ClCompile Include="CGUISharkControlWidget.cpp" />
@@ -74,6 +75,7 @@
     <ClCompile Include="CMainState.EventHandling.cpp" />
     <ClCompile Include="CMainState.MouseTracking.cpp" />
     <ClCompile Include="CPlaneGridSceneObject.cpp" />
+    <ClCompile Include="CPlot.cpp" />
     <ClCompile Include="CProgramContext.cpp" />
     <ClCompile Include="CSharkNodeManager.cpp" />
     <ClCompile Include="CSite.cpp" />
@@ -88,6 +90,7 @@
     <ClCompile Include="GifWriter.cpp" />
     <ClCompile Include="glQuaternion.cpp" />
     <ClCompile Include="GPSconverter.cpp" />
+    <ClCompile Include="GraphPanel.cpp" />
     <ClCompile Include="HorizontalSliderTooltip.cpp" />
     <ClCompile Include="InvDistWeight.cpp" />
     <ClCompile Include="Keyframe.cpp" />
@@ -128,6 +131,7 @@
     <ClInclude Include="CGUIContextWidget.h" />
     <ClInclude Include="CGUIControlPanelWidget.h" />
     <ClInclude Include="CGUIGlyphControlWidget.h" />
+    <ClInclude Include="CGUIGraphWidget.h" />
     <ClInclude Include="CGUIMainMenuWidget.h" />
     <ClInclude Include="CGUISceneControlWidget.h" />
     <ClInclude Include="CGUISharkControlWidget.h" />
@@ -135,6 +139,7 @@
     <ClInclude Include="CGUIVolumeControlWidget.h" />
     <ClInclude Include="CLoadState.h" />
     <ClInclude Include="CGUISiteWidget.h" />
+    <ClInclude Include="CPlot.h" />
     <ClInclude Include="CSharkNodeManager.h" />
     <ClInclude Include="CSplineFunctions.h" />
     <ClInclude Include="CWorldTime.h" />
@@ -159,6 +164,7 @@
     <ClInclude Include="CSplineNodeManager.h" />
     <ClInclude Include="glQuaternion.h" />
     <ClInclude Include="GPSconverter.h" />
+    <ClInclude Include="GraphPanel.h" />
     <ClInclude Include="HorizontalSliderTooltip.h" />
     <ClInclude Include="Interp.h" />
     <ClInclude Include="InvDistWeight.h" />

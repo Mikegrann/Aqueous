@@ -4,6 +4,12 @@
 #include "SciDataManager.h"
 #include "CMainState.h"
 
+#include "CGUIGraphWidget.h"
+#include "CGUIVolumeControlWidget.h"
+#include "CGUITerrainControlWidget.h"
+#include "CGUIGlyphControlWidget.h"
+#include "CGUISharkControlWidget.h"
+#include "CGUISceneControlWidget.h"
 
 void CGUIContext::Init()
 {
@@ -22,6 +28,7 @@ void CGUIContext::SetupMainState()
 	GlyphControl = new CGUIGlyphControlWidget();
 	SharkControl = new CGUISharkControlWidget();
 	SceneControl = new CGUISceneControlWidget();
+	GraphDisplay = new CGUIGraphWidget();
 	ControlPanel = new CGUIControlPanelWidget();
 	
 	Console->AddMessage("GUI Initialized.");
@@ -78,6 +85,11 @@ CGUISharkControlWidget * CGUIContext::GetSharkControl()
 	return SharkControl;
 }
 
+CGUIGraphWidget * CGUIContext::GetGraphDisplay()
+{
+	return GraphDisplay;
+}
+
 CGUISceneControlWidget * CGUIContext::GetSceneControl()
 {
 	return SceneControl;
@@ -86,4 +98,8 @@ CGUISceneControlWidget * CGUIContext::GetSceneControl()
 CGUIControlPanelWidget * CGUIContext::GetControlPanel()
 {
 	return ControlPanel;
+}
+
+void CGUIContext::Toggle(CGUIContextWidget *widget) {
+	widget->toggle();
 }

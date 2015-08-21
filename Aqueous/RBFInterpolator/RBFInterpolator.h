@@ -21,9 +21,7 @@
 
 #include <vector>
 
-typedef float real;
-
-typedef real(*RBFunc)(real t_squared);
+typedef float(*RBFunc)(float t_squared);
 
 using namespace std;
 
@@ -34,17 +32,17 @@ public:
 	~RBFInterpolator();
 
 	//create an interpolation function f that obeys F_i = f(x_i, y_i, z_i)
-	RBFInterpolator(vector<real> x, vector<real> y, vector<real> z, vector<real> F, RBFunc basis);
+	RBFInterpolator(vector<float> x, vector<float> y, vector<float> z, vector<float> F, RBFunc basis);
 
 	//specify new function values F_i while keeping the same 
-	void UpdateFunctionValues(vector<real> F);
+	void UpdateFunctionValues(vector<float> F);
 
 	//evaluate the interpolation function f at the 3D position (x,y,z)
-	real interpolate(real x, real y, real z);
+	float interpolate(float x, float y, float z);
 
 	// valid RBFuncs
-	static real log_shift(real t_squared);
-	static real thin_spline(real t_squared);
+	static float log_shift(float t_squared);
+	static float thin_spline(float t_squared);
 
 private:
 	RBFunc basis_func;

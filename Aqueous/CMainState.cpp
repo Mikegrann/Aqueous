@@ -309,30 +309,12 @@ void CMainState::CalculateDataAlignment()
 	static vec3d const Multiplier = vec3d(1, YExaggeration, 1);
 
     printf("Main State Transforms\n");
-
-    glm::mat4 transformMat = glm::mat4(1.0f);
-    vec3d scalar = DataScale * Multiplier;
-    glm::mat4 scaleMat = glm::scale(glm::mat4(1.0f), glm::vec3(scalar.X, scalar.Y, scalar.Z));
-    glm::mat4 transMat = glm::translate(glm::mat4(1.0f), glm::vec3(0, -DataScale.Y * YExaggeration / 2, 0));
-    scaleMat = glm::scale(scaleMat, glm::vec3(1.0f, 1.0f, -1.0f));
-    scaleMat = glm::scale(scaleMat, glm::vec3(1.0f, -1.0f, 1.0f));
-
-    transformMat = scaleMat * transMat;
 	
 	Scene.Glyphs->GetNode()->SetScale(DataScale * Multiplier);
-<<<<<<< HEAD
-    //Scene.Spline->GetNode()->SetScale(DataScale * Multiplier);
-   // Scene.Shark->GetNode()->SetScale(DataScale * Multiplier);
-	Scene.Volume->GetNode()->SetScale(DataScale * Multiplier);
+    Scene.Volume->GetNode()->SetScale(DataScale * Multiplier);
 	Scene.Glyphs->GetNode()->SetTranslation(vec3f(0, -DataScale.Y * YExaggeration / 2, 0));
-    //Scene.Spline->GetNode()->SetTranslation(vec3f(0, -DataScale.Y * YExaggeration / 2, 0));
-   // Scene.Shark->GetNode()->SetTranslation(vec3f(0, -DataScale.Y * YExaggeration / 2, 0));
-=======
-	Scene.Volume->GetNode()->SetScale(DataScale * Multiplier);
-	Scene.Glyphs->GetNode()->SetTranslation(vec3f(0, -DataScale.Y * YExaggeration / 2, 0));
->>>>>>> 852a659ad002d545611c18ea217ec30aa38fdf2c
 	Scene.Volume->GetNode()->SetTranslation(vec3f(0, -DataScale.Y * YExaggeration / 2, 0));
-	
+    
 	Scene.Terrain->GetNode()->SetScale(MapScale * Multiplier / CTerrainNodeManager::Size);
 	//Scene.Water->SetScale(MapScale / CTerrainNodeManager::Size);
 
@@ -341,24 +323,14 @@ void CMainState::CalculateDataAlignment()
 
 	//// Flip for RHC->LHC
 	Scene.Glyphs->GetNode()->SetScale(Scene.Glyphs->GetNode()->GetScale() * vec3f(1, 1, -1));
-<<<<<<< HEAD
-    //Scene.Spline->GetNode()->SetScale(Scene.Spline->GetNode()->GetScale() * vec3f(1, 1, -1));
-    //Scene.Shark->GetNode()->SetScale(Scene.Shark->GetNode()->GetScale() * vec3f(1, 1, -1));
-=======
->>>>>>> 852a659ad002d545611c18ea217ec30aa38fdf2c
-	Scene.Volume->GetNode()->SetScale(Scene.Volume->GetNode()->GetScale() * vec3f(1, 1, -1));
+    Scene.Volume->GetNode()->SetScale(Scene.Volume->GetNode()->GetScale() * vec3f(1, 1, -1));
 	Scene.Terrain->GetNode()->SetScale(Scene.Terrain->GetNode()->GetScale() * vec3f(1, 1, -1));
 	//Scene.Water->SetScale(Scene.Water->GetScale() * vec3f(1, 1, -1));
 
 	//// Flip Height -> Depth
 	Scene.Volume->GetNode()->SetScale(Scene.Volume->GetNode()->GetScale() * vec3f(1, -1, 1));
     Scene.Glyphs->GetNode()->SetScale(Scene.Glyphs->GetNode()->GetScale() * vec3f(1, -1, 1));
-<<<<<<< HEAD
-    //Scene.Spline->GetNode()->SetScale(Scene.Spline->GetNode()->GetScale() * vec3f(1, -1, 1));
-    //Scene.Shark->GetNode()->SetScale(Scene.Shark->GetNode()->GetScale() * vec3f(1, -1, 1));
-=======
->>>>>>> 852a659ad002d545611c18ea217ec30aa38fdf2c
-}
+    }
 
 void CMainState::SetSite(int site)
 {

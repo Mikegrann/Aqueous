@@ -24,5 +24,6 @@ Thumbs.db
 Aqueous/Aqueous.vcxproj.user
 NewMat/NewMat.vcxproj.user
 Aqueous/x64/*
+temp/
 
 !Aqueous/Meshes/*

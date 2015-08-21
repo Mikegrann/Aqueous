@@ -165,16 +165,39 @@ void CSharkNodeManager::Update(f32 const Elapsed)
             //yaw rotation	
 
             // handle shark rotation
-            glQuaternion Quat;
-            glm::vec3 ax = world->gRotationAxis();
+            //glm::vec3 ax = world->gRotationAxis();
             //Quat.CreateFromAxisAngle(ax.x, ax.y, ax.z, world1.gRotationDegrees());
-            Quat.CreateFromAxisAngle(0, 1, 0, world->gRotationDegrees());
-            GLfloat Matrix[16];
-            Quat.CreateMatrix(Matrix);
 
-            glm::mat4 multMatrix = glm::make_mat4(Matrix);
+            // estimate the tangent...
+            glm::vec3 nextPoint = world->gNext();
 
-            Node->SetRotation(multMatrix);
+            float rotAngle = atan2(nextPoint.z - currPosition.z, nextPoint.x - currPosition.x);
+            rotAngle = rotAngle * (180.0f / PI);
+
+            glm::vec3 diffAngle = nextPoint - currPosition;
+            diffAngle = glm::normalize(diffAngle);
+            /*float rotAngle = ArcTan((float)(diffAngle.z / diffAngle.x));
+            if (diffAngle.x > 0) {
+                rotAngle = PI + rotAngle;
+            }
+            //rotAngle = PI/2.0f;
+
+            rotAngle = rotAngle * (180.0f / PI);*/
+
+            printf("looking from (%f, %f, %f) to (%f, %f, %f)\n", currPosition.x, currPosition.y, currPosition.z, nextPoint.x, nextPoint.y, nextPoint.z);
+            printf("diffAngle: (%f, %f, %f)\n", diffAngle.x, diffAngle.y, diffAngle.z);
+            printf("rotAngle: %f, rotationDegrees: %f\n", rotAngle, world->gRotationDegrees());
+
+            glm::mat4 rotMat = glm::rotate(glm::mat4(1.0f), rotAngle, glm::vec3(0.0f, 1.0f, 1.0f));
+
+            //glQuaternion Quat;
+            //Quat.CreateFromAxisAngle(0, 1, 0, rotAngle);// world->gRotationDegrees());
+            //GLfloat Matrix[16];
+            //Quat.CreateMatrix(Matrix);
+
+           // glm::mat4 multMatrix = glm::make_mat4(rotMat);
+          
+            Node->SetRotation(rotMat);
 
             glm::vec3 transVec = currPosition;// -prevPosition;
             Node->SetTranslation(vec3f(transVec.x, transVec.y, transVec.z));

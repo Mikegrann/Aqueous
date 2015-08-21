@@ -11,6 +11,7 @@ SplineTraveler::SplineTraveler(CSplinePath* _path)
 {
     path = path;
 	rotation = glm::vec3(0,0,0); 
+    next = glm::vec3(0, 0, 0);
 	nextPoint = 1;
         curPoint = 0;
 	curU = 0;
@@ -24,6 +25,7 @@ SplineTraveler::SplineTraveler(CSplinePath* _path)
 SplineTraveler::SplineTraveler()
 { 
 	rotation = glm::vec3(0,0,0); 
+    next = glm::vec3(0, 0, 0);
 	nextPoint = 1; 
 	elapseRate = 1;
 	areGhostPoints = false;
@@ -155,8 +157,9 @@ glm::vec3 SplineTraveler::upCurrentLocation(int dt)
 	}
 	//printf("curU: %f\n", curU);
 	newLoc = path->splineLocation(curU, ppoint); //this is the location of the traveler 
-	aheadTarget = path->getNearbyPoint(.3, ppoint, curU);
-
+	//aheadTarget = path->getNearbyPoint(.3, ppoint, curU);
+    aheadTarget = path->getNearbyPoint(.01, ppoint, curU);
+    next = aheadTarget;
 	//auto-calculate rotation
 	//rotation = calcRotation(newLoc, aheadTarget);
 	calcRotationAngle();

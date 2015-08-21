@@ -49,6 +49,8 @@ class SharkWorld
 		string gAnimationLoop(){return animationLoop;}
 
 		glm::vec3 gVelocity(){return traveler.gVelocity();} //velocity the traveler is moving
+        
+        glm::vec3 gNext() { return traveler.gNext(); }
 
 		void speedUp(){traveler.speedUp();}
 		void slowDown(){traveler.slowDown();}

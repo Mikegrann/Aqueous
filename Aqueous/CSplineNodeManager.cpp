@@ -16,8 +16,8 @@ void CSplineNodeManager::Init()
     //parser->parseFile(SPLINE_FILE);
     //path = CSplinePath();
     //path.initSpline(SPLINE_FILE);
-    Node = SceneManager->GetFactory()->AddSceneNode("Glyph");
-	//Node = SceneManager->GetFactory()->AddSceneNode("Line");
+    //Node = SceneManager->GetFactory()->AddSceneNode("Glyph");
+	Node = SceneManager->GetFactory()->AddSceneNode("Line");
 	//LoadSceneElements();
 
     currSite = nullptr;
@@ -31,30 +31,31 @@ void CSplineNodeManager::LoadSceneElements()
     PositionBuffer->Data<f32>(Positions.size() * sizeof(f32), nullptr, 3);
     ColorBuffer = new ion::GL::VertexBuffer;
     ColorBuffer->Data<f32>(Colors.size() * sizeof(f32), nullptr, 3);
-    //IndBuffer = new ion::GL::IndexBuffer;
-    //IndBuffer->Data<u32>(Indices.size() * sizeof(u32), nullptr);
+    IndBuffer = new ion::GL::IndexBuffer;
+    IndBuffer->Data<u32>(Indices.size() * sizeof(u32), nullptr);
     //IndBuffer->Data<u32>(Indices);
 
     if (Node)
     {
         Node->SetVertexBuffer("vPosition", PositionBuffer);
         Node->SetVertexBuffer("vColor", ColorBuffer);
+        Node->SetIndexBuffer(IndBuffer);
         //Node->SetVertexBuffer("vTime", TimeBuffer);
         Node->SetUniform("Model", &Node->GetTransformationUniform());
         //Node->SetUniform("timeMin", &timeUniformMin);
         //Node->SetUniform("timeMax", &timeUniformMax);
-        //Node->SetPrimitiveType(ion::GL::EPrimitiveType::Lines);
-        Node->SetPrimitiveType(ion::GL::EPrimitiveType::Points);
+        Node->SetPrimitiveType(ion::GL::EPrimitiveType::Lines);
+        //Node->SetPrimitiveType(ion::GL::EPrimitiveType::Points);
     }
 
     PositionBuffer->SubData(Positions);
     ColorBuffer->SubData(Colors);
-   // IndBuffer->SubData(Indices);
+    IndBuffer->SubData(Indices);
     //TimeBuffer->SubData(Times);
 
     if (Node)
     {
-        Node->SetElementCount((uint)Indices.size()-1);
+        Node->SetElementCount((uint)Positions.size()-1);
         Node->SetVisible(true);
     }
 }

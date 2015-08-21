@@ -54,22 +54,22 @@ void EXEreader::parseFile(const char* filename)
             dt = 0.0;
         }
 
-		if(!(sharkX >= -0.001 && sharkX <= 0.001 && sharkY >= -0.001 && sharkY <= 0.001)) //some data entries are blank
+		if(!(estX >= -0.001 && estX <= 0.001 && estY >= -0.001 && estY <= 0.001)) //some data entries are blank
 	    {
-            latLong.push_back(glm::vec3(sharkX, 0.0, sharkY));
+            latLong.push_back(glm::vec3(estX, 0.0, estY));
             dts.push_back(dt);
             prevTime = timestamp; 
-            if (sharkY < minlong) {
-	            minlong = sharkY;
+            if (estY < minlong) {
+	            minlong = estY;
             }
-            if (sharkY > maxlong) {
-                maxlong = sharkY;
+            if (estY > maxlong) {
+                maxlong = estY;
             }
-            if (sharkX < minlat) {
-                minlat = sharkX;
+            if (estX < minlat) {
+                minlat = estX;
             }
-            if (sharkX > maxlat) {
-                maxlat = sharkX;
+            if (estX > maxlat) {
+                maxlat = estX;
             }
         }
         else {

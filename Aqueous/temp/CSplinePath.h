@@ -66,8 +66,6 @@ public:
     bool sGhostPoints(bool b){isGhostPointMode = b;}
     bool sLimitedDrawing(bool drawingStatus){ limitedDrawing = drawingStatus;}
 
-    glm::vec3 gNextPoint() { return nextPoint; }
-
     //VBO stuff
     vector<f32> getPositionBuffer() { return posBuf; };
     vector<f32> getColorBuffer() { return colorBuf; };
@@ -78,12 +76,12 @@ public:
 	SRange<f32> GetYRange() { return YRange; }
 	SRange<f32> GetZRange() { return ZRange; }
 
+	SLongitudeLatituded OffsetPos;
+
 private:	
     CDataSet* DataSet;
     CLocation* Location;
     CProgramContext* Context;
-
-    glm::vec3 nextPoint;
 
     bool ranOnce;
 

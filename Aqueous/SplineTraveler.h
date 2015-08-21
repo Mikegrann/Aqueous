@@ -45,6 +45,7 @@ class SplineTraveler
 		glm::vec3 gRotationAxis(){return rotateAxis;}
 		glm::vec3 gLocation(){return location;}
 		glm::vec3 gNearbyPoint(float ahead, int curPoint, float u);
+        glm::vec3 gNext() { return path->gNextPoint(); }
 		void speedUp(){elapseRate += .5;}
 		void slowDown(){if(elapseRate >= 0.5){ elapseRate -= .5;} }
 		void resetTime();
@@ -64,6 +65,7 @@ class SplineTraveler
 		glm::vec3 interpolateRotation();
 		glm::vec3 velocity; //velocity of traveler down the spline. Measured in distance units per second.	
 
+        glm::vec3 next;
 
 		CSplinePath* path;
 		//Frustum *frustum;

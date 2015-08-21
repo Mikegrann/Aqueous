@@ -280,10 +280,11 @@ void CSplinePath::transformCoords() {
     vec3d scalar = DataScale * Multiplier;
     glm::mat4 scaleMat = glm::scale(glm::mat4(1.0f), glm::vec3(scalar.X, scalar.Y, scalar.Z));
     glm::mat4 transMat = glm::translate(glm::mat4(1.0f), glm::vec3(0, -DataScale.Y * YExaggeration / 2, 0));
-    scaleMat = glm::scale(scaleMat, glm::vec3(1.0f, 1.0f, -1.0f));
-    scaleMat = glm::scale(scaleMat, glm::vec3(1.0f, -1.0f, 1.0f));
+    scaleMat *= glm::scale(glm::mat4(1.0f), glm::vec3(1.0f, 1.0f, -1.0f));
+    scaleMat *= glm::scale(glm::mat4(1.0f), glm::vec3(1.0f, -1.0f, 1.0f));
 
-    transformMat = scaleMat * transMat;
+   // transformMat = scaleMat * transMat;
+    transformMat = transMat * scaleMat;
     
 
    /* Scene.Spline->GetNode()->SetScale(DataScale * Multiplier);
@@ -575,7 +576,7 @@ glm::vec3 CSplinePath::splineLocation(f32 curLocation, int startPoint)
             CSplineTable* table = paramTable[i];
             for (int j = 0; j < table->getSize(); ++j) {
                 CSplineTableEntry entry = table->get(j);
-                printf("table: %d, index: %d, u: %lf, dist: %lf, length: %lf\n", i, j, entry.u, entry.dist, entry.length);
+                //printf("table: %d, index: %d, u: %lf, dist: %lf, length: %lf\n", i, j, entry.u, entry.dist, entry.length);
                 //printf("")
             }
             ranOnce = true;
@@ -591,6 +592,19 @@ glm::vec3 CSplinePath::splineLocation(f32 curLocation, int startPoint)
 	else
 	{
 		int endPoint = startPoint + 1;   //TODO found this line. dangerous. set endPoint properly
+
+        //printf("curLocation in spline: %f\n", curLocation);
+        f32 nextLocation = curLocation + 0.0001;
+        int nextStartPoint = startPoint;
+        int nextEndPoint = endPoint;
+        if (nextLocation >= 1.0f) {
+            nextLocation -= 1.0f;
+            nextStartPoint++;
+            nextEndPoint++;
+        }
+        nextPoint = hermiteMatrix(nextLocation, points[nextStartPoint], points[nextEndPoint],
+            tangents[nextStartPoint], tangents[nextEndPoint]);
+
 		return hermiteMatrix(curLocation, points[startPoint], points[endPoint],
 				tangents[startPoint], tangents[endPoint]);
 	}
@@ -959,7 +973,7 @@ void CSplinePath::drawPointLine(int i)//, Frustum* frustum)
                 //p = glm::normalize(p);
 
 
-               // if (currIndex == 0) {
+                //if (currIndex == 0) {
                     posBuf.push_back(p.x);
                     posBuf.push_back(p.y);
                     posBuf.push_back(p.z);
@@ -968,9 +982,16 @@ void CSplinePath::drawPointLine(int i)//, Frustum* frustum)
                     colorBuf.push_back(0.0f);
                     colorBuf.push_back(0.0f);
 
-                    indBuf.push_back(currIndex++);
-                /*}
-                else {
+                    if (currIndex > 0) {
+                        indBuf.push_back(currIndex - 1);
+                        indBuf.push_back(currIndex++);
+                    }
+                    else {
+                        currIndex++;
+                    }
+
+                
+                /*else {
                     posBuf.push_back(prev_p.x);
                     posBuf.push_back(prev_p.y);
                     posBuf.push_back(prev_p.z);
@@ -1029,6 +1050,7 @@ void CSplinePath::drawPointLine(int i)//, Frustum* frustum)
 			glEnd();*/
 		//}
 	}
+    printf("done creating spline lines\n");
 }
 
 

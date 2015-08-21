@@ -10,7 +10,7 @@
 #include "SharkWorld.h"
 #include "CSplinePath.h"
 
-#define SHARK_SCALE 0.05f
+#define SHARK_SCALE 0.04f
 
 class CSharkNodeManager : public Singleton<CSharkNodeManager>, public IEventListener
 {

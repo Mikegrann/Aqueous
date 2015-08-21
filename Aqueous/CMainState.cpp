@@ -316,6 +316,15 @@ void CMainState::CalculateDataAlignment()
 	static vec3d const Multiplier = vec3d(1, YExaggeration, 1);
 
     printf("Main State Transforms\n");
+
+    glm::mat4 transformMat = glm::mat4(1.0f);
+    vec3d scalar = DataScale * Multiplier;
+    glm::mat4 scaleMat = glm::scale(glm::mat4(1.0f), glm::vec3(scalar.X, scalar.Y, scalar.Z));
+    glm::mat4 transMat = glm::translate(glm::mat4(1.0f), glm::vec3(0, -DataScale.Y * YExaggeration / 2, 0));
+    scaleMat = glm::scale(scaleMat, glm::vec3(1.0f, 1.0f, -1.0f));
+    scaleMat = glm::scale(scaleMat, glm::vec3(1.0f, -1.0f, 1.0f));
+
+    transformMat = scaleMat * transMat;
 	
 	Scene.Glyphs->GetNode()->SetScale(DataScale * Multiplier);
     //Scene.Spline->GetNode()->SetScale(DataScale * Multiplier);

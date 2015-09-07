@@ -54,4 +54,10 @@ private:
     bool isMoving;
     ion::GL::VertexBuffer * createVertexBuffer();
     string artistDrivenAnimations[5];
+
+    glm::vec3 prevPos;
+    bool prevPosSet;
+
+    vector<f32> debugPoints;
+    vector<f32> debugColors;
 };

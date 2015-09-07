@@ -187,6 +187,9 @@ void CSplinePath::gatherEXPoints()
 
     transformCoords();
 
+   // printf("points:\n");
+    //printPs();
+
 	calcRadius();
 	initTangents();
 	
@@ -293,7 +296,7 @@ void CSplinePath::transformCoords() {
     Scene.Spline->GetNode()->SetScale(Scene.Spline->GetNode()->GetScale() * vec3f(1, -1, 1));*/
 
     for (int i = 0; i < points.size(); ++i) {
-        glm::vec4 tempPoint = glm::vec4(points[i], 1.0f) * transformMat;
+        glm::vec4 tempPoint = transformMat * glm::vec4(points[i], 1.0f);
         points[i] = glm::vec3(tempPoint.x, tempPoint.y, tempPoint.z);
     }
 }
@@ -581,6 +584,7 @@ glm::vec3 CSplinePath::splineLocation(f32 curLocation, int startPoint)
             }
             ranOnce = true;
         }
+       // printPs();
     }
 	if(tabSet) {  //the very first runs of this function creates the table. So the u should not be converted
 		curLocation = StoU(curLocation, startPoint); //convert arcLength based u into the spline's true u.
@@ -594,7 +598,7 @@ glm::vec3 CSplinePath::splineLocation(f32 curLocation, int startPoint)
 		int endPoint = startPoint + 1;   //TODO found this line. dangerous. set endPoint properly
 
         //printf("curLocation in spline: %f\n", curLocation);
-        f32 nextLocation = curLocation + 0.0001;
+        f32 nextLocation = curLocation;// +0.000001;
         int nextStartPoint = startPoint;
         int nextEndPoint = endPoint;
         if (nextLocation >= 1.0f) {
@@ -622,12 +626,27 @@ f64 CSplinePath::convertTimestampToU(f32 timer, int curKnot ) // TODO should nev
     glm::vec3 endTime;
     glm::vec3 endTan;
 
-    /*while (timer > totts[endLocNum]) {
-    curKnot++;
-    endLocNum++;
-    }*/
+	if (curKnot + 1 >= endMark) {
+		endLocNum = 0;
+	}
+	else {
+		endLocNum = curKnot + 1;
+	}
 
-    startTime = glm::vec3(totts[curKnot], 0, curKnot);
+    while (timer > totts[endLocNum]) {
+		curKnot++;
+		endLocNum++;
+    }
+	
+
+
+	startTime = glm::vec3(totts[curKnot], 0, curKnot);
+	startTan = tTangents[curKnot];
+
+	endTime = glm::vec3(totts[endLocNum], 0, endLocNum); //provided it's not at the end of the spline, endLocation is start+1
+	endTan = tTangents[endLocNum];
+
+    /*startTime = glm::vec3(totts[curKnot], 0, curKnot);
     startTan = tTangents[curKnot];
 
     if (curKnot + 1 >= endMark) {
@@ -718,7 +737,6 @@ glm::vec3 CSplinePath::hermiteMatrix(f32 curLocation, glm::vec3 startLocation, g
 	glm::vec3 res = glm::vec3();
 
 	f32 dU[4] = {curLocation*curLocation*curLocation, curLocation*curLocation, curLocation, 1 };
-
 	f32 Bx[4] = {startLocation.x, endLocation.x, startTangent.x, endTangent.x};
 	f32 By[4] = {startLocation.y, endLocation.y, startTangent.y, endTangent.y};
 	f32 Bz[4] = {startLocation.z, endLocation.z, startTangent.z, endTangent.z};
@@ -970,6 +988,9 @@ void CSplinePath::drawPointLine(int i)//, Frustum* frustum)
             for (double ind = 0.1; ind < 1.0; ind += 0.1) {
                 glm::vec3 p = splineLocation(ind, i - 1);
 
+                //printf("spline location: (%f, %f, %f)\n", p.x, p.y, p.z);
+                //printf("p.y: %f\n", p.y);
+
                 //p = glm::normalize(p);
 
 
@@ -1050,7 +1071,7 @@ void CSplinePath::drawPointLine(int i)//, Frustum* frustum)
 			glEnd();*/
 		//}
 	}
-    printf("done creating spline lines\n");
+   // printf("done creating spline lines\n");
 }
 
 

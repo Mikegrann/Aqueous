@@ -56,7 +56,7 @@ void EXEreader::parseFile(const char* filename)
 
 		if(!(estX >= -0.001 && estX <= 0.001 && estY >= -0.001 && estY <= 0.001)) //some data entries are blank
 	    {
-            latLong.push_back(glm::vec3(estX, 0.0, estY));
+            latLong.push_back(glm::vec3(estX, sharkDepth, estY));
             dts.push_back(dt);
             prevTime = timestamp; 
             if (estY < minlong) {

@@ -17,6 +17,7 @@ void CSharkNodeManager::Init()
 	SingletonPointer<CSceneManager> SceneManager;
 	
 	Node = SceneManager->GetFactory()->AddSceneNode("Shark");
+    //Node = SceneManager->GetFactory()->AddSceneNode("Glyph");
     
     TestMesh = SceneManager->GetMeshLibrary()->Get("Sphere");
     
@@ -45,8 +46,13 @@ void CSharkNodeManager::Init()
     //shark init
     shark.toggleMoving(true);
     
+    prevPosSet = false;
+    prevPos = glm::vec3(0.0f, 0.0f, 0.0f);
     prevPosition = glm::vec3(0.0f, 0.0f, 0.0f);
     LoadSceneElements();
+
+    debugPoints.clear();
+    debugColors.clear();
 }
 
 void CSharkNodeManager::LoadSceneElements()
@@ -73,33 +79,33 @@ void CSharkNodeManager::LoadSceneElements()
 	}
 
     /*PositionBuffer = new ion::GL::VertexBuffer;
-    //PositionBuffer->Data<f32>(shark.getSharkObject()->get * sizeof(f32), nullptr, 3);
+    PositionBuffer->Data<f32>(debugPoints.size() * sizeof(f32), nullptr, 3);
     ColorBuffer = new ion::GL::VertexBuffer;
-    ColorBuffer->Data<f32>(Mesh->Buffers[0]->Vertices.size() * sizeof(f32), nullptr, 3);
+    ColorBuffer->Data<f32>(debugColors.size() * sizeof(f32), nullptr, 3);
     //IndBuffer = new ion::GL::IndexBuffer;
     //IndBuffer->Data<u32>(Indices.size() * sizeof(u32), nullptr);
     //IndBuffer->Data<u32>(Indices);
 
     if (Node)
     {
-        Node->SetVertexBuffer("Position", PositionBuffer);
+        Node->SetVertexBuffer("vPosition", PositionBuffer);
         Node->SetVertexBuffer("vColor", ColorBuffer);
         //Node->SetVertexBuffer("vTime", TimeBuffer);
         Node->SetUniform("Model", &Node->GetTransformationUniform());
         //Node->SetUniform("timeMin", &timeUniformMin);
         //Node->SetUniform("timeMax", &timeUniformMax);
         //Node->SetPrimitiveType(ion::GL::EPrimitiveType::Lines);
-        Node->SetPrimitiveType(ion::GL::EPrimitiveType::Triangles);
+        Node->SetPrimitiveType(ion::GL::EPrimitiveType::Points);
     }
 
-    //PositionBuffer->SubData(Mesh->Buffers[0]->Vertices);
-    //ColorBuffer->SubData(Colors);
+    PositionBuffer->SubData(debugPoints);
+    ColorBuffer->SubData(debugColors);
     //IndBuffer->SubData(Indices);
     //TimeBuffer->SubData(Times);
 
     if (Node)
     {
-        Node->SetElementCount(Mesh->Buffers[0]->Vertices.size());
+        Node->SetElementCount(debugPoints.size());
         Node->SetVisible(true);
     }*/
 }
@@ -109,7 +115,7 @@ void CSharkNodeManager::Update(f32 const Elapsed)
     //printf("Elapsed: %f\n", (float)Elapsed);
     //update calls 
     glm::vec3 currPosition;
-    if (world != nullptr && toStep == true) {
+    if (world != nullptr) {// && toStep == true) {
         world->setSplinePath(currSite->GetTracks()[0]);
         currPosition = world->updateWorld((int)(Elapsed * 1000.0f));
         if (shark.isMoving()) {					//increment movement frame
@@ -131,7 +137,7 @@ void CSharkNodeManager::Update(f32 const Elapsed)
 
             printf("translating to (%f, %f, %f)\n", transVec.x, transVec.y, transVec.z);
 
-            Node->SetTranslation(vec3f(transVec.x, transVec.y, transVec.z));
+            //Node->SetTranslation(vec3f(transVec.x, transVec.y, transVec.z));
             toStep = false;
         }
     //}
@@ -140,7 +146,6 @@ void CSharkNodeManager::Update(f32 const Elapsed)
     //if (world != nullptr) {
         //world->setSplinePath(currSite->GetTracks()[0]);
 
-        //shark.timedUpdate((int)(Elapsed * 1000.0f), world->deriveRailAngle(), world->gVelocity());  //TODO factor in dt in Shark update  
         if (shark.isMoving()) {					//increment movement frame
             //if (showWorld)
             //{
@@ -169,38 +174,88 @@ void CSharkNodeManager::Update(f32 const Elapsed)
             //Quat.CreateFromAxisAngle(ax.x, ax.y, ax.z, world1.gRotationDegrees());
 
             // estimate the tangent...
-            glm::vec3 nextPoint = world->gNext();
-
-            float rotAngle = atan2(nextPoint.z - currPosition.z, nextPoint.x - currPosition.x);
-            rotAngle = rotAngle * (180.0f / PI);
-
-            glm::vec3 diffAngle = nextPoint - currPosition;
-            diffAngle = glm::normalize(diffAngle);
-            /*float rotAngle = ArcTan((float)(diffAngle.z / diffAngle.x));
-            if (diffAngle.x > 0) {
-                rotAngle = PI + rotAngle;
+           // glm::vec3 nextPoint = world->gNext();
+            if (!prevPosSet) {
+                prevPos = currPosition;
+                prevPosSet = true;
             }
-            //rotAngle = PI/2.0f;
+            else {
 
-            rotAngle = rotAngle * (180.0f / PI);*/
+                // debug stuff... 
+                debugPoints.clear();
+                debugColors.clear();
+                debugPoints.push_back(currPosition.x);
+                debugPoints.push_back(currPosition.y);
+                debugPoints.push_back(currPosition.z);
+                debugPoints.push_back(prevPos.x);
+                debugPoints.push_back(prevPos.y);
+                debugPoints.push_back(prevPos.z);
+                debugColors.push_back(1.0f);
+                debugColors.push_back(0.0f);
+                debugColors.push_back(0.0f);
+                debugColors.push_back(1.0f);
+                debugColors.push_back(0.0f);
+                debugColors.push_back(0.0f);
 
-            printf("looking from (%f, %f, %f) to (%f, %f, %f)\n", currPosition.x, currPosition.y, currPosition.z, nextPoint.x, nextPoint.y, nextPoint.z);
-            printf("diffAngle: (%f, %f, %f)\n", diffAngle.x, diffAngle.y, diffAngle.z);
-            printf("rotAngle: %f, rotationDegrees: %f\n", rotAngle, world->gRotationDegrees());
+                debugColors.push_back(0.0f);
+                debugColors.push_back(1.0f);
+                debugColors.push_back(0.0f);
+                debugColors.push_back(0.0f);
+                debugColors.push_back(0.0f);
+                debugColors.push_back(1.0f);
 
-            glm::mat4 rotMat = glm::rotate(glm::mat4(1.0f), rotAngle, glm::vec3(0.0f, 1.0f, 1.0f));
+                float rotAngle = atan2(currPosition.z - prevPos.z, currPosition.x - prevPos.x);
+                //rotAngle = rotAngle * (180.0f / PI);
 
-            //glQuaternion Quat;
-            //Quat.CreateFromAxisAngle(0, 1, 0, rotAngle);// world->gRotationDegrees());
-            //GLfloat Matrix[16];
-            //Quat.CreateMatrix(Matrix);
+                glm::vec3 diffAngle = currPosition - prevPos;
 
-           // glm::mat4 multMatrix = glm::make_mat4(rotMat);
-          
-            Node->SetRotation(rotMat);
+                //diffAngle = glm::normalize(diffAngle);
+                //float rotAngle = ArcTan((float)(diffAngle.z / diffAngle.x)); // expecting this to be in radians
+                if (diffAngle.x < 0) {
+                    //rotAngle = PI + rotAngle;
+                }
+                //rotAngle = PI/2.0f;
 
-            glm::vec3 transVec = currPosition;// -prevPosition;
-            Node->SetTranslation(vec3f(transVec.x, transVec.y, transVec.z));
+                rotAngle = -1.0f * rotAngle * (180.0f / PI);
+
+                //printf("looking from (%f, %f, %f) to (%f, %f, %f)\n", currPosition.x, currPosition.y, currPosition.z, nextPoint.x, nextPoint.y, nextPoint.z);
+                printf("diffAngle: (%f, %f, %f)\n", diffAngle.x, diffAngle.y, diffAngle.z);
+                printf("rotAngle: %f, rotationDegrees: %f\n", rotAngle, world->gRotationDegrees());
+
+                //glm::mat4 rotMat = glm::rotate(glm::mat4(1.0f), rotAngle, glm::vec3(0.0f, 1.0f, 0.0f));
+
+                glQuaternion Quat;
+                Quat.CreateFromAxisAngle(0, 1, 0, rotAngle);// world->gRotationDegrees());
+                GLfloat Matrix[16];
+                Quat.CreateMatrix(Matrix);
+
+                //shark.timedUpdate((int)(Elapsed * 1000.0f), world->deriveRailAngle(), world->gVelocity());  //TODO factor in dt in Shark update  
+                shark.timedUpdate((int)(Elapsed * 1000.0f), rotAngle, world->gVelocity());  //TODO factor in dt in Shark update  
+
+
+                glm::mat4 rotMat = glm::make_mat4(Matrix);
+                glm::vec3 transVec = prevPos;// -prevPosition;
+                Node->SetTranslation(vec3f(transVec.x, transVec.y, transVec.z));
+
+                glm::mat4 transMat = glm::translate(glm::mat4(1.0f), transVec);
+
+                glm::mat4 transformMatrix = transMat * rotMat;//rotMat*transMat;transMat * rotMat;
+
+                Node->SetRotation(rotMat);
+
+                glm::vec4 debugPos1 = glm::vec4(-0.05f, 0.0f, 0.0f, 1.0f);
+                glm::vec4 debugPos2 = glm::vec4(0.05f, 0.0f, 0.0f, 1.0f);
+                debugPos1 = transformMatrix * debugPos1;
+                debugPos2 = transformMatrix * debugPos2;
+                debugPoints.push_back(debugPos1.x);
+                debugPoints.push_back(currPosition.y);
+                debugPoints.push_back(debugPos1.z);
+                debugPoints.push_back(debugPos2.x);
+                debugPoints.push_back(currPosition.y);
+                debugPoints.push_back(debugPos2.z);
+
+                prevPos = currPosition;
+            }
 
         }
         shark.drawShark(0);
@@ -212,15 +267,15 @@ void CSharkNodeManager::Update(f32 const Elapsed)
 	// For this example, turning all vertices yellow
     //Mesh->Buffers
    // for (int i = 0; i < )
+    /*if (Node) {
+        LoadSceneElements();
+    }*/
     if (Node) {
         delete meshBuffer;
         delete Mesh;
         meshBuffer = new SMeshBuffer(shark.getSharkObject()->getIndBuf(), shark.getSharkObject()->getPosBuf(), shark.getSharkObject()->getNorBuf());
         Mesh = new CMesh(meshBuffer);
         Node->SetMesh(Mesh);
-        //Mesh = new CMesh(meshBuffer);
-        //Node->SetMesh(Mesh);
-
 
         int i = 0;
         for (SVertex &vert : Mesh->Buffers[0]->Vertices) {

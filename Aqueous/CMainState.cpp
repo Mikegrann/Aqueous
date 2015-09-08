@@ -31,6 +31,9 @@ void CMainState::Begin()
 	OrbitCameraTimer = 0;
 
 	Font = IFont::init("Media/GUI/OpenSans.ttf", 18);
+
+	// FOR DEBUGGING PURPOSES!!
+	//BeginGifDraw();
 }
 
 void CMainState::End()

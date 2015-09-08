@@ -13,6 +13,7 @@ void CSharkNodeManager::Init()
     world = nullptr;
     isMoving = true;
     toStep = true;
+	writeGif = false;
 
 	SingletonPointer<CSceneManager> SceneManager;
 	
@@ -53,6 +54,9 @@ void CSharkNodeManager::Init()
 
     debugPoints.clear();
     debugColors.clear();
+
+	// DEBUG STUFFS!!!
+	initGifWriting();
 }
 
 void CSharkNodeManager::LoadSceneElements()
@@ -324,11 +328,12 @@ void CSharkNodeManager::toggleAnimation(bool moving) {
     shark.toggleMoving(isMoving);
 }
 
-//ion::GL::VertexBuffer * createVertexBuffer() {
-    //vector<SVertex> vertBuf;
-    //vertBuf.clear();
-    
-    //for (int i = 0; i <)
-    //SVertex vert = SVertex();
-   // vert.Position = 
-//}
+void CSharkNodeManager::initGifWriting() {
+	writeGif = true;
+
+}
+
+
+void CSharkNodeManager::writeFrameToGif() {
+
+}

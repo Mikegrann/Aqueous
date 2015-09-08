@@ -4,6 +4,7 @@
 #include <ionScene.h>
 
 #include "CProgramContext.h"
+#include "GifWriter.h"
 #include "CSite.h"
 #include "Shark.h"
 #include "SharkMesh.h"
@@ -50,6 +51,10 @@ protected:
     ion::GL::IndexBuffer * IndBuffer = nullptr;
 
 private:
+	bool writeGif;
+	void initGifWriting();
+	void writeFrameToGif();
+
     bool toStep;
     bool isMoving;
     ion::GL::VertexBuffer * createVertexBuffer();

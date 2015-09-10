@@ -55,6 +55,8 @@ private:
 	void initGifWriting();
 	void writeFrameToGif();
 
+	GifWriter * gifWriter;
+
     bool toStep;
     bool isMoving;
     ion::GL::VertexBuffer * createVertexBuffer();

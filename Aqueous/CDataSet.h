@@ -2,6 +2,7 @@
 #pragma once
 
 #include "CProgramContext.h"
+#include "Interp.h"
 
 
 class CDataSet
@@ -21,6 +22,8 @@ public:
 	void InitSceneElements(CProgramContext::SScene & Scene);
 	void InitTextures();
 	vec3f SetupVolume();
+	vector<double> GetGraphData();
+	vector<double> GetGraphTimes();
 
 	f64 GetMinColorValue() const;
 	f64 GetMaxColorValue() const;

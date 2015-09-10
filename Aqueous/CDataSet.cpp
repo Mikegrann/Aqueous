@@ -12,7 +12,6 @@
 #include "Interp.h"
 #include "CWorldTime.h"
 
-
 CDataSet::CDataSet(CSite * Site)
 	: VolumeHandle()
 {
@@ -164,6 +163,22 @@ void CDataSet::InitSceneElements(CProgramContext::SScene & Scene)
 	Scene.Glyphs->LoadGlyphs(this, Mapper);
 }
 
+vector<double> CDataSet::GetGraphData() {
+	std::vector<double> CData;
+	for (auto Point : Points) {
+		CData.push_back(Point.GetField(ColorField));
+	}
+	return CData;
+}
+
+vector<double> CDataSet::GetGraphTimes() {
+	std::vector<double> CData;
+	for (auto Point : Points) {
+		CData.push_back(Point.GetField(Traits.TField));
+	}
+	return CData;
+}
+
 void CDataSet::GenerateVolumeFromPointData(std::time_t targetTime, Interp interp)
 {
 	if (interp.mode == Interp::Mode::Density) {
@@ -206,7 +221,7 @@ void CDataSet::InterpData(std::time_t targetTime, Interp interp) {
 	cout << "Loading interpolator values..." << endl;
 
 	// TODO: Fix N^2 Solution (Pre-sort and skip sequential values that are equal?)
-	vector<real> Xs, Ys, Zs, Fs;
+	vector<float> Xs, Ys, Zs, Fs;
 	map<vec3f, float> positions;
 	int Count = 0;
 	print.BeginProgress();

@@ -84,6 +84,12 @@ public:
 		return MapColor(v);
 	}
 
+	SColorAf const GetColor(f64 const r) {
+		f32 const v = (f32)FieldRange.Normalize(r);
+
+		return MapColor(v);
+	}
+
 	virtual void PreProcessValues(IDatabase<f64> & s)
 	{
 		FieldRange = s.GetFieldRange(Field, ValueCutoff, AcceptedRange);

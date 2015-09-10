@@ -3,6 +3,7 @@
 
 #include "CTerrainNodeManager.h"
 #include "CGlyphNodeManager.h"
+#include "CVolumeNodeManager.h"
 #include "CSharkNodeManager.h"
 #include "CSplineNodeManager.h"
 #include "CSite.h"
@@ -267,10 +268,8 @@ void CMainState::CalculateDataAlignment()
 
 	longlatd const DataLonLatMin(XRange.Minimum, ZRange.Minimum), DataLonLatMax(XRange.Maximum, ZRange.Maximum);
 	longlatd const DataLonLatCenter = (DataSet->ManuallySetDataLongLat ? DataSet->DataLonLatCenter : (DataLonLatMin + DataLonLatMax) / 2.f);
-	longlatd const SplineLonLatMin(CurrentSite->GetCurrentSplinePath()->GetXRange().Minimum, CurrentSite->GetCurrentSplinePath()->GetZRange().Minimum);
-	longlatd const SplineLonLatMax(CurrentSite->GetCurrentSplinePath()->GetXRange().Maximum, CurrentSite->GetCurrentSplinePath()->GetZRange().Maximum);
 	
-	vec2d DataRangeMin, DataRangeMax, MapRangeMin, MapRangeMax, SplineRangeMin, SplineRangeMax;
+	vec2d DataRangeMin, DataRangeMax, MapRangeMin, MapRangeMax;
 	sharedPtr<longlatd::IProjectionSystem> Projection;
 	if (ProjectionMode == 0)
 		Projection = sharedNew(new longlatd::CHaversineProjection());
@@ -282,8 +281,6 @@ void CMainState::CalculateDataAlignment()
 	DataRangeMin = DataLonLatCenter.OffsetTo(DataLonLatMin, Projection);
 	DataRangeMax = DataLonLatCenter.OffsetTo(DataLonLatMax, Projection);
 
-	SplineRangeMin = DataLonLatCenter.OffsetTo(SplineLonLatMin, Projection);
-	SplineRangeMax = DataLonLatCenter.OffsetTo(SplineLonLatMax, Projection);
 	if (CurrentSite->GetCurrentLocation())
 	{
 		MapRangeMin = DataLonLatCenter.OffsetTo(MapLonLatMin, Projection);
@@ -298,9 +295,6 @@ void CMainState::CalculateDataAlignment()
 	vec2d const DataRangeSize = (DataSet->ManuallySetDataLongLat ? DataLonLatMax - DataLonLatMin : DataRangeMax - DataRangeMin);
 	vec2d const DataRangeCenter = (DataSet->ManuallySetDataLongLat ? DataRangeSize / 2 : (DataRangeMin + DataRangeMax) / 2.f);
 	f64 const DataDepth = YRange.Size();
-
-	vec2d const SplineRangeSize = SplineRangeMax - SplineRangeMin;
-	vec2d const SplineRangeCenter = (SplineRangeMin + SplineRangeMax) / 2.f;
 	
 	vec2d const MapRangeSize = MapRangeMax - MapRangeMin;
 	vec2d const MapRangeCenter = (MapRangeMin + MapRangeMax) / 2.f;
@@ -313,31 +307,17 @@ void CMainState::CalculateDataAlignment()
 	vec2d const MapOffset = ActualOffset * 3.f / Maximum(DataRangeSize.X, DataRangeSize.Y);
 	vec3d const DataScale = 3.0 * vec3d(DataRangeSize.X, DataDepth, DataRangeSize.Y) / Maximum(DataRangeSize.X, DataRangeSize.Y);
 	vec3d const MapScale = DataScale * vec3d(MapRangeSize.X, MapDepth, MapRangeSize.Y) / vec3d(DataRangeSize.X, 1, DataRangeSize.Y);
-	vec3d const SplineScale = 3.0 * vec3d(SplineRangeSize.X, DataDepth, SplineRangeSize.Y) / Maximum(SplineRangeSize.X, SplineRangeSize.Y);
 
 	static f64 const YExaggeration = DataSet->YExaggeration;
 	static vec3d const Multiplier = vec3d(1, YExaggeration, 1);
 
     printf("Main State Transforms\n");
-
-    glm::mat4 transformMat = glm::mat4(1.0f);
-    vec3d scalar = DataScale * Multiplier;
-    glm::mat4 scaleMat = glm::scale(glm::mat4(1.0f), glm::vec3(scalar.X, scalar.Y, scalar.Z));
-    glm::mat4 transMat = glm::translate(glm::mat4(1.0f), glm::vec3(0, -DataScale.Y * YExaggeration / 2, 0));
-    scaleMat = glm::scale(scaleMat, glm::vec3(1.0f, 1.0f, -1.0f));
-    scaleMat = glm::scale(scaleMat, glm::vec3(1.0f, -1.0f, 1.0f));
-
-    transformMat = scaleMat * transMat;
 	
 	Scene.Glyphs->GetNode()->SetScale(DataScale * Multiplier);
-    //Scene.Spline->GetNode()->SetScale(DataScale * Multiplier);
-   // Scene.Shark->GetNode()->SetScale(DataScale * Multiplier);
-	Scene.Volume->GetNode()->SetScale(DataScale * Multiplier);
+    Scene.Volume->GetNode()->SetScale(DataScale * Multiplier);
 	Scene.Glyphs->GetNode()->SetTranslation(vec3f(0, -DataScale.Y * YExaggeration / 2, 0));
-    //Scene.Spline->GetNode()->SetTranslation(vec3f(0, -DataScale.Y * YExaggeration / 2, 0));
-   // Scene.Shark->GetNode()->SetTranslation(vec3f(0, -DataScale.Y * YExaggeration / 2, 0));
 	Scene.Volume->GetNode()->SetTranslation(vec3f(0, -DataScale.Y * YExaggeration / 2, 0));
-	
+    
 	Scene.Terrain->GetNode()->SetScale(MapScale * Multiplier / CTerrainNodeManager::Size);
 	//Scene.Water->SetScale(MapScale / CTerrainNodeManager::Size);
 
@@ -346,18 +326,14 @@ void CMainState::CalculateDataAlignment()
 
 	//// Flip for RHC->LHC
 	Scene.Glyphs->GetNode()->SetScale(Scene.Glyphs->GetNode()->GetScale() * vec3f(1, 1, -1));
-    //Scene.Spline->GetNode()->SetScale(Scene.Spline->GetNode()->GetScale() * vec3f(1, 1, -1));
-    //Scene.Shark->GetNode()->SetScale(Scene.Shark->GetNode()->GetScale() * vec3f(1, 1, -1));
-	Scene.Volume->GetNode()->SetScale(Scene.Volume->GetNode()->GetScale() * vec3f(1, 1, -1));
+    Scene.Volume->GetNode()->SetScale(Scene.Volume->GetNode()->GetScale() * vec3f(1, 1, -1));
 	Scene.Terrain->GetNode()->SetScale(Scene.Terrain->GetNode()->GetScale() * vec3f(1, 1, -1));
 	//Scene.Water->SetScale(Scene.Water->GetScale() * vec3f(1, 1, -1));
 
 	//// Flip Height -> Depth
 	Scene.Volume->GetNode()->SetScale(Scene.Volume->GetNode()->GetScale() * vec3f(1, -1, 1));
     Scene.Glyphs->GetNode()->SetScale(Scene.Glyphs->GetNode()->GetScale() * vec3f(1, -1, 1));
-    //Scene.Spline->GetNode()->SetScale(Scene.Spline->GetNode()->GetScale() * vec3f(1, -1, 1));
-    //Scene.Shark->GetNode()->SetScale(Scene.Shark->GetNode()->GetScale() * vec3f(1, -1, 1));
-}
+    }
 
 void CMainState::SetSite(int site)
 {

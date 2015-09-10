@@ -122,6 +122,7 @@ void CSharkNodeManager::Update(f32 const Elapsed)
     if (world != nullptr) {// && toStep == true) {
         world->setSplinePath(currSite->GetTracks()[0]);
         currPosition = world->updateWorld((int)(Elapsed * 1000.0f));
+
         if (shark.isMoving()) {					//increment movement frame
             //if (showWorld)
             //{
@@ -330,6 +331,8 @@ void CSharkNodeManager::toggleAnimation(bool moving) {
 
 void CSharkNodeManager::initGifWriting() {
 	writeGif = true;
+
+	gifWriter = new GifWriter(CProgramContext::Get().Window->GetSize());
 
 }
 

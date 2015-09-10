@@ -16,7 +16,7 @@ CGUISharkControlWidget::CGUISharkControlWidget()
 	Window = new Gwen::Controls::WindowControl(GUIManager->GetCanvas());
 	Window->SetDeleteOnClose(false);
 	Window->SetBounds(1200, 670, 330, 160);
-	Window->SetTitle("Scene Controls");
+	Window->SetTitle("Shark Controls");
 	Window->SetHidden(true);
 
 	SharkEnableButton = new Gwen::Controls::Button(Window);

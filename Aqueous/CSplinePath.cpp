@@ -157,6 +157,9 @@ void CSplinePath::gatherEXPoints()
 		i++;	
 	}
 	f64 scale = GPSconverter().findScaleDifference(sc1, sc2);
+
+	f64 minDepth = ereader.gCoordinate(0).y;
+	f64 maxDepth = ereader.gCoordinate(0).y;
 	
     // every 4 data points are being skipped TODO : this time scaling should not be hard coded in case datasets have different delta times.
 	for(int id = 0; id < ereader.size(); id += 4)
@@ -173,9 +176,16 @@ void CSplinePath::gatherEXPoints()
 
 		if(!(p.x == q.x && p.y == q.y && p.z == q.z))
 		{
+			if (p.y > maxDepth) {
+				maxDepth = p.y;
+			}
+			if (p.y < minDepth) {
+				minDepth = p.y;
+			}
 			isLargerPoint(p);
 			isSmallerPoint(p);
 			points.push_back(p);
+			//points.push_back(glm::vec3(p.x, p.y, p.z));//p);
 			dts.push_back(deltaTime);
 			totts.push_back(runningTotts+deltaTime);
 			runningTotts += deltaTime;
@@ -183,6 +193,10 @@ void CSplinePath::gatherEXPoints()
 		}
 		q = p;
 	}
+	SplineDepth = maxDepth - minDepth;
+
+	//printf("Printing P's\n");
+	//printPs();
 	normalizeCoords();
 
     transformCoords();
@@ -190,9 +204,10 @@ void CSplinePath::gatherEXPoints()
    // printf("points:\n");
     //printPs();
 
+
 	calcRadius();
 	initTangents();
-	
+	//printf("Printing P's\n");
 	//printPs();
 	//printdTPs();
 }
@@ -204,33 +219,15 @@ void CSplinePath::transformCoords() {
     //CDataSet const * const DataSet = CurrentSite->GetCurrentDataSet();
     STable & Points = DataSet->Points;
 
-    longlatd MapLonLatMin;
-    longlatd MapLonLatMax;
-
-    if (Location)
-    {
-        MapLonLatMin = (Location->LowerBound);
-        MapLonLatMax = (Location->UpperBound);
-    }
-
     SRange<f64> XRange = Points.GetFieldRange(DataSet->Traits.PositionXField, 15.0);
     SRange<f64> YRange = Points.GetFieldRange(DataSet->Traits.PositionYField, 15.0);
     SRange<f64> ZRange = Points.GetFieldRange(DataSet->Traits.PositionZField, 15.0);
 
-    if (XRange.IsEmpty())
-        XRange = SRange<f64>(MapLonLatMin.Longitude, MapLonLatMax.Longitude);
-    if (YRange.IsEmpty())
-        YRange = SRange<f64>(-1, 1);
-    if (ZRange.IsEmpty())
-        ZRange = SRange<f64>(MapLonLatMin.Latitude, MapLonLatMax.Latitude);
-
     printf("Longlat range is %g %g to %g %g\n", XRange.Minimum, ZRange.Minimum, XRange.Maximum, ZRange.Maximum);
     longlatd const DataLonLatMin(XRange.Minimum, ZRange.Minimum), DataLonLatMax(XRange.Maximum, ZRange.Maximum);
     longlatd const DataLonLatCenter = (DataSet->ManuallySetDataLongLat ? DataSet->DataLonLatCenter : (DataLonLatMin + DataLonLatMax) / 2.f);
-    longlatd const SplineLonLatMin(GetXRange().Minimum, GetZRange().Minimum);
-    longlatd const SplineLonLatMax(GetXRange().Maximum, GetZRange().Maximum);
-
-    vec2d DataRangeMin, DataRangeMax, MapRangeMin, MapRangeMax, SplineRangeMin, SplineRangeMax;
+    
+    vec2d DataRangeMin, DataRangeMax, SplineRangeMin, SplineRangeMax;
     sharedPtr<longlatd::IProjectionSystem> Projection;
     int ProjectionMode = 0; //TODO this probably shouldn't be hardcoded!!!
     if (ProjectionMode == 0)
@@ -240,63 +237,51 @@ void CSplinePath::transformCoords() {
     else if (ProjectionMode == 2)
         Projection = sharedNew(new longlatd::CEquirectangularProjection(DataLonLatCenter.Latitude));
 
+	//longlatd const SplineLonLatMin(GetXRange().Minimum, GetZRange().Minimum);
+	//longlatd const SplineLonLatMax(GetXRange().Maximum, GetZRange().Maximum);
+
+	SVector2d SplineMinOffset(GetXRange().Minimum, GetZRange().Minimum);
+	SVector2d SplineMaxOffset(GetXRange().Maximum, GetZRange().Maximum);
+
+	longlatd const SplineLonLatMin = Projection->OffsetFromStart(OffsetPos, SplineMinOffset);
+	longlatd const SplineLonLatMax = Projection->OffsetFromStart(OffsetPos, SplineMaxOffset);
+
     DataRangeMin = DataLonLatCenter.OffsetTo(DataLonLatMin, Projection);
     DataRangeMax = DataLonLatCenter.OffsetTo(DataLonLatMax, Projection);
 
     SplineRangeMin = DataLonLatCenter.OffsetTo(SplineLonLatMin, Projection);
     SplineRangeMax = DataLonLatCenter.OffsetTo(SplineLonLatMax, Projection);
-    if (Location)
-    {
-        MapRangeMin = DataLonLatCenter.OffsetTo(MapLonLatMin, Projection);
-        MapRangeMax = DataLonLatCenter.OffsetTo(MapLonLatMax, Projection);
-    }
-    else
-    {
-        MapRangeMin = DataLonLatCenter.OffsetTo(DataLonLatMin, Projection);
-        MapRangeMax = DataLonLatCenter.OffsetTo(DataLonLatMax, Projection);
-    }
 
     vec2d const DataRangeSize = (DataSet->ManuallySetDataLongLat ? DataLonLatMax - DataLonLatMin : DataRangeMax - DataRangeMin);
     vec2d const DataRangeCenter = (DataSet->ManuallySetDataLongLat ? DataRangeSize / 2 : (DataRangeMin + DataRangeMax) / 2.f);
-    f64 const DataDepth = YRange.Size();
+	f64 const DataDepth = 1.0;// YRange.Size();
 
     vec2d const SplineRangeSize = SplineRangeMax - SplineRangeMin;
     vec2d const SplineRangeCenter = (SplineRangeMin + SplineRangeMax) / 2.f;
-
-    vec2d const MapRangeSize = MapRangeMax - MapRangeMin;
-    vec2d const MapRangeCenter = (MapRangeMin + MapRangeMax) / 2.f;
-    f64 const MapDepth = DataSet->MapDepth;
+	SplineDepth = this->YRange.Size();
 
     printf("Data range is %f by %f meters,\n", DataRangeSize.X, DataRangeSize.Y);
-    printf("Terrain range is %f by %f meters,\n", MapRangeSize.X, MapRangeSize.Y);
+    printf("Spline range is %f by %f meters,\n", SplineRangeSize.X, SplineRangeSize.Y);
 
-    vec2d const ActualOffset = MapRangeCenter - DataRangeCenter;
-    vec2d const MapOffset = ActualOffset * 3.f / Maximum(DataRangeSize.X, DataRangeSize.Y);
-    vec3d const DataScale = 3.0 * vec3d(DataRangeSize.X, DataDepth, DataRangeSize.Y) / Maximum(DataRangeSize.X, DataRangeSize.Y);
-    vec3d const MapScale = DataScale * vec3d(MapRangeSize.X, MapDepth, MapRangeSize.Y) / vec3d(DataRangeSize.X, 1, DataRangeSize.Y);
-    vec3d const SplineScale = 3.0 * vec3d(SplineRangeSize.X, DataDepth, SplineRangeSize.Y) / Maximum(SplineRangeSize.X, SplineRangeSize.Y);
+    vec2d const ActualOffset = SplineRangeCenter - DataRangeCenter;
+    vec2d const SplineOffset = ActualOffset * 3.f / Maximum(DataRangeSize.X, DataRangeSize.Y);
+    
+	vec3d const DataScale = 3.0 * vec3d(DataRangeSize.X, DataDepth, DataRangeSize.Y) / Maximum(DataRangeSize.X, DataRangeSize.Y);
+	vec3d const SplineScale = DataScale * vec3d(SplineRangeSize.X, SplineDepth, SplineRangeSize.Y) / vec3d(DataRangeSize.X, 1, DataRangeSize.Y);
 
     static f64 const YExaggeration = DataSet->YExaggeration;
     static vec3d const Multiplier = vec3d(1, YExaggeration, 1);
 
     glm::mat4 transformMat = glm::mat4(1.0f);
-    vec3d scalar = DataScale * Multiplier;
+    vec3d scalar = SplineScale * Multiplier;
     glm::mat4 scaleMat = glm::scale(glm::mat4(1.0f), glm::vec3(scalar.X, scalar.Y, scalar.Z));
-    glm::mat4 transMat = glm::translate(glm::mat4(1.0f), glm::vec3(0, -DataScale.Y * YExaggeration / 2, 0));
-    scaleMat *= glm::scale(glm::mat4(1.0f), glm::vec3(1.0f, 1.0f, -1.0f));
-    scaleMat *= glm::scale(glm::mat4(1.0f), glm::vec3(1.0f, -1.0f, 1.0f));
+	glm::mat4 transMat = glm::translate(glm::mat4(1.0f), glm::vec3(SplineOffset.X, 0, -SplineOffset.Y));
+    scaleMat = glm::scale(scaleMat, glm::vec3(1.0f, 1.0f, -1.0f));
 
-   // transformMat = scaleMat * transMat;
     transformMat = transMat * scaleMat;
     
-
-   /* Scene.Spline->GetNode()->SetScale(DataScale * Multiplier);
-    Scene.Spline->GetNode()->SetTranslation(vec3f(0, -DataScale.Y * YExaggeration / 2, 0));
-    Scene.Spline->GetNode()->SetScale(Scene.Spline->GetNode()->GetScale() * vec3f(1, 1, -1));
-    Scene.Spline->GetNode()->SetScale(Scene.Spline->GetNode()->GetScale() * vec3f(1, -1, 1));*/
-
     for (int i = 0; i < points.size(); ++i) {
-        glm::vec4 tempPoint = transformMat * glm::vec4(points[i], 1.0f);
+		glm::vec4 tempPoint = transformMat * glm::vec4(points[i], 1.0f);
         points[i] = glm::vec3(tempPoint.x, tempPoint.y, tempPoint.z);
     }
 }
@@ -608,9 +593,13 @@ glm::vec3 CSplinePath::splineLocation(f32 curLocation, int startPoint)
         }
         nextPoint = hermiteMatrix(nextLocation, points[nextStartPoint], points[nextEndPoint],
             tangents[nextStartPoint], tangents[nextEndPoint]);
+		nextPoint = glm::vec3(nextPoint.x, points[startPoint].y, nextPoint.z);
 
-		return hermiteMatrix(curLocation, points[startPoint], points[endPoint],
+		glm::vec3 temp = hermiteMatrix(curLocation, points[startPoint], points[endPoint],
 				tangents[startPoint], tangents[endPoint]);
+
+		//printf("return location: (%f, %f, %f)\n", temp.x, temp.y, temp.z);
+		return glm::vec3(temp.x, points[startPoint].y, temp.z);
 	}
 }
 
@@ -731,6 +720,7 @@ f64 CSplinePath::convertTimestampToU(f32 timer, int curKnot ) // TODO should nev
  * returns a vector
  * curLocation is a number between zero and one, and represents percentage of progress
  * See a math reference for how this works. */
+// TODO y value shouldn't be hardcoded.... but it durn messes things up!
 glm::vec3 CSplinePath::hermiteMatrix(f32 curLocation, glm::vec3 startLocation, glm::vec3 endLocation,
 		glm::vec3 startTangent, glm::vec3 endTangent)
 {
@@ -742,7 +732,8 @@ glm::vec3 CSplinePath::hermiteMatrix(f32 curLocation, glm::vec3 startLocation, g
 	f32 Bz[4] = {startLocation.z, endLocation.z, startTangent.z, endTangent.z};
 
 	res.x =  HmInt(dU, Mher, Bx);
-	res.y =  HmInt(dU, Mher, By);
+	res.y =  HmInt(dU, Mher, By); // what it should be
+	//res.y = -6.0f;
 	res.z =  HmInt(dU, Mher, Bz);
 	return res;
 }
@@ -1031,6 +1022,39 @@ void CSplinePath::drawPointLine(int i)//, Frustum* frustum)
                     colorBuf.push_back(0.0f);
                     colorBuf.push_back(0.0f);
 
+=======
+
+               // if (currIndex == 0) {
+                    posBuf.push_back(p.x);
+                    posBuf.push_back(p.y);
+                    posBuf.push_back(p.z);
+
+                    colorBuf.push_back(1.0f);
+                    colorBuf.push_back(0.0f);
+                    colorBuf.push_back(0.0f);
+
+                    indBuf.push_back(currIndex++);
+                /*}
+                else {
+                    posBuf.push_back(prev_p.x);
+                    posBuf.push_back(prev_p.y);
+                    posBuf.push_back(prev_p.z);
+
+                    colorBuf.push_back(1.0f);
+                    colorBuf.push_back(0.0f);
+                    colorBuf.push_back(0.0f);
+
+                    indBuf.push_back(currIndex++);
+                    
+                    posBuf.push_back(p.x);
+                    posBuf.push_back(p.y);
+                    posBuf.push_back(p.z);
+
+                    colorBuf.push_back(1.0f);
+                    colorBuf.push_back(0.0f);
+                    colorBuf.push_back(0.0f);
+
+>>>>>>> 852a659ad002d545611c18ea217ec30aa38fdf2c
                     indBuf.push_back(currIndex++);
                 }
                 prev_p = p;*/

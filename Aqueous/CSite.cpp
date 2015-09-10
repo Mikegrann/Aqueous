@@ -165,6 +165,9 @@ void CSite::ReadConfiguration()
                         {
                             cout << "Creating SplinePath using file: " << Path + dTrackFile["File"].GetString() << endl;
                             splinePath->setFileName(Path + dTrackFile["File"].GetString());
+
+							splinePath->OffsetPos.Longitude = SLongitudeLatituded::DMStoDecimal(dTrackFile["OriginLongitude"].GetString());
+							splinePath->OffsetPos.Latitude = SLongitudeLatituded::DMStoDecimal(dTrackFile["OriginLatitude"].GetString());
                         }
                         else
                         {

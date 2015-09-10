@@ -78,13 +78,14 @@ public:
 	SRange<f32> GetYRange() { return YRange; }
 	SRange<f32> GetZRange() { return ZRange; }
 
+	SLongitudeLatituded OffsetPos;
+
 private:	
     CDataSet* DataSet;
     CLocation* Location;
     CProgramContext* Context;
 
     glm::vec3 nextPoint;
-
     bool ranOnce;
 
     GLuint lineShader;
@@ -112,6 +113,8 @@ private:
     vector<f32> posBuf;
     vector<f32> colorBuf;
     vector<u32> indBuf;
+
+	f64 SplineDepth;
 
     u32 currIndex;
     glm::vec3 prev_p;

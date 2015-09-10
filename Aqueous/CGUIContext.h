@@ -4,17 +4,20 @@
 #include <ionGUI.h>
 
 // Main State
+#include "CGUIContextWidget.h"
 #include "CGUITitleLabelsWidget.h"
-#include "CGUIVolumeControlWidget.h"
-#include "CGUITerrainControlWidget.h"
-#include "CGUIGlyphControlWidget.h"
-#include "CGUISharkControlWidget.h"
-#include "CGUISceneControlWidget.h"
 #include "CGUIControlPanelWidget.h"
 
 // Menu State
 #include "CGUIMainMenuWidget.h"
 
+class CGUIVolumeControlWidget;
+class CGUIGlyphControlWidget;
+class CGUISharkControlWidget;
+class CGUISceneControlWidget;
+class CGUITerrainControlWidget;
+
+class CGUIGraphWidget;
 
 class CMainState;
 
@@ -35,8 +38,11 @@ public:
 	CGUITerrainControlWidget * GetTerrainControl();
 	CGUIGlyphControlWidget * GetGlyphControl();
 	CGUISharkControlWidget * GetSharkControl();
+	CGUIGraphWidget * GetGraphDisplay();
 	CGUISceneControlWidget * GetSceneControl();
 	CGUIControlPanelWidget * GetControlPanel();
+
+	void Toggle(CGUIContextWidget *widget);
 
 	Gwen::Controls::Canvas * GetCanvas();
 
@@ -53,6 +59,7 @@ protected:
 	CGUIGlyphControlWidget * GlyphControl = 0;
 	CGUISharkControlWidget * SharkControl = 0;
 	CGUISceneControlWidget * SceneControl = 0;
+	CGUIGraphWidget * GraphDisplay = 0;
 	CGUIControlPanelWidget * ControlPanel = 0;
 
 private:

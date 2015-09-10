@@ -195,14 +195,14 @@ void CSplinePath::gatherEXPoints()
 	}
 	SplineDepth = maxDepth - minDepth;
 
-	//printf("Printing P's\n");
+	printf("Printing P's\n");
 	//printPs();
 	normalizeCoords();
 
     transformCoords();
 
    // printf("points:\n");
-    //printPs();
+	printPs();
 
 
 	calcRadius();
@@ -274,8 +274,9 @@ void CSplinePath::transformCoords() {
 
     glm::mat4 transformMat = glm::mat4(1.0f);
     vec3d scalar = SplineScale * Multiplier;
-    glm::mat4 scaleMat = glm::scale(glm::mat4(1.0f), glm::vec3(scalar.X, scalar.Y, scalar.Z));
-	glm::mat4 transMat = glm::translate(glm::mat4(1.0f), glm::vec3(SplineOffset.X, 0, -SplineOffset.Y));
+	vec3d depthScalar = DataScale * Multiplier;
+    glm::mat4 scaleMat = glm::scale(glm::mat4(1.0f), glm::vec3(scalar.X, depthScalar.Y, scalar.Z));
+	glm::mat4 transMat = glm::translate(glm::mat4(1.0f), glm::vec3(SplineOffset.X, -DataScale.Y * YExaggeration/2, -SplineOffset.Y));
     scaleMat = glm::scale(scaleMat, glm::vec3(1.0f, 1.0f, -1.0f));
 
     transformMat = transMat * scaleMat;

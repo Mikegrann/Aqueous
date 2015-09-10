@@ -387,7 +387,7 @@ void CSplinePath::normalizeCoords() {
 
 	for (int i = 0; i < points.size(); i++)
 	{
-		points[i] = ((points[i] - min) / (max - min)) - glm::vec3(0.5);
+		points[i] = ((points[i] - min) / (max - min)) - glm::vec3(0.5, 1.0, 0.5);
 	}
 }
 
